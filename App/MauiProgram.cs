@@ -32,6 +32,7 @@ namespace App
     		builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
 
+
             builder.Services.AddSingleton<ProjectRepository>();
             builder.Services.AddSingleton<TaskRepository>();
             builder.Services.AddSingleton<CategoryRepository>();
@@ -41,9 +42,11 @@ namespace App
             builder.Services.AddSingleton<MainPageModel>();
             builder.Services.AddSingleton<ProjectListPageModel>();
             builder.Services.AddSingleton<ManageMetaPageModel>();
+            builder.Services.AddSingleton<CountToVisibilityConverter>();
 
             builder.Services.AddTransientWithShellRoute<ProjectDetailPage, ProjectDetailPageModel>("project");
             builder.Services.AddTransientWithShellRoute<TaskDetailPage, TaskDetailPageModel>("task");
+            builder.Services.AddTransientWithShellRoute<RequestPage, RequestPageModel>("request");
 
             return builder.Build();
         }

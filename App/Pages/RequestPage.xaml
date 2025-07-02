@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pageModels="clr-namespace:App.PageModels"
+             xmlns:model="clr-namespace:App.PageModels"
+             xmlns:controls="clr-namespace:App.Utilities"
+             x:Class="App.Pages.RequestPage"
+             x:DataType="pageModels:RequestPageModel"
+             Title="RequestPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <!-- Header with adjusted font size -->
+            <Label Text="{Binding Organization}" 
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <!-- Document Info -->
+            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" 
+                  ColumnSpacing="8"
+                  RowSpacing="8">
+                <Label Text="ЗАПОВЕД №:" 
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <Entry Grid.Column="1" 
+                       Text="{Binding DocumentNumber}" 
+                       WidthRequest="60"
+                       FontSize="14"/>
+
+                <Label Grid.Column="2" 
+                       Text="Дата:" 
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <DatePicker Grid.Column="3" 
+                           Date="{Binding DocumentDate}" 
+                           Format="dd.MM.yyyy"
+                           WidthRequest="120"
+                           FontSize="14"/>
+
+                <Label Grid.Column="4" 
+                       Text="Проект:" 
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <Entry Grid.Column="5" 
+                       Text="{Binding Project}" 
+                       WidthRequest="150"
+                       FontSize="14"/>
+            </Grid>
+
+            <!-- Employee Info -->
+            <Frame BorderColor="LightGray" CornerRadius="5" Padding="10">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Данни за служителя" 
+                           FontSize="14"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Text="Име и длъжност:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" 
+                               Text="{Binding EmployeeName}" 
+                               Placeholder="Въведете име"
+                               FontSize="14"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Trip Details -->
+            <Frame BorderColor="LightGray" CornerRadius="5" Padding="10">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Данни за командировката" 
+                           FontSize="14"
+                           FontAttributes="Bold"/>
+
+                    <!-- Destination City with type-ahead -->
+                    <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
+                        <Label Text="До град:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1">
+                            <Entry Text="{Binding DestinationCity}" 
+                                   Placeholder="Изберете град"
+                                   TextChanged="OnDestinationCityTextChanged"
+                                   FontSize="14"/>
+                            <CollectionView ItemsSource="{Binding FilteredCities}" 
+                                       SelectionMode="Single"                                    
+                                       SelectedItem="{Binding DestinationCity, Mode=TwoWay}"
+                                       HeightRequest="120"
+                                       IsVisible="{Binding FilteredCities.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding .}" 
+                                               Padding="10"
+                                               FontSize="14"
+                                               TextColor="Black"
+                                               />
+                                        <!-- Fix for visibility -->
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+
+                        <Label Grid.Column="2" 
+                               Text="и обратно:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="3">
+                            <Entry Text="{Binding ReturnCity}" 
+                                   Placeholder="Изберете град"
+                                   TextChanged="OnReturnCityTextChanged"
+                                   FontSize="14"/>
+                            <CollectionView ItemsSource="{Binding FilteredCities}" 
+                                       SelectionMode="Single"
+                                       SelectedItem="{Binding ReturnCity}"
+                                       HeightRequest="120"
+                                       IsVisible="{Binding FilteredCities.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Text="{Binding .}" 
+                                               Padding="10"
+                                               FontSize="14"
+                                               TextColor="Black"/>
+                                        <!-- Fix for visibility -->
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Dates - Fixed date format -->
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto,*" 
+                          ColumnSpacing="8">
+                        <Label Text="Срок:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" 
+                               Text="{Binding DurationDays}" 
+                               WidthRequest="40" 
+                               Keyboard="Numeric"
+                               FontSize="14"/>
+                        <Label Grid.Column="2" 
+                               Text="дни от" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <DatePicker Grid.Column="3" 
+                                    Date="{Binding TripStartDate}" 
+                                    Format="dd.MM.yyyy"
+                                    WidthRequest="120"
+                                    FontSize="14"/>
+                        <Label Grid.Column="4" 
+                               Text="до" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <DatePicker Grid.Column="5" 
+                                    Date="{Binding TripEndDate}" 
+                                    Format="dd.MM.yyyy"
+                                    WidthRequest="120"
+                                    FontSize="14"/>
+                    </Grid>
+
+                    <!-- Task -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <Label Text="Задача:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" 
+                               Text="{Binding Task}" 
+                               Placeholder="Описание на задачата"
+                               FontSize="14"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Allowances -->
+            <Frame BorderColor="LightGray" CornerRadius="5" Padding="10">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Издръжки" 
+                           FontSize="14"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" 
+                          ColumnSpacing="8">
+                        <Label Text="Дневни:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" 
+                               Text="{Binding DailyAllowanceRate}" 
+                               WidthRequest="60" 
+                               Keyboard="Numeric"
+                               FontSize="14"/>
+                        <Label Grid.Column="2" 
+                               Text="лв/ден" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+
+                        <Label Grid.Column="3" 
+                               Text="Квартирни:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="4" 
+                               Text="{Binding AccommodationAllowanceRate}" 
+                               WidthRequest="60" 
+                               Keyboard="Numeric"
+                               FontSize="14"/>
+                        <Label Grid.Column="5" 
+                               Text="лв/ден" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                    </Grid>
+
+                    <Label Text="{Binding TotalExpenses, StringFormat='Общо разходи: {0:N2} лв'}" 
+                           FontSize="14"
+                           FontAttributes="Bold"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Vehicle Info -->
+            <Frame BorderColor="LightGray" CornerRadius="5" Padding="10">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Транспорт" 
+                           FontSize="14"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="8">
+                        <Label Text="Тип МПС:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" 
+                               Text="{Binding VehicleType}" 
+                               WidthRequest="80"
+                               FontSize="14"/>
+                        <Label Grid.Column="2" 
+                               Text="Марка:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="3" 
+                               Text="{Binding VehicleModel}" 
+                               WidthRequest="100"
+                               FontSize="14"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+                        <Label Text="Гориво:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Picker Grid.Column="1" 
+                                ItemsSource="{Binding FuelTypes}"
+                                SelectedItem="{Binding FuelType}"
+                                WidthRequest="100"
+                                FontSize="14"
+                                ItemDisplayBinding="{Binding .}"
+                                TextColor="Black"/>
+                        <!-- Fix for visibility -->
+
+                        <Label Grid.Column="2" 
+                               Text="Разход:" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Column="3" 
+                               Text="{Binding FuelConsumption}" 
+                               WidthRequest="60" 
+                               Keyboard="Numeric"
+                               FontSize="14"/>
+                        <Label Grid.Column="4" 
+                               Text="л/100км" 
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Submit Button -->
+            <Button Text="ЗАПАЗИ КОМАНДИРОВКАТА" 
+                    Command="{Binding SubmitRequestCommand}"
+                    HorizontalOptions="Fill"
+                    Margin="0,20,0,0"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    FontSize="14"
+                    HeightRequest="50"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

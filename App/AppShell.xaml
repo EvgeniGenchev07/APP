@@ -26,6 +26,12 @@
         ContentTemplate="{DataTemplate pages:ManageMetaPage}"
         Route="manage" />
 
+    <ShellContent
+    Title="Request"
+    Icon="{StaticResource IconDashboard}"
+    ContentTemplate="{DataTemplate pages:RequestPage}"
+    Route="request" />
+
     <Shell.FlyoutFooter>
         <Grid Padding="15">
             <sf:SfSegmentedControl x:Name="ThemeSegmentedControl" 
