@@ -1,3 +1,5 @@
+using App.PageModels;
+
 namespace App.Pages;
 
 
@@ -7,7 +9,7 @@ public partial class RequestPage : ContentPage
 	{
         BindingContext = model;
         InitializeComponent();
-	}
+    }
     private void OnDestinationCityTextChanged(object sender, TextChangedEventArgs e)
     {
         if (BindingContext is RequestPageModel vm)

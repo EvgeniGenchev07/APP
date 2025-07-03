@@ -82,7 +82,7 @@ namespace App.PageModels
         [RelayCommand]
         private void FilterCities(string searchText)
         {
-            
+
 
             if (string.IsNullOrWhiteSpace(searchText))
             {
@@ -126,6 +126,7 @@ namespace App.PageModels
 
         partial void OnTripStartDateChanged(DateTime value)
         {
+            TripStartDate = value;
             TripEndDate = value.AddDays(DurationDays);
             CalculateTotalExpenses();
         }
