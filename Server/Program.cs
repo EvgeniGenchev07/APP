@@ -1,3 +1,6 @@
+using DataLayer;
+using Microsoft.Extensions.DependencyInjection;
+using MySqlConnector;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,7 +9,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddScoped<EapDbContext>(_ =>
+{
+    var connection = new MySqlConnection(connectionString);
+    return new EapDbContext(connection);
+});
+builder.Services.AddScoped<UserContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
