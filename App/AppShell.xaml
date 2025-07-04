@@ -8,11 +8,6 @@
     Shell.FlyoutBehavior="Disabled"
     Title="App">
     <ShellContent
-     Title="Login"
-     ContentTemplate="{DataTemplate pages:LoginPage}"
-     Route="login" />
-    <ShellContent
-        Title="Home"
         ContentTemplate="{DataTemplate pages:RegisterPage}"
         Route="register" />
 

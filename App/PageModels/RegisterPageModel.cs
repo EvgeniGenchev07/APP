@@ -6,27 +6,15 @@ namespace App.PageModels;
 
 public class RegisterPageModel : INotifyPropertyChanged
 {
-    private string _fullName;
     private string _email;
     private string _password;
-    private string _confirmPassword;
     private string _errorMessage;
     private bool _isBusy;
     private bool _isEnabled;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public string FullName
-    {
-        get => _fullName;
-        set
-        {
-            _fullName = value;
-            IsEnabled = CanRegister();
-            OnPropertyChanged();
-        }
-    }
-
+   
     public string Email
     {
         get => _email;
@@ -51,17 +39,6 @@ public class RegisterPageModel : INotifyPropertyChanged
         }
     }
 
-    public string ConfirmPassword
-    {
-        get => _confirmPassword;
-        set
-        {
-            _confirmPassword = value;
-            IsEnabled = CanRegister();
-
-            OnPropertyChanged();
-        }
-    }
 
     public string ErrorMessage
     {
@@ -94,10 +71,7 @@ public class RegisterPageModel : INotifyPropertyChanged
     }
 
     public ICommand RegisterCommand { get; }
-    public ICommand GoToLoginCommand { get;
-        set;
-    } = new Command(() => Shell.Current.GoToAsync("//LoginPage"));
-
+   
     public RegisterPageModel()
     {
         RegisterCommand = new Command(async () => await RegisterAsync(), CanRegister);
@@ -109,11 +83,8 @@ public class RegisterPageModel : INotifyPropertyChanged
     private bool CanRegister()
     {
         return !IsBusy
-            && !string.IsNullOrWhiteSpace(FullName)
             && !string.IsNullOrWhiteSpace(Email)
-            && !string.IsNullOrWhiteSpace(Password)
-            && !string.IsNullOrWhiteSpace(ConfirmPassword)
-            && Password == ConfirmPassword;
+            && !string.IsNullOrWhiteSpace(Password);
     }
 
     private async Task RegisterAsync()
@@ -132,11 +103,6 @@ public class RegisterPageModel : INotifyPropertyChanged
             }
 
             // Validate password match
-            if (Password != ConfirmPassword)
-            {
-                ErrorMessage = "Passwords do not match";
-                return;
-            }
 
             // Validate password length
             if (Password.Length < 6)
@@ -153,10 +119,8 @@ public class RegisterPageModel : INotifyPropertyChanged
             await Shell.Current.DisplayAlert("Success", "Registration successful!", "OK");
 
             // Clear form
-            FullName = string.Empty;
             Email = string.Empty;
             Password = string.Empty;
-            ConfirmPassword = string.Empty;
         }
         catch (Exception ex)
         {

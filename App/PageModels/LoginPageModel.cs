@@ -7,15 +7,15 @@ namespace App.PageModels
 {
     public class LoginPageModel : INotifyPropertyChanged
     {
-        private string _username;
+        private string _email;
         private string _password;
         private bool _isBusy;
         private string _errorMessage;
 
-        public string Username
+        public string Email
         {
-            get => _username;
-            set { _username = value; OnPropertyChanged(); }
+            get => _email;
+            set { _email = value; OnPropertyChanged(); }
         }
 
         public string Password
@@ -52,7 +52,7 @@ namespace App.PageModels
 
             await Task.Delay(1000); // Simulate API call
 
-            if (Username == "admin" && Password == "password")
+            if (Email == "admin" && Password == "password")
             {
                 // Success: Navigate or show success
             }
@@ -63,6 +63,12 @@ namespace App.PageModels
 
             IsBusy = false;
         }
+
+        public ICommand GoToRegisterCommand
+        {
+            get;
+            set;
+        } = new Command(() => Shell.Current.GoToAsync("//register"));
 
         public event PropertyChangedEventHandler PropertyChanged;
         void OnPropertyChanged([CallerMemberName] string name = null) =>
