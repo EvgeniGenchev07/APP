@@ -13,7 +13,15 @@
      Route="login" />
     <ShellContent
         Title="Home"
+        ContentTemplate="{DataTemplate pages:RegisterPage}"
+        Route="register" />
+
+
+<ShellContent
+        Title="Home"
         ContentTemplate="{DataTemplate pages:RequestPage}"
         Route="request" />
 
 </Shell>
+
+
