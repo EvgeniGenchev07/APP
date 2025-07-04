@@ -8,7 +8,7 @@ namespace BusinessLayer
 {
     public class User
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int AbsenceDays { get; set; }
         public string Name { get; set; } 
         public Role Role { get; set; }

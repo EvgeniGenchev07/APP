@@ -16,6 +16,7 @@ builder.Services.AddScoped<EapDbContext>(_ =>
     return new EapDbContext(connection);
 });
 builder.Services.AddScoped<UserContext>();
+builder.Services.AddScoped<AuthenticationContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
