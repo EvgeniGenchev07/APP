@@ -10,5 +10,9 @@ public partial class RegisterPage : ContentPage
         BindingContext = model;
         InitializeComponent();
     }
-    
+
+    private void Button_Focused(object sender, FocusEventArgs e)
+    {
+
+    }
 }
