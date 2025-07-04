@@ -96,7 +96,7 @@ public class RegisterPageModel : INotifyPropertyChanged
     public ICommand RegisterCommand { get; }
     public ICommand GoToLoginCommand { get;
         set;
-    } = new Command(() => Shell.Current.GoToAsync("//LoginPage"));
+    } = new Command(() => Shell.Current.GoToAsync("//login"));
 
     public RegisterPageModel()
     {

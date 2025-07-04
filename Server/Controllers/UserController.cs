@@ -31,6 +31,7 @@ namespace Server.Controllers
             {
                 return Conflict("User already exists.");
             }
+        
         }
     }
 }

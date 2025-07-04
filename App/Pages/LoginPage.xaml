@@ -4,7 +4,8 @@
              xmlns:vm="clr-namespace:App.PageModels"
              x:DataType="vm:LoginPageModel"
              x:Class="App.Pages.LoginPage"
-             Title="LoginPage">
+             NavigationPage.HasNavigationBar="False"
+             >
         <ScrollView>
             <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
 
@@ -22,7 +23,7 @@
 
                 <Button Text="Login"
                     Command="{Binding LoginCommand}"
-                    IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" />
+                    IsEnabled="{Binding IsBusy}" />
 
                 <ActivityIndicator IsRunning="{Binding IsBusy}" 
                                IsVisible="{Binding IsBusy}" />
