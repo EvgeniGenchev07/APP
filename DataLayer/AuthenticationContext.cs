@@ -31,16 +31,20 @@ namespace DataLayer
             return hashedInput.Equals(hashedPassword, StringComparison.OrdinalIgnoreCase);
         }
 
-        public bool Authenticate(string email, string password)
+        public User Authenticate(string email, string password)
         {
             // Simulate database lookup
             // In a real application, you would query the database to get the user's hashed password
             var user = _userContext.GetByEmail(email);
             if (user == null)
             {
-                return false; // User not found
+                return null; // User not found
             }
-            return VerifyPassword(password, user.Password);
+            if (VerifyPassword(password, user.Password))
+            {
+                return user;
+            }
+            return null;
         }
 
         public bool Register(User user)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BusinessLayer
@@ -15,7 +16,7 @@ namespace BusinessLayer
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public List<Absence> Absences { get; set; } = new List<Absence>();
-        public List<BusinessTrip> BusinessTrips { get; set; } = new List<BusinessTrip>();
+        public List<Absence> Absences { get; set; }
+        public List<BusinessTrip> BusinessTrips { get; set; } 
     }
 }

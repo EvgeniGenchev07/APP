@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using App.Services;
+using BusinessLayer;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Windows.Input;
 
 namespace App.PageModels;
@@ -11,6 +14,7 @@ public class RegisterPageModel : INotifyPropertyChanged
     private string _errorMessage;
     private bool _isBusy;
     private bool _isEnabled;
+    private readonly HttpService _httpService;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -71,13 +75,14 @@ public class RegisterPageModel : INotifyPropertyChanged
     }
 
     public ICommand RegisterCommand { get; }
-   
-    public RegisterPageModel()
+    public RegisterPageModel(HttpService httpService)
     {
         RegisterCommand = new Command(async () => await RegisterAsync(), CanRegister);
 
         // Subscribe to property changes to re-evaluate CanExecute
         PropertyChanged += (_, __) => ((Command)RegisterCommand).ChangeCanExecute();
+        _httpService = httpService;
+
     }
 
     private bool CanRegister()
@@ -102,7 +107,6 @@ public class RegisterPageModel : INotifyPropertyChanged
                 return;
             }
 
-            // Validate password match
 
             // Validate password length
             if (Password.Length < 6)
@@ -113,8 +117,13 @@ public class RegisterPageModel : INotifyPropertyChanged
 
             // Here you would typically call your API/service to register the user
             // For now, we'll just simulate a network call
-            await Task.Delay(1500);
-
+            User user = await _httpService.PostUserLogin(Email, Password);
+            if (user == null)
+            {
+                ErrorMessage = "Registration failed. Please try again.";
+                return;
+            }
+            App.User = user;
             // Registration successful
             await Shell.Current.DisplayAlert("Success", "Registration successful!", "OK");
 
