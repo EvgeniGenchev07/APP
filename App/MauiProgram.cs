@@ -23,6 +23,7 @@ namespace App
     		builder.Logging.AddDebug();
 #endif
             builder.Services.AddTransientWithShellRoute<RequestPage,RequestPageModel>("request");
+            builder.Services.AddTransientWithShellRoute<RegisterPage,RegisterPageModel>("register");
             return builder.Build();
         }
     }

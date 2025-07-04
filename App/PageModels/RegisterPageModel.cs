@@ -1,0 +1,177 @@
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+
+namespace App.PageModels;
+
+public class RegisterPageModel : INotifyPropertyChanged
+{
+    private string _fullName;
+    private string _email;
+    private string _password;
+    private string _confirmPassword;
+    private string _errorMessage;
+    private bool _isBusy;
+    private bool _isEnabled;
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    public string FullName
+    {
+        get => _fullName;
+        set
+        {
+            _fullName = value;
+            IsEnabled = CanRegister();
+            OnPropertyChanged();
+        }
+    }
+
+    public string Email
+    {
+        get => _email;
+        set
+        {
+            _email = value;
+            IsEnabled = CanRegister();
+
+            OnPropertyChanged();
+        }
+    }
+
+    public string Password
+    {
+        get => _password;
+        set
+        {
+            _password = value;
+            IsEnabled = CanRegister();
+
+            OnPropertyChanged();
+        }
+    }
+
+    public string ConfirmPassword
+    {
+        get => _confirmPassword;
+        set
+        {
+            _confirmPassword = value;
+            IsEnabled = CanRegister();
+
+            OnPropertyChanged();
+        }
+    }
+
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+        set
+        {
+            _errorMessage = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            _isBusy = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsEnabled
+    {
+        get => _isEnabled;
+        set
+        {
+            _isEnabled = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand RegisterCommand { get; }
+    public ICommand GoToLoginCommand { get;
+        set;
+    } = new Command(() => Shell.Current.GoToAsync("//LoginPage"));
+
+    public RegisterPageModel()
+    {
+        RegisterCommand = new Command(async () => await RegisterAsync(), CanRegister);
+
+        // Subscribe to property changes to re-evaluate CanExecute
+        PropertyChanged += (_, __) => ((Command)RegisterCommand).ChangeCanExecute();
+    }
+
+    private bool CanRegister()
+    {
+        return !IsBusy
+            && !string.IsNullOrWhiteSpace(FullName)
+            && !string.IsNullOrWhiteSpace(Email)
+            && !string.IsNullOrWhiteSpace(Password)
+            && !string.IsNullOrWhiteSpace(ConfirmPassword)
+            && Password == ConfirmPassword;
+    }
+
+    private async Task RegisterAsync()
+    {
+        try
+        {
+            IsBusy = true;
+            IsEnabled = false;
+            ErrorMessage = string.Empty;
+
+            // Validate email format
+            if (!Email.Contains("@") || !Email.Contains("."))
+            {
+                ErrorMessage = "Please enter a valid email address";
+                return;
+            }
+
+            // Validate password match
+            if (Password != ConfirmPassword)
+            {
+                ErrorMessage = "Passwords do not match";
+                return;
+            }
+
+            // Validate password length
+            if (Password.Length < 6)
+            {
+                ErrorMessage = "Password must be at least 6 characters";
+                return;
+            }
+
+            // Here you would typically call your API/service to register the user
+            // For now, we'll just simulate a network call
+            await Task.Delay(1500);
+
+            // Registration successful
+            await Shell.Current.DisplayAlert("Success", "Registration successful!", "OK");
+
+            // Clear form
+            FullName = string.Empty;
+            Email = string.Empty;
+            Password = string.Empty;
+            ConfirmPassword = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Registration failed: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+            IsEnabled = true;
+        }
+    }
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        //IsEnabled = CanRegister();
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
