@@ -25,6 +25,18 @@ namespace App
 #endif
             builder.Services.AddTransientWithShellRoute<RequestPage,RequestPageModel>("request");
             builder.Services.AddTransientWithShellRoute<RegisterPage,RegisterPageModel>("register");
+            builder.Services.AddTransientWithShellRoute<MainPage,MainPageModel>("MainPage");
+            builder.Services.AddTransientWithShellRoute<AdminPage,AdminPageModel>("AdminPage");
+            builder.Services.AddTransientWithShellRoute<AdminUsersPage,AdminUsersPageModel>("AdminUsersPage");
+            builder.Services.AddTransientWithShellRoute<AddUserPage,AddUserPageModel>("AddUserPage");
+            builder.Services.AddTransientWithShellRoute<EditUserPage,EditUserPageModel>("EditUserPage");
+            builder.Services.AddTransientWithShellRoute<AdminAllAbsencesPage,AdminAllAbsencesPageModel>("AdminAllAbsencesPage");
+            builder.Services.AddTransientWithShellRoute<AdminAllBusinessTripsPage,AdminAllBusinessTripsPageModel>("AdminAllBusinessTripsPage");
+            builder.Services.AddTransientWithShellRoute<AbsencePage,AbsencePageModel>("AbsencePage");
+            builder.Services.AddTransientWithShellRoute<AllAbsencesPage,AllAbsencesPageModel>("AllAbsencesPage");
+            builder.Services.AddTransientWithShellRoute<AbsenceDetailsPage,AbsenceDetailsPageModel>("AbsenceDetailsPage");
+            builder.Services.AddTransientWithShellRoute<BusinessTripsPage,BusinessTripsPageModel>("businesstrips");
+            builder.Services.AddTransient<BusinessTripDetailsPage>();
             builder.Services.AddScoped(_ =>
             {
                 return new HttpService(

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="App.Pages.AdminPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Admin Dashboard"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Admin Dashboard" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"/>
+            
+            <!-- Admin Navigation Buttons -->
+            <Grid ColumnDefinitions="*,*,*,*" Margin="0,10,0,0" Spacing="10">
+                <Button Grid.Column="0" 
+                        Text="Users" 
+                        Command="{Binding NavigateToUsersCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        FontSize="14"/>
+                <Button Grid.Column="1" 
+                        Text="Absences" 
+                        Command="{Binding NavigateToAbsencesCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        FontSize="14"/>
+                <Button Grid.Column="2" 
+                        Text="Trips" 
+                        Command="{Binding NavigateToTripsCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        FontSize="14"/>
+                <Button Grid.Column="3" 
+                        Text="Logout" 
+                        Command="{Binding LogoutCommand}"
+                        BackgroundColor="{StaticResource Error}"
+                        TextColor="White"
+                        FontSize="14"/>
+            </Grid>
+            
+            <Label Text="Business Trips Calendar View" 
+                   FontSize="16" 
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"/>
+        </VerticalStackLayout>
+
+        <!-- Calendar View -->
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Default">
+            <VerticalStackLayout Spacing="15">
+                <!-- Month Navigation -->
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,10">
+                    <Button Grid.Column="0" 
+                            Text="&lt;" 
+                            FontSize="18" 
+                            WidthRequest="50"
+                            Command="{Binding PreviousMonthCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"/>
+                    
+                    <Label Grid.Column="1" 
+                           Text="{Binding CurrentMonthYear}" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                    
+                    <Button Grid.Column="2" 
+                            Text="&gt;" 
+                            FontSize="18" 
+                            WidthRequest="50"
+                            Command="{Binding NextMonthCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"/>
+                </Grid>
+
+                <!-- Calendar Grid -->
+                <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                    <Grid ColumnDefinitions="*,*,*,*,*,*,*" 
+                          RowDefinitions="Auto,*,*,*,*,*,*"
+                          Padding="10">
+                        
+                        <!-- Day Headers -->
+                        <Label Grid.Row="0" Grid.Column="0" Text="Sun" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Mon" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Tue" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="3" Text="Wed" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="4" Text="Thu" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="5" Text="Fri" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="6" Text="Sat" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                        <!-- Calendar Days -->
+                        <CollectionView Grid.Row="1" Grid.RowSpan="6" Grid.ColumnSpan="7"
+                                        ItemsSource="{Binding CalendarDays}"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnDaySelected">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" 
+                                                Span="7" 
+                                                HorizontalItemSpacing="0" 
+                                                VerticalItemSpacing="0"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                            StrokeThickness="0.5"
+                                            BackgroundColor="{Binding BackgroundColor}"
+                                            Padding="5">
+                                        <Grid RowDefinitions="Auto,Auto">
+                                            <Label Grid.Row="0" 
+                                                   Text="{Binding DayNumber}" 
+                                                   FontSize="12"
+                                                   HorizontalOptions="Center"
+                                                   TextColor="{Binding TextColor}"/>
+                                            
+                                            <!-- Business Trip Indicators -->
+                                            <VerticalStackLayout Grid.Row="1" Spacing="2">
+                                                <Frame IsVisible="{Binding HasBusinessTrips}"
+                                                       BackgroundColor="{StaticResource Primary}"
+                                                       CornerRadius="2"
+                                                       HeightRequest="4"
+                                                       Margin="2,0"/>
+                                                <Frame IsVisible="{Binding HasPendingTrips}"
+                                                       BackgroundColor="{StaticResource Warning}"
+                                                       CornerRadius="2"
+                                                       HeightRequest="4"
+                                                       Margin="2,0"/>
+                                                <Frame IsVisible="{Binding HasCompletedTrips}"
+                                                       BackgroundColor="{StaticResource Success}"
+                                                       CornerRadius="2"
+                                                       HeightRequest="4"
+                                                       Margin="2,0"/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+                <!-- Legend -->
+                <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}"
+                        Padding="15">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Legend" FontAttributes="Bold" FontSize="16"/>
+                        <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto">
+                            <Frame Grid.Row="0" Grid.Column="0" 
+                                   BackgroundColor="{StaticResource Primary}" 
+                                   WidthRequest="20" 
+                                   HeightRequest="20" 
+                                   CornerRadius="2"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="Approved Trips" VerticalOptions="Center"/>
+                            
+                            <Frame Grid.Row="0" Grid.Column="2" 
+                                   BackgroundColor="{StaticResource Warning}" 
+                                   WidthRequest="20" 
+                                   HeightRequest="20" 
+                                   CornerRadius="2"/>
+                            <Label Grid.Row="0" Grid.Column="3" Text="Pending Trips" VerticalOptions="Center"/>
+                            
+                            <Frame Grid.Row="1" Grid.Column="0" 
+                                   BackgroundColor="{StaticResource Success}" 
+                                   WidthRequest="20" 
+                                   HeightRequest="20" 
+                                   CornerRadius="2"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="Completed Trips" VerticalOptions="Center"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Selected Day Details -->
+                <Border IsVisible="{Binding IsDaySelected}"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                        Padding="15">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="{Binding SelectedDayTitle}" FontAttributes="Bold" FontSize="18"/>
+                        
+                        <CollectionView ItemsSource="{Binding SelectedDayTrips}"
+                                        HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                            StrokeThickness="1"
+                                            Margin="0,5"
+                                            Padding="10">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                            <Label Grid.Row="0" Grid.Column="0" 
+                                                   Text="{Binding UserFullName}" 
+                                                   FontAttributes="Bold"/>
+                                            <Label Grid.Row="0" Grid.Column="1" 
+                                                   Text="{Binding StatusText}" 
+                                                   TextColor="{Binding StatusColor}"/>
+                                            
+                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding ProjectName}" 
+                                                   FontSize="12"/>
+                                            
+                                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding CarTripDestination}" 
+                                                   FontSize="12"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="2" 
+                          IsRunning="{Binding IsBusy}" 
+                          IsVisible="{Binding IsBusy}"
+                          HorizontalOptions="Center"/>
+    </Grid>
+</ContentPage> 

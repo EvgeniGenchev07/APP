@@ -124,8 +124,15 @@ public class RegisterPageModel : INotifyPropertyChanged
                 return;
             }
             App.User = user;
-            // Registration successful
-            await Shell.Current.DisplayAlert("Success", "Registration successful!", "OK");
+            // Registration successful - navigate based on role
+            if (user.Role != Role.Admin)
+            {
+                await Shell.Current.GoToAsync("//AdminPage");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("//MainPage");
+            }
 
             // Clear form
             Email = string.Empty;

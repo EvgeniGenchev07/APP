@@ -9,13 +9,13 @@ namespace BusinessLayer
     public class Absence
     {
         public int Id { get; set; }
-        public byte Type { get; set; }
+        public AbsenceType Type { get; set; }
         public int DaysCount { get; set; }
         public DateTime Created { get; set; }
-        public byte Status { get; set; }
+        public AbsenceStatus Status { get; set; }
         public DateTime StartDate { get; set; }
+        public string UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
     }
-
 }

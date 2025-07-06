@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using App.Services;
+using BusinessLayer;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
@@ -6,6 +8,7 @@ namespace App.PageModels
 {
     public partial class RequestPageModel : ObservableObject
     {
+        private readonly HttpService _httpService;
         
         [ObservableProperty]
         string _organization = "ЕНЕРГИЙНА АГЕНЦИЯ-ПЛОВДИВ";
@@ -78,7 +81,30 @@ namespace App.PageModels
         [ObservableProperty]
         ObservableCollection<string> _filteredCities = new();
 
+        [ObservableProperty]
+        private bool _isBusy;
+
+        public RequestPageModel(HttpService httpService)
+        {
+            _httpService = httpService;
+            LoadUserData();
+        }
+
+        private void LoadUserData()
+        {
+            if (App.User != null)
+            {
+                EmployeeName = App.User.Name;
+            }
+        }
+
         // Commands
+        [RelayCommand]
+        private async Task Back()
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+
         [RelayCommand]
         private void FilterCities(string searchText)
         {
@@ -118,10 +144,56 @@ namespace App.PageModels
                 return;
             }
 
-            // Save logic would go here
-            await Shell.Current.DisplayAlert("Успех", "Командировката е запазена успешно", "OK");
+            try
+            {
+                IsBusy = true;
 
-            // Could navigate back or clear form
+                var businessTrip = new BusinessTrip
+                {
+                    Status = BusinessTripStatus.Pending,
+                    IssueDate = DocumentDate,
+                    ProjectName = Project,
+                    UserFullName = EmployeeName,
+                    Task = Task,
+                    StartDate = TripStartDate,
+                    EndDate = TripEndDate,
+                    TotalDays = (byte)DurationDays,
+                    CarOwnership = CarOwnership.Personal, // Default to personal car
+                    Wage = DailyAllowanceRate,
+                    AccommodationMoney = AccommodationAllowanceRate,
+                    CarBrand = VehicleType,
+                    CarRegistrationNumber = "", // Will be filled by user
+                    CarTripDestination = DestinationCity,
+                    DateOfArrival = TripStartDate,
+                    CarModel = VehicleModel,
+                    CarUsagePerHundredKm = (float)FuelConsumption,
+                    PricePerLiter = 2.50, // Default price
+                    DepartureDate = TripEndDate,
+                    ExpensesResponsibility = "Служител",
+                    Created = DateTime.Now,
+                    UserId = App.User?.Id ?? string.Empty
+                };
+
+                var success = await _httpService.CreateBusinessTripAsync(businessTrip);
+                
+                if (success)
+                {
+                    await Shell.Current.DisplayAlert("Успех", "Командировката е запазена успешно", "OK");
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Грешка", "Неуспешно запазване на командировката", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Грешка", $"Възникна грешка: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         partial void OnTripStartDateChanged(DateTime value)

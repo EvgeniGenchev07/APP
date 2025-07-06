@@ -1,0 +1,126 @@
+using System;
+using System.Text.Json;
+using BusinessLayer;
+using DataLayer;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Server.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class AbsenceController : Controller
+    {
+        private readonly AbsenceContext _absenceContext;
+
+        public AbsenceController(AbsenceContext absenceContext)
+        {
+            _absenceContext = absenceContext ?? throw new ArgumentNullException(nameof(absenceContext));
+        }
+
+        [HttpPost("create")]
+        public IActionResult Create([FromBody] Absence absence)
+        {
+            if (absence == null)
+            {
+                return BadRequest("Invalid absence data.");
+            }
+
+            if (_absenceContext.Create(absence))
+            {
+                return Ok(JsonSerializer.Serialize(absence));
+            }
+            else
+            {
+                return BadRequest("Failed to create absence request.");
+            }
+        }
+
+        [HttpGet("user/{userId}")]
+        public IActionResult GetByUserId(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid user ID.");
+            }
+
+            var absences = _absenceContext.GetByUserId(userId);
+            if (absences != null && absences.Any())
+            {
+                return Ok(absences);
+            }
+            else
+            {
+                return NotFound("No absences found for this user.");
+            }
+        }
+
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            var absences = _absenceContext.GetAll();
+            if (absences != null && absences.Any())
+            {
+                return Ok(absences);
+            }
+            else
+            {
+                return NotFound("No absences found.");
+            }
+        }
+
+        [HttpPut("update")]
+        public IActionResult Update([FromBody] Absence absence)
+        {
+            if (absence == null || absence.Id <= 0)
+            {
+                return BadRequest("Invalid absence data.");
+            }
+
+            if (_absenceContext.Update(absence))
+            {
+                return Ok(JsonSerializer.Serialize(absence));
+            }
+            else
+            {
+                return BadRequest("Failed to update absence request.");
+            }
+        }
+
+        [HttpDelete("cancel/{absenceId}")]
+        public IActionResult Cancel(int absenceId)
+        {
+            if (absenceId <= 0)
+            {
+                return BadRequest("Invalid absence ID.");
+            }
+
+            if (_absenceContext.Delete(absenceId))
+            {
+                return Ok("Absence request cancelled successfully.");
+            }
+            else
+            {
+                return BadRequest("Failed to cancel absence request.");
+            }
+        }
+
+        [HttpGet("{absenceId}")]
+        public IActionResult GetById(int absenceId)
+        {
+            if (absenceId <= 0)
+            {
+                return BadRequest("Invalid absence ID.");
+            }
+
+            var absence = _absenceContext.GetById(absenceId);
+            if (absence != null)
+            {
+                return Ok(absence);
+            }
+            else
+            {
+                return NotFound("Absence not found.");
+            }
+        }
+    }
+} 

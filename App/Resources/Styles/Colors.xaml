@@ -49,4 +49,6 @@
     <Color x:Key="DarkBackground">#121212</Color>
     <Color x:Key="Error">#EF4444</Color>
     <Color x:Key="Gray50">#F9FAFB</Color>
+    <Color x:Key="Warning">#F59E0B</Color>
+    <Color x:Key="Success">#10B981</Color>
 </ResourceDictionary>

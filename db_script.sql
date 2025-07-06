@@ -2,7 +2,7 @@ drop database EAPDigitalIntegrationDb;
 create database EAPDigitalIntegrationDb;
 use EAPDigitalIntegrationDb;
 create table User(
-id int auto_increment,
+id varchar(30),
 absenceDays int not null,
 name varchar(70) not null,
 role tinyint not null,
@@ -11,7 +11,7 @@ password varchar(100) not null,
 constraint PK_User primary key(id));
 
 insert into User(
-`absenceDays`,`name`,`role`,`email`,`password`)values(20,"Test",1,"example@gmail.com",md5("test"));
+`id`,`absenceDays`,`name`,`role`,`email`,`password`)values("dawoiudhawudhawuai",20,"Test",1,"example@gmail.com",md5("usercho"));
 
 create table Absence(
 id int auto_increment,
@@ -20,7 +20,7 @@ daysCount int not null,
 created date not null,
 status tinyint not null,
 startDate date not null,
-userId int not null,
+userId varchar(30) not null,
 constraint FK_Absence_User foreign key(userId) 
 references User(id),
 constraint PK_Absence primary key(id));
@@ -33,9 +33,8 @@ references User(id),
 constraint FK_AbsenceId foreign key(absenceId) 
 references Absence(id),
 constraint PK_User_Absence primary key(userId,absenceId));*/
-
 create table BusinessTrip(
-id int not null,
+id int auto_increment,
 status tinyint not null,
 issueDate date not null,
 projectName varchar(60) not null,
@@ -57,11 +56,10 @@ pricePerLiter double,
 departureDate date not null,
 expensesResponsibility varchar(256),
 created date not null ,
-userId int not null,
+userId varchar(30) not null,
 constraint FK_Business_User foreign key(userId) 
 references User(id),
 constraint PK_BusinessTrip primary key(id));
-
 /*create table User_BusinessTrip(
 userId int not null,
 businessTripId int not null,

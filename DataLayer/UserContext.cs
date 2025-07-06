@@ -62,7 +62,7 @@ namespace DataLayer
                     command.Parameters.AddWithValue("@name", user.Name);
                     command.Parameters.AddWithValue("@email", user.Email);
                     command.Parameters.AddWithValue("@password", user.Password);
-                    command.Parameters.AddWithValue("@role", user.Role);
+                    command.Parameters.AddWithValue("@role", (int)user.Role);
                     command.Parameters.AddWithValue("@absenceDays", user.AbsenceDays);
 
                     int rowsAffected = command.ExecuteNonQuery();
@@ -92,7 +92,7 @@ namespace DataLayer
 
                     command.Parameters.AddWithValue("@name", user.Name);
                     command.Parameters.AddWithValue("@email", user.Email);
-                    command.Parameters.AddWithValue("@role", user.Role.ToString());
+                    command.Parameters.AddWithValue("@role", (int)user.Role);
                     command.Parameters.AddWithValue("@absenceDays", user.AbsenceDays);
                     command.Parameters.AddWithValue("@id", user.Id);
 

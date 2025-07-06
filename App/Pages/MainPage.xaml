@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="App.Pages.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:App.ViewModels"
+             Title="Employee Dashboard"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Spacing="10">
+            <VerticalStackLayout Grid.Column="0" Spacing="10">
+                <Label Text="Welcome Back!" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Start"
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"/>
+                <Label Text="{Binding UserName}" 
+                       FontSize="18" 
+                       HorizontalOptions="Start"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"/>
+            </VerticalStackLayout>
+            
+            <Button Grid.Column="1" 
+                    Text="Logout" 
+                    Command="{Binding LogoutCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                    FontSize="16"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    Margin="0,10,0,0"/>
+        </Grid>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Default">
+            <VerticalStackLayout Spacing="20">
+                <!-- Quick Stats -->
+                <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}"
+                        Padding="20">
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Absence Days" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Pending Trips" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Completed Trips" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding AbsenceDays}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding PendingTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Warning}"/>
+                        <Label Grid.Row="1" Grid.Column="2" Text="{Binding CompletedTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
+                    </Grid>
+                </Border>
+
+                <!-- Recent Absences -->
+                <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="Recent Absences" FontAttributes="Bold" FontSize="18"/>
+                            <Button Grid.Column="1" 
+                                    Text="View All" 
+                                    Command="{Binding ViewAllAbsencesCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource Primary}"
+                                    FontSize="14"
+                                    HorizontalOptions="End"/>
+                        </Grid>
+                        
+                        <CollectionView ItemsSource="{Binding RecentAbsences}"
+                                        HeightRequest="200">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:AbsenceViewModel">
+                                    <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                            StrokeThickness="1"
+                                            Margin="0,5"
+                                            Padding="15">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                            <Label Grid.Row="0" Grid.Column="0" 
+                                                   Text="{Binding TypeText}" 
+                                                   FontAttributes="Bold"/>
+                                            <Label Grid.Row="0" Grid.Column="1" 
+                                                   Text="{Binding StatusText}" 
+                                                   TextColor="{Binding StatusColor}"/>
+                                            
+                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding DateRange}" 
+                                                   FontSize="12"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        
+                        <Label IsVisible="{Binding NoAbsences}"
+                               Text="No recent absences" 
+                               HorizontalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Recent Business Trips -->
+                <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="15">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="Recent Business Trips" FontAttributes="Bold" FontSize="18"/>
+                            <Button Grid.Column="1" 
+                                    Text="View All" 
+                                    Command="{Binding ViewAllBusinessTripsCommand}"
+                                    BackgroundColor="Transparent"
+                                    TextColor="{StaticResource Primary}"
+                                    FontSize="14"
+                                    HorizontalOptions="End"/>
+                        </Grid>
+                        
+                        <CollectionView ItemsSource="{Binding RecentBusinessTrips}"
+                                        HeightRequest="250">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
+                                            StrokeThickness="1"
+                                            Margin="0,5"
+                                            Padding="15">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                            <Label Grid.Row="0" Grid.Column="0" 
+                                                   Text="{Binding ProjectName}" 
+                                                   FontAttributes="Bold"/>
+                                            <Label Grid.Row="0" Grid.Column="1" 
+                                                   Text="{Binding StatusText}" 
+                                                   TextColor="{Binding StatusColor}"/>
+                                            
+                                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding Task}" 
+                                                   FontSize="12"/>
+                                            
+                                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding DateRange}" 
+                                                   FontSize="12"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
+                                            
+                                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding Destination}" 
+                                                   FontSize="12"
+                                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        
+                        <Label IsVisible="{Binding NoBusinessTrips}"
+                               Text="No recent business trips" 
+                               HorizontalOptions="Center"
+                               TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Action Buttons -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                    <Button Grid.Column="0" 
+                            Text="Request Absence" 
+                            Command="{Binding RequestAbsenceCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"/>
+                    
+                    <Button Grid.Column="1" 
+                            Text="Request Business Trip" 
+                            Command="{Binding RequestBusinessTripCommand}"
+                            BackgroundColor="{StaticResource Secondary}"
+                            TextColor="White"/>
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="2" 
+                          IsRunning="{Binding IsBusy}" 
+                          IsVisible="{Binding IsBusy}"
+                          HorizontalOptions="Center"/>
+    </Grid>
+</ContentPage> 
