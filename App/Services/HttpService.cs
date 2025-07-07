@@ -89,6 +89,7 @@ namespace App.Services
                 });
                 App.User.Absences?.Add(absence);
                 App.User.AbsenceDays -= absence.DaysCount;
+                return true;
             }
             return false;
         }
