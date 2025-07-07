@@ -12,10 +12,12 @@ namespace Server.Controllers
     public class UserController : Controller
     {
         private readonly AuthenticationContext _authenticationContext;
+        private readonly UserContext _userContext;
 
-        public UserController(AuthenticationContext authenticationContext)
+        public UserController(AuthenticationContext authenticationContext, UserContext userContext)
         {
             _authenticationContext = authenticationContext ?? throw new ArgumentNullException(nameof(authenticationContext));
+            _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
         }
 
         [HttpPost("register")]
@@ -44,10 +46,27 @@ namespace Server.Controllers
                 return BadRequest("Invalid login data.");
             }
             User user = _authenticationContext.Authenticate(loginModel.Email, loginModel.Password);
-            if(user!=null) return Ok(user);
+            if (user != null) return Ok(user);
             else
             {
                 return Unauthorized("Invalid email or password.");
+            }
+        }
+        [HttpPost("create")]
+        public IActionResult CreateUser([FromBody] BusinessLayer.User user)
+        {
+            if (user == null || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+            {
+                return BadRequest("Invalid user data.");
+            }
+            user.Id = Guid.NewGuid().ToString();
+            if (_userContext.Create(user))
+            {   
+                return Ok(JsonSerializer.Serialize(user));
+            }
+            else
+            {
+                return Conflict("User already exists.");
             }
         }
     }

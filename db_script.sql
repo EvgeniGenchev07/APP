@@ -2,7 +2,7 @@ drop database EAPDigitalIntegrationDb;
 create database EAPDigitalIntegrationDb;
 use EAPDigitalIntegrationDb;
 create table User(
-id varchar(30),
+id varchar(40),
 absenceDays int not null,
 name varchar(70) not null,
 role tinyint not null,
@@ -60,6 +60,7 @@ userId varchar(30) not null,
 constraint FK_Business_User foreign key(userId) 
 references User(id),
 constraint PK_BusinessTrip primary key(id));
+select * from User;
 /*create table User_BusinessTrip(
 userId int not null,
 businessTripId int not null,
