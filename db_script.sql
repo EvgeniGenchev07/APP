@@ -20,7 +20,7 @@ daysCount int not null,
 created date not null,
 status tinyint not null,
 startDate date not null,
-userId varchar(30) not null,
+userId varchar(40) not null,
 constraint FK_Absence_User foreign key(userId) 
 references User(id),
 constraint PK_Absence primary key(id));
@@ -56,7 +56,7 @@ pricePerLiter double,
 departureDate date not null,
 expensesResponsibility varchar(256),
 created date not null ,
-userId varchar(30) not null,
+userId varchar(40) not null,
 constraint FK_Business_User foreign key(userId) 
 references User(id),
 constraint PK_BusinessTrip primary key(id));
