@@ -219,7 +219,6 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
                 }
                 finally
                 {

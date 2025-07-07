@@ -2,6 +2,7 @@ using App.Services;
 using BusinessLayer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Windows.Input;
 
 namespace App.PageModels;
@@ -120,14 +121,20 @@ public class AddUserPageModel : INotifyPropertyChanged
             IsBusy = true;
 
             var role = SelectedRole == "Administrator" ? Role.Admin : Role.Employee;
-            
-            var user = new User
+            using (var md5 = MD5.Create())
             {
-                Name = Name,
-                Email = Email,
-                Password = Password,
-                Role = role
-            };
+                // Hash the password using MD5
+                var passwordBytes = System.Text.Encoding.UTF8.GetBytes(Password);
+                var hashedPassword = md5.ComputeHash(passwordBytes);
+                Password = BitConverter.ToString(hashedPassword).Replace("-", "").ToLowerInvariant();
+            }
+                var user = new User
+                {
+                    Name = Name,
+                    Email = Email,
+                    Password = Password,
+                    Role = role
+                };
 
             // Call API to create user
             var success = await _httpService.CreateUserAsync(user);

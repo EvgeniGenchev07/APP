@@ -110,7 +110,10 @@ public class MainPageModel : INotifyPropertyChanged
         ViewAllAbsencesCommand = new Command(async () => await ViewAllAbsencesAsync());
         ViewAllBusinessTripsCommand = new Command(async () => await ViewAllBusinessTripsAsync());
         LogoutCommand = new Command(async () => await LogoutAsync());
-
+        MessagingCenter.Subscribe<RequestPageModel>(this, "BusinessTripCreated", async (sender) =>
+        {
+            await LoadDataAsync();
+        });
         _ = LoadDataAsync();
     }
 
@@ -191,7 +194,7 @@ public class MainPageModel : INotifyPropertyChanged
             App.User = null;
             
             // Navigate to register page
-            await Shell.Current.GoToAsync("//RegisterPage");
+            await Shell.Current.GoToAsync("//register");
         }
         catch (Exception ex)
         {
