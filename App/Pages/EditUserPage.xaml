@@ -38,6 +38,17 @@
                        FontSize="12"
                        IsVisible="{Binding HasEmailError}"/>
             </VerticalStackLayout>
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Password *" FontSize="16" FontAttributes="Bold"/>
+                <Entry Text="{Binding Password}" 
+            Placeholder="Password"
+            Keyboard="Text"
+            FontSize="16"/>
+                <Label Text="{Binding PasswordError}" 
+            TextColor="Red" 
+            FontSize="12"
+            IsVisible="{Binding HasPasswordError}"/>
+            </VerticalStackLayout>
 
             <!-- Role -->
             <VerticalStackLayout Spacing="5">

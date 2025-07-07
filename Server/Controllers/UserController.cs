@@ -99,5 +99,22 @@ namespace Server.Controllers
                 return StatusCode(500, "Failed to delete user.");
             }
         }
+
+        [HttpPost("edit")]
+        public IActionResult EditUser([FromBody] BusinessLayer.User user)
+        {
+            if (user == null || string.IsNullOrEmpty(user.Id) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+            {
+                return BadRequest("Invalid user data.");
+            }
+            if (_userContext.Update(user))
+            {
+                return Ok(JsonSerializer.Serialize(user));
+            }
+            else
+            {
+                return NotFound("User not found.");
+            }
+        }
     }
 }

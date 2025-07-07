@@ -15,9 +15,10 @@ public class EditUserPageModel : INotifyPropertyChanged
     private string _name = string.Empty;
     private string _email = string.Empty;
     private string _selectedRole = "Employee";
+    private string _password = string.Empty;
     private string _absenceDays = "0";
     private string _userId = string.Empty;
-
+    private bool _isPasswordChanged = false;
     public event PropertyChangedEventHandler PropertyChanged;
 
     public string Name
@@ -41,7 +42,17 @@ public class EditUserPageModel : INotifyPropertyChanged
             ValidateEmail();
         }
     }
-
+    public string Password
+    {
+        get => _password;
+        set
+        {
+            _password = value;
+            _isPasswordChanged = true; // Mark that the password has been changed
+            OnPropertyChanged();
+            ValidatePassword();
+        }
+    }
     public string SelectedRole
     {
         get => _selectedRole;
@@ -77,9 +88,10 @@ public class EditUserPageModel : INotifyPropertyChanged
     // Error properties
     public string NameError { get; private set; } = string.Empty;
     public string EmailError { get; private set; } = string.Empty;
+    public string PasswordError { get; set; } = string.Empty;
     public string RoleError { get; private set; } = string.Empty;
     public string AbsenceDaysError { get; private set; } = string.Empty;
-
+    public bool HasPasswordError => !string.IsNullOrEmpty(Password) && Password.Length < 6;
     public bool HasNameError => !string.IsNullOrEmpty(NameError);
     public bool HasEmailError => !string.IsNullOrEmpty(EmailError);
     public bool HasRoleError => !string.IsNullOrEmpty(RoleError);
@@ -106,6 +118,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             _userId = user.Id;
             Name = user.Name;
             Email = user.Email;
+            Password = user.Password;
             SelectedRole = user.Role == Role.Admin ? "Administrator" : "Employee";
             AbsenceDays = user.AbsenceDays.ToString();
         }
@@ -129,12 +142,26 @@ public class EditUserPageModel : INotifyPropertyChanged
             {
                 absenceDays = 0;
             }
+            if (_isPasswordChanged)
+            {
 
+            using(var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                // Hash the password if it's provided
+                if (!string.IsNullOrWhiteSpace(Password))
+                {
+                    var passwordBytes = System.Text.Encoding.UTF8.GetBytes(Password);
+                    var hashedBytes = md5.ComputeHash(passwordBytes);
+                    Password = BitConverter.ToString(hashedBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }
+            }
             var user = new User
             {
                 Id = _userId,
                 Name = Name,
                 Email = Email,
+                Password = Password,
                 Role = role,
                 AbsenceDays = absenceDays
             };
@@ -144,7 +171,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             if (success)
             {
                 await Application.Current.MainPage.DisplayAlert("Success", "User updated successfully", "OK");
-                await Shell.Current.GoToAsync("..");
+                await Shell.Current.GoToAsync("//");
             }
             else
             {
@@ -170,6 +197,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         ValidateName();
         ValidateEmail();
+        ValidatePassword();
         ValidateRole();
         ValidateAbsenceDays();
 
@@ -193,7 +221,21 @@ public class EditUserPageModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(NameError));
         OnPropertyChanged(nameof(HasNameError));
     }
-
+    public void ValidatePassword()
+    {
+        if (string.IsNullOrWhiteSpace(Password))
+        {
+            OnPropertyChanged(nameof(Password));
+        }
+        else if (Password.Length < 6)
+        {
+            PasswordError = "Password must be at least 6 characters";
+        }
+        else
+        {
+            PasswordError = string.Empty;
+        }
+    }
     private void ValidateEmail()
     {
         if (string.IsNullOrWhiteSpace(Email))

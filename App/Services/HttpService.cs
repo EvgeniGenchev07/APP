@@ -144,7 +144,7 @@ namespace App.Services
         {
             var json = JsonSerializer.Serialize(user);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync($"User/update/{user.Id}", content);
+            var response = await _httpClient.PostAsync($"User/edit", content);
             return response.IsSuccessStatusCode;
         }
 
