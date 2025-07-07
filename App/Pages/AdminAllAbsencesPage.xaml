@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:App.PageModels"
+             xmlns:viewModels="clr-namespace:App.ViewModels"
              x:Class="App.Pages.AdminAllAbsencesPage"
              x:DataType="pageModels:AdminAllAbsencesPageModel"
              Title="All Absences">
@@ -56,7 +57,7 @@
                 <CollectionView ItemsSource="{Binding Absences}"
                                Margin="20,0,20,20">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="pageModels:AbsenceViewModel">
+                        <DataTemplate x:DataType="viewModels:AbsenceViewModel">
                             <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                                     StrokeThickness="1"
                                     Margin="0,5"

@@ -8,7 +8,7 @@
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="20">
         <!-- Header -->
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Spacing="10">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
             <VerticalStackLayout Grid.Column="0" Spacing="10">
                 <Label Text="Welcome Back!" 
                        FontSize="24" 

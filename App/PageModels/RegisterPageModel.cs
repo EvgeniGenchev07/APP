@@ -125,7 +125,7 @@ public class RegisterPageModel : INotifyPropertyChanged
             }
             App.User = user;
             // Registration successful - navigate based on role
-            if (user.Role != Role.Admin)
+            if (user.Role == Role.Admin)
             {
                 await Shell.Current.GoToAsync("//AdminPage");
             }

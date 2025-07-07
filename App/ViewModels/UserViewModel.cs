@@ -15,6 +15,7 @@ public class UserViewModel
     public string Id => _user.Id;
     public string Name => _user.Name;
     public string Email => _user.Email;
+    public string UserName => _user.Name;
     public Role Role => _user.Role;
     public int AbsenceDays => _user.AbsenceDays;
     public int AbsencesCount => _user.Absences?.Count ?? 0;

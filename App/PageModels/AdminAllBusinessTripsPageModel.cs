@@ -147,7 +147,7 @@ public class AdminAllBusinessTripsPageModel : INotifyPropertyChanged
                 IsBusy = true;
                 
                 // Call API to reject business trip
-                var success = await _httpService.RejectBusinessTripAsync(trip.);
+                var success = await _httpService.RejectBusinessTripAsync(trip.Id);
                 if (success)
                 {
                     trip.Status = BusinessTripStatus.Rejected;

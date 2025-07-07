@@ -212,7 +212,7 @@ public class CalendarDay
 
 public class BusinessTripViewModel
 {
-    private readonly BusinessTrip _trip;
+    private BusinessTrip _trip;
 
     public BusinessTripViewModel(BusinessTrip trip)
     {
@@ -220,6 +220,8 @@ public class BusinessTripViewModel
     }
 
     public string UserFullName => _trip.UserFullName;
+    public int Id => _trip.Id;
+    public BusinessTripStatus Status{get=>  _trip.Status;set => _trip.Status = value; }
     public string ProjectName => _trip.ProjectName;
     public string CarTripDestination => _trip.CarTripDestination;
     public string Task => _trip.Task ?? "No task specified";

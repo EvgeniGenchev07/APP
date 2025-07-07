@@ -5,7 +5,7 @@ namespace App.ViewModels;
 
 public class AbsenceViewModel
 {
-    private readonly Absence _absence;
+    private Absence _absence;
 
     public AbsenceViewModel(Absence absence)
     {
@@ -13,7 +13,7 @@ public class AbsenceViewModel
     }
 
     public int Id => _absence.Id;
-    public AbsenceStatus Status => _absence.Status;
+    public AbsenceStatus Status {get => _absence.Status;set => _absence.Status = value; }
     public DateTime StartDate => _absence.StartDate;
     public DateTime EndDate => _absence.StartDate.AddDays(_absence.DaysCount - 1);
     public int DaysCount => _absence.DaysCount;
