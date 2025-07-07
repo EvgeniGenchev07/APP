@@ -16,28 +16,43 @@ namespace DataLayer
         {
             _eapDbContext = eapDbContext ?? throw new ArgumentNullException(nameof(eapDbContext));
         }
-        public string ReadAll() {
+        public List<User> ReadAll() {
+            var users = new List<User>();
+
             if (_eapDbContext.IsConnect())
             {
-                MySqlConnector.MySqlCommand command = new MySqlConnector.MySqlCommand("SELECT * FROM User", _eapDbContext.Connection);
-                using (var read = command.ExecuteReader())
+                try
                 {
-                    //MD5 md5 = MD5.Create();
-                    string result = "";
-                    while (read.Read())
+                    MySqlConnector.MySqlCommand command = new MySqlConnector.MySqlCommand("SELECT * FROM User", _eapDbContext.Connection);
+                    using (var reader = command.ExecuteReader())
                     {
-                        for (int i = 0; i < read.FieldCount; i++)
+                        while (reader.Read())
                         {
-                            result += ($"{read.GetName(i)}: {read[i]}");
+                            users.Add(new User
+                            {
+                                Id = reader["Id"].ToString(),
+                                Name = reader["Name"].ToString(),
+                                Email = reader["Email"].ToString(),
+                                Password = reader["Password"].ToString(),
+                                Role = (Role)Convert.ToInt32(reader["Role"]),
+                                AbsenceDays = Convert.ToInt32(reader["AbsenceDays"])
+                            });
                         }
                     }
                     _eapDbContext.Close();
-                    return result;
+                    return users;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading users: {ex.Message}");
+                    _eapDbContext.Close();
+                    return new List<User>();
                 }
             }
             else
             {
-                return "Failed to connect to the database.";
+                Console.WriteLine("Failed to connect to the database.");
+                return new List<User>();
             }
         }
         public bool Create(User user)

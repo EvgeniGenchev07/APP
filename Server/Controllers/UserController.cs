@@ -69,5 +69,18 @@ namespace Server.Controllers
                 return Conflict("User already exists.");
             }
         }
+        [HttpGet("all")]
+        public IActionResult GetAllUsers()
+        {
+            try
+            {
+                var users = _userContext.ReadAll();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
