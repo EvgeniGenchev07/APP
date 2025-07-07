@@ -172,26 +172,34 @@ namespace App.Services
 
         public async Task<bool> ApproveAbsenceAsync(int absenceId)
         {
-            var response = await _httpClient.PutAsync($"Absence/approve/{absenceId}", null);
+            var json = JsonSerializer.Serialize(new {id= absenceId, status = BusinessTripStatus.Approved });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"Absence/requestupdate", content);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> RejectAbsenceAsync(int absenceId)
         {
-            var response = await _httpClient.PutAsync($"Absence/reject/{absenceId}", null);
+            var json = JsonSerializer.Serialize(new {id= absenceId, status = BusinessTripStatus.Rejected });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"Absence/requestupdate", content);
             return response.IsSuccessStatusCode;
         }
 
-        // Admin methods for business trip management
+
         public async Task<bool> ApproveBusinessTripAsync(int tripId)
         {
-            var response = await _httpClient.PutAsync($"BusinessTrip/approve/{tripId}", null);
+            var json = JsonSerializer.Serialize(new {id= tripId, status = BusinessTripStatus.Approved });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"BusinessTrip/requestupdate", content);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> RejectBusinessTripAsync(int tripId)
         {
-            var response = await _httpClient.PutAsync($"BusinessTrip/reject/{tripId}", null);
+            var json = JsonSerializer.Serialize(new {id=tripId,status = BusinessTripStatus.Rejected});
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"BusinessTrip/requestupdate", content);
             return response.IsSuccessStatusCode;
         }
     }

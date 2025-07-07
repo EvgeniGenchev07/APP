@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Storage;
-
+using App.ViewModels;
 namespace App.PageModels;
 
 public class AdminPageModel : INotifyPropertyChanged
@@ -180,12 +180,8 @@ public class AdminPageModel : INotifyPropertyChanged
 
     private async Task LogoutAsync()
     {
-        // Clear user session
-        Preferences.Default.Remove("UserId");
-        Preferences.Default.Remove("UserName");
-        Preferences.Default.Remove("UserRole");
-        
-        await Shell.Current.GoToAsync("//RegisterPage");
+        App.User = null;
+        await Shell.Current.GoToAsync("//register");
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -209,42 +205,3 @@ public class CalendarDay
     public Color BackgroundColor => IsToday ? Colors.LightBlue : Colors.Transparent;
     public Color TextColor => IsCurrentMonth ? Colors.Black : Colors.Gray;
 }
-
-public class BusinessTripViewModel
-{
-    private BusinessTrip _trip;
-
-    public BusinessTripViewModel(BusinessTrip trip)
-    {
-        _trip = trip;
-    }
-
-    public string UserFullName => _trip.UserFullName;
-    public int Id => _trip.Id;
-    public BusinessTripStatus Status{get=>  _trip.Status;set => _trip.Status = value; }
-    public string ProjectName => _trip.ProjectName;
-    public string CarTripDestination => _trip.CarTripDestination;
-    public string Task => _trip.Task ?? "No task specified";
-    public string DateRange => $"{_trip.StartDate:dd/MM/yyyy} - {_trip.EndDate:dd/MM/yyyy}";
-    public string Destination => _trip.CarTripDestination;
-    
-    public string StatusText => _trip.Status switch
-    {
-        BusinessTripStatus.Pending => "Pending",
-        BusinessTripStatus.Approved => "Approved",
-        BusinessTripStatus.Rejected => "Rejected",
-        BusinessTripStatus.Cancelled => "Cancelled",
-        BusinessTripStatus.Completed => "Completed",
-        _ => "Unknown"
-    };
-
-    public Color StatusColor => _trip.Status switch
-    {
-        BusinessTripStatus.Pending => Colors.Orange,
-        BusinessTripStatus.Approved => Colors.Green,
-        BusinessTripStatus.Rejected => Colors.Red,
-        BusinessTripStatus.Cancelled => Colors.Gray,
-        BusinessTripStatus.Completed => Colors.Blue,
-        _ => Colors.Gray
-    };
-} 

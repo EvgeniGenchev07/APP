@@ -4,8 +4,7 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
                 xmlns:viewModels="clr-namespace:App.ViewModels"
              x:Class="App.Pages.AdminUsersPage"
-             x:DataType="pageModels:AdminUsersPageModel"
-             Title="User Management">
+             x:DataType="pageModels:AdminUsersPageModel">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->

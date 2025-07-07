@@ -3,6 +3,7 @@ using System.Text.Json;
 using BusinessLayer;
 using DataLayer;
 using Microsoft.AspNetCore.Mvc;
+using Server.Models;
 
 namespace Server.Controllers
 {
@@ -120,6 +121,28 @@ namespace Server.Controllers
             else
             {
                 return NotFound("Business trip not found.");
+            }
+        }
+        [HttpPut("requestupdate")]
+        public IActionResult RequestUpdate([FromBody] RequestUpdateModel request)
+        {
+            if (request == null || request.Id <= 0)
+            {
+                return BadRequest("Invalid business trip data.");
+            }
+            BusinessTrip businessTrip = _businessTripContext.GetById(request.Id);
+            if (businessTrip == null)
+            {
+                return NotFound("Business trip not found.");
+            }
+            businessTrip.Status = (BusinessTripStatus)request.Status;
+            if (_businessTripContext.Update(businessTrip))
+            {
+                return Ok(JsonSerializer.Serialize(businessTrip));
+            }
+            else
+            {
+                return BadRequest("Failed to request update for business trip.");
             }
         }
     }

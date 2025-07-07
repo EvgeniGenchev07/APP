@@ -4,8 +4,7 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
              xmlns:viewModels="clr-namespace:App.ViewModels"
              x:Class="App.Pages.AdminAllAbsencesPage"
-             x:DataType="pageModels:AdminAllAbsencesPageModel"
-             Title="All Absences">
+             x:DataType="pageModels:AdminAllAbsencesPageModel">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header -->
@@ -107,9 +106,9 @@
 
                                     <!-- Details -->
                                     <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ColumnDefinitions="Auto,*,Auto,*" Margin="0,10,0,0">
-                                        <Label Grid.Column="0" Text="Days:" FontSize="12" VerticalOptions="Center"/>
+                                        <Label Grid.Column="0" Text="Days: " FontSize="12" VerticalOptions="Center"/>
                                         <Label Grid.Column="1" Text="{Binding Days}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center"/>
-                                        <Label Grid.Column="2" Text="Created:" FontSize="12" VerticalOptions="Center"/>
+                                        <Label Grid.Column="2" Text="Created: " FontSize="12" VerticalOptions="Center"/>
                                         <Label Grid.Column="3" Text="{Binding CreatedDate}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center"/>
                                     </Grid>
                                 </Grid>

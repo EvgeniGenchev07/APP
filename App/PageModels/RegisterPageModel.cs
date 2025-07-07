@@ -115,8 +115,6 @@ public class RegisterPageModel : INotifyPropertyChanged
                 return;
             }
 
-            // Here you would typically call your API/service to register the user
-            // For now, we'll just simulate a network call
             User user = await _httpService.PostUserLogin(Email, Password);
             if (user == null)
             {

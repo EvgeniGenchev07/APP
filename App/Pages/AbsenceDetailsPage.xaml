@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:App.PageModels"
              x:Class="App.Pages.AbsenceDetailsPage"
-             x:DataType="pageModels:AbsenceDetailsPageModel"
-             Title="Absence Details">
+             x:DataType="pageModels:AbsenceDetailsPageModel">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header with Back Button -->

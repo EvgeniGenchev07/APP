@@ -112,6 +112,7 @@ public class AdminAllAbsencesPageModel : INotifyPropertyChanged
                     absence.Status = AbsenceStatus.Approved;
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(ApprovedAbsences));
+                    OnPropertyChanged(nameof(Absences));
                     await Application.Current.MainPage.DisplayAlert("Success", "Absence approved successfully", "OK");
                 }
                 else
@@ -146,13 +147,13 @@ public class AdminAllAbsencesPageModel : INotifyPropertyChanged
             {
                 IsBusy = true;
                 
-                // Call API to reject absence
                 var success = await _httpService.RejectAbsenceAsync(absence.Id);
                 if (success)
                 {
                     absence.Status = AbsenceStatus.Rejected;
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(RejectedAbsences));
+                    OnPropertyChanged(nameof(Absences));
                     await Application.Current.MainPage.DisplayAlert("Success", "Absence rejected successfully", "OK");
                 }
                 else

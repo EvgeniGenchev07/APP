@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:App.PageModels"
              x:Class="App.Pages.EditUserPage"
-             x:DataType="pageModels:EditUserPageModel"
-             Title="Edit User">
+             x:DataType="pageModels:EditUserPageModel">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">

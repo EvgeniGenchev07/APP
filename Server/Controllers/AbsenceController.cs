@@ -3,6 +3,7 @@ using System.Text.Json;
 using BusinessLayer;
 using DataLayer;
 using Microsoft.AspNetCore.Mvc;
+using Server.Models;
 
 namespace Server.Controllers
 {
@@ -120,6 +121,28 @@ namespace Server.Controllers
             else
             {
                 return NotFound("Absence not found.");
+            }
+        }
+        [HttpPut("requestupdate")]
+        public IActionResult RequestUpdate([FromBody] RequestUpdateModel request)
+        {
+            if (request == null || request.Id <= 0)
+            {
+                return BadRequest("Invalid absence data.");
+            }
+            Absence absence = _absenceContext.GetById(request.Id);
+            if (absence == null)
+            {
+                return NotFound("Absence not found.");
+            }
+            absence.Status = (AbsenceStatus)(request.Status);
+            if (_absenceContext.Update(absence))
+            {
+                return Ok(JsonSerializer.Serialize(absence));
+            }
+            else
+            {
+                return BadRequest("Failed to request update for absence.");
             }
         }
     }

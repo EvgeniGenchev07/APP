@@ -4,8 +4,7 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
              xmlns:model="clr-namespace:App.PageModels"
              x:Class="App.Pages.RequestPage"
-             x:DataType="pageModels:RequestPageModel"
-             Title="Business Trip Request">
+             x:DataType="pageModels:RequestPageModel">
    
     <Grid RowDefinitions="Auto,*">
         <!-- Header with Back Button -->

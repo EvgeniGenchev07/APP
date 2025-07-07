@@ -4,8 +4,7 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
              xmlns:viewModels="clr-namespace:App.ViewModels"
              x:Class="App.Pages.AllAbsencesPage"
-             x:DataType="pageModels:AllAbsencesPageModel"
-             Title="All Absences">
+             x:DataType="pageModels:AllAbsencesPageModel">
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header with Back Button -->

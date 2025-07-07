@@ -1,6 +1,7 @@
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -8,15 +9,15 @@ using System.Windows.Input;
 
 namespace App.PageModels;
 
-public class AdminAllBusinessTripsPageModel : INotifyPropertyChanged
+public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyPropertyChanged
 {
     private readonly HttpService _httpService;
     private bool _isBusy;
     private bool _isRefreshing;
 
     public event PropertyChangedEventHandler PropertyChanged;
-
-    public ObservableCollection<BusinessTripViewModel> BusinessTrips { get; } = new();
+    [ObservableProperty]
+    public ObservableCollection<BusinessTripViewModel> businessTrips = new();
 
     public bool IsBusy
     {
@@ -112,6 +113,7 @@ public class AdminAllBusinessTripsPageModel : INotifyPropertyChanged
                     trip.Status = BusinessTripStatus.Approved;
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(ApprovedTrips));
+                    OnPropertyChanged(nameof(BusinessTrips));
                     await Application.Current.MainPage.DisplayAlert("Success", "Business trip approved successfully", "OK");
                 }
                 else
@@ -153,6 +155,7 @@ public class AdminAllBusinessTripsPageModel : INotifyPropertyChanged
                     trip.Status = BusinessTripStatus.Rejected;
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(RejectedTrips));
+                    OnPropertyChanged(nameof(BusinessTrips));
                     await Application.Current.MainPage.DisplayAlert("Success", "Business trip rejected successfully", "OK");
                 }
                 else
