@@ -82,5 +82,22 @@ namespace Server.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpDelete("delete/{userId}")]
+        public IActionResult DeleteUser(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("Invalid user ID.");
+            }
+
+            if (_userContext.Delete(userId))
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500, "Failed to delete user.");
+            }
+        }
     }
 }

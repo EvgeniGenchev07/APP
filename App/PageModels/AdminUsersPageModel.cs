@@ -114,9 +114,9 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         if (user == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Confirm Delete", 
-            $"Are you sure you want to delete user '{user.Name}'?", 
-            "Delete", 
+            "Confirm Delete",
+            $"Are you sure you want to delete user '{user.Name}'?",
+            "Delete",
             "Cancel");
 
         if (confirm)
@@ -124,7 +124,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             try
             {
                 IsBusy = true;
-                
+
                 // Call API to delete user
                 var success = await _httpService.DeleteUserAsync(user.Id);
                 if (success)

@@ -143,7 +143,6 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
                     _eapDbContext.Close();
                     return false;
                 }
