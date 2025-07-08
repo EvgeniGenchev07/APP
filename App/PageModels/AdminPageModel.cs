@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Storage;
 using App.ViewModels;
+
 namespace App.PageModels;
 
 public class AdminPageModel : INotifyPropertyChanged
@@ -17,6 +18,11 @@ public class AdminPageModel : INotifyPropertyChanged
     private bool _isDaySelected;
     private string _selectedDayTitle;
     private CalendarDay _selectedDay;
+    private DateTime _selectedHolidayDate = DateTime.Today;
+    private string _holidayName;
+    private bool _isHolidayDialogVisible;
+    private List<DateTime> _officialHolidays = new();
+    private List<DateTime> _customHolidays = new();
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -24,6 +30,7 @@ public class AdminPageModel : INotifyPropertyChanged
     public ObservableCollection<BusinessTripViewModel> SelectedDayTrips { get; } = new();
 
     public string CurrentMonthYear => _currentDate.ToString("MMMM yyyy");
+
     public bool IsBusy
     {
         get => _isBusy;
@@ -54,12 +61,56 @@ public class AdminPageModel : INotifyPropertyChanged
         }
     }
 
+    public CalendarDay SelectedDay
+    {
+        get => _selectedDay;
+        set
+        {
+            _selectedDay = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public DateTime SelectedHolidayDate
+    {
+        get => _selectedHolidayDate;
+        set
+        {
+            _selectedHolidayDate = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string HolidayName
+    {
+        get => _holidayName;
+        set
+        {
+            _holidayName = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsHolidayDialogVisible
+    {
+        get => _isHolidayDialogVisible;
+        set
+        {
+            _isHolidayDialogVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
     public ICommand PreviousMonthCommand { get; }
     public ICommand NextMonthCommand { get; }
     public ICommand NavigateToUsersCommand { get; }
     public ICommand NavigateToAbsencesCommand { get; }
     public ICommand NavigateToTripsCommand { get; }
     public ICommand LogoutCommand { get; }
+    public ICommand AddHolidayCommand { get; }
+    public ICommand DeleteCustomHolidayCommand { get; }
+    public ICommand ShowAddHolidayDialogCommand { get; }
+    public ICommand HideAddHolidayDialogCommand { get; }
 
     private List<BusinessTrip> _allBusinessTrips = new();
 
@@ -74,8 +125,83 @@ public class AdminPageModel : INotifyPropertyChanged
         NavigateToAbsencesCommand = new Command(async () => await NavigateToAbsencesAsync());
         NavigateToTripsCommand = new Command(async () => await NavigateToTripsAsync());
         LogoutCommand = new Command(async () => await LogoutAsync());
+        AddHolidayCommand = new Command(async () => await AddHolidayAsync());
+        DeleteCustomHolidayCommand = new Command(async () => await DeleteCustomHolidayAsync());
+        ShowAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = true);
+        HideAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = false);
 
+        InitializeOfficialHolidays(_currentDate.Year);
         _ = LoadDataAsync();
+    }
+
+    private void InitializeOfficialHolidays(int year)
+    {
+        _officialHolidays.Clear();
+
+        // Fixed date holidays
+        var fixedHolidays = new List<DateTime>
+        {
+            new DateTime(year, 1, 1),   // New Year
+            new DateTime(year, 3, 3),   // Liberation Day
+            new DateTime(year, 5, 1),   // Labor Day
+            new DateTime(year, 5, 6),   // St. George's Day
+            new DateTime(year, 5, 24),  // Bulgarian Education and Culture Day
+            new DateTime(year, 9, 6),   // Unification Day
+            new DateTime(year, 9, 22),  // Independence Day
+            new DateTime(year, 12, 24), // Christmas Eve
+            new DateTime(year, 12, 25), // Christmas Day
+            new DateTime(year, 12, 26)  // Second Day of Christmas
+        };
+
+        // Calculate Easter and related holidays
+        var easter = CalculateOrthodoxEaster(year);
+        var easterHolidays = new List<DateTime>
+        {
+            easter.AddDays(-2), // Good Friday
+            easter.AddDays(-1), // Holy Saturday
+            easter,             // Easter Sunday
+            easter.AddDays(1)   // Easter Monday
+        };
+
+        // Add all holidays to the official list
+        _officialHolidays.AddRange(fixedHolidays);
+        _officialHolidays.AddRange(easterHolidays);
+
+        // Adjust for weekends - move to Monday if holiday falls on Saturday or Sunday
+        for (int i = 0; i < _officialHolidays.Count; i++)
+        {
+            var holiday = _officialHolidays[i];
+            if (holiday.DayOfWeek == DayOfWeek.Saturday || holiday.DayOfWeek == DayOfWeek.Sunday)
+            {
+                // Find next Monday that's not already a holiday
+                DateTime monday = holiday;
+                while (monday.DayOfWeek != DayOfWeek.Monday)
+                {
+                    monday = monday.AddDays(1);
+                }
+
+                // Only add if not already in the list
+                if (!_officialHolidays.Contains(monday))
+                {
+                    _officialHolidays.Add(monday);
+                }
+            }
+        }
+    }
+
+    private DateTime CalculateOrthodoxEaster(int year)
+    {
+        // Gauss algorithm for Orthodox Easter date calculation
+        int a = year % 4;
+        int b = year % 7;
+        int c = year % 19;
+        int d = (19 * c + 15) % 30;
+        int e = (2 * a + 4 * b - d + 34) % 7;
+        int month = (int)Math.Floor((d + e + 114) / 31M);
+        int day = ((d + e + 114) % 31) + 1;
+
+        DateTime easter = new DateTime(year, month, day);
+        return easter.AddDays(13); // Convert to Gregorian calendar
     }
 
     private async Task LoadDataAsync()
@@ -99,6 +225,13 @@ public class AdminPageModel : INotifyPropertyChanged
     private async Task NavigateMonth(int direction)
     {
         _currentDate = _currentDate.AddMonths(direction);
+
+        // Reinitialize holidays if year changed
+        if (direction != 0 && _currentDate.Year != _officialHolidays.FirstOrDefault().Year)
+        {
+            InitializeOfficialHolidays(_currentDate.Year);
+        }
+
         OnPropertyChanged(nameof(CurrentMonthYear));
         GenerateCalendar();
     }
@@ -121,8 +254,12 @@ public class AdminPageModel : INotifyPropertyChanged
         for (int day = 1; day <= lastDayOfMonth.Day; day++)
         {
             var date = new DateTime(_currentDate.Year, _currentDate.Month, day);
-            var dayTrips = _allBusinessTrips.Where(t => 
+            var dayTrips = _allBusinessTrips.Where(t =>
                 date >= t.StartDate.Date && date <= t.EndDate.Date).ToList();
+
+            var isOfficialHoliday = _officialHolidays.Contains(date.Date);
+            var isCustomHoliday = _customHolidays.Contains(date.Date);
+            var isHoliday = isOfficialHoliday || isCustomHoliday;
 
             var calendarDay = new CalendarDay
             {
@@ -130,9 +267,12 @@ public class AdminPageModel : INotifyPropertyChanged
                 DayNumber = day.ToString(),
                 IsCurrentMonth = true,
                 IsToday = date.Date == DateTime.Today,
-                HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved), // Approved
-                HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending), // Pending
-                HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed), // Completed
+                IsHoliday = isHoliday,
+                IsOfficialHoliday = isOfficialHoliday,
+                IsCustomHoliday = isCustomHoliday,
+                HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved),
+                HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
+                HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed),
                 BusinessTrips = dayTrips
             };
 
@@ -140,10 +280,60 @@ public class AdminPageModel : INotifyPropertyChanged
         }
 
         // Fill remaining cells to complete the grid
-        var remainingCells = 42 - CalendarDays.Count; // 6 rows * 7 columns
+        var remainingCells = 42 - CalendarDays.Count;
         for (int i = 0; i < remainingCells; i++)
         {
             CalendarDays.Add(new CalendarDay { IsEmpty = true });
+        }
+    }
+
+    private async Task AddHolidayAsync()
+    {
+        if (string.IsNullOrWhiteSpace(HolidayName))
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", "Please enter a holiday name", "OK");
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+            _customHolidays.Add(SelectedHolidayDate.Date);
+            GenerateCalendar();
+            IsHolidayDialogVisible = false;
+            HolidayName = string.Empty;
+            await Application.Current.MainPage.DisplayAlert("Success", "Holiday added successfully", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to add holiday: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task DeleteCustomHolidayAsync()
+    {
+        if (SelectedDay == null || !SelectedDay.IsCustomHoliday)
+            return;
+
+        try
+        {
+            IsBusy = true;
+            _customHolidays.Remove(SelectedDay.Date.Date);
+            GenerateCalendar();
+            IsDaySelected = false;
+            await Application.Current.MainPage.DisplayAlert("Success", "Custom holiday deleted successfully", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to delete holiday: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
@@ -152,7 +342,7 @@ public class AdminPageModel : INotifyPropertyChanged
         if (day == null || day.IsEmpty || !day.IsCurrentMonth)
             return;
 
-        _selectedDay = day;
+        SelectedDay = day;
         IsDaySelected = true;
         SelectedDayTitle = day.Date.ToString("dddd, MMMM dd, yyyy");
 
@@ -197,11 +387,30 @@ public class CalendarDay
     public bool IsEmpty { get; set; }
     public bool IsCurrentMonth { get; set; }
     public bool IsToday { get; set; }
+    public bool IsHoliday { get; set; }
+    public bool IsOfficialHoliday { get; set; }
+    public bool IsCustomHoliday { get; set; }
     public bool HasBusinessTrips { get; set; }
     public bool HasPendingTrips { get; set; }
     public bool HasCompletedTrips { get; set; }
     public List<BusinessTrip> BusinessTrips { get; set; } = new();
 
-    public Color BackgroundColor => IsToday ? Colors.LightBlue : Colors.Transparent;
-    public Color TextColor => IsCurrentMonth ? Colors.Black : Colors.Gray;
+    public bool HasAnyTrips => HasBusinessTrips || HasPendingTrips || HasCompletedTrips;
+    public bool HasNoTrips => !HasAnyTrips;
+
+    public string HolidayTypeText => IsOfficialHoliday ? "Official Holiday" :
+                                   IsCustomHoliday ? "Custom Holiday" :
+                                   string.Empty;
+
+    public Color HolidayColor => IsOfficialHoliday ? Colors.LightPink :
+                               IsCustomHoliday ? Colors.LightBlue :
+                               Colors.Transparent;
+
+    public Color BackgroundColor => IsToday ? Colors.LightBlue :
+                                 IsHoliday ? (IsOfficialHoliday ? Colors.LightPink : Colors.LightBlue) :
+                                 Colors.Transparent;
+
+    public Color TextColor => IsCurrentMonth ?
+                            (IsHoliday ? Colors.Red : Colors.Black) :
+                            Colors.Gray;
 }
