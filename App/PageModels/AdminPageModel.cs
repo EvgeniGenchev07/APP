@@ -163,24 +163,20 @@ public class AdminPageModel : INotifyPropertyChanged
             easter.AddDays(1)   // Easter Monday
         };
 
-        // Add all holidays to the official list
         _officialHolidays.AddRange(fixedHolidays);
         _officialHolidays.AddRange(easterHolidays);
 
-        // Adjust for weekends - move to Monday if holiday falls on Saturday or Sunday
         for (int i = 0; i < _officialHolidays.Count; i++)
         {
             var holiday = _officialHolidays[i];
             if (holiday.DayOfWeek == DayOfWeek.Saturday || holiday.DayOfWeek == DayOfWeek.Sunday)
             {
-                // Find next Monday that's not already a holiday
                 DateTime monday = holiday;
                 while (monday.DayOfWeek != DayOfWeek.Monday)
                 {
                     monday = monday.AddDays(1);
                 }
 
-                // Only add if not already in the list
                 if (!_officialHolidays.Contains(monday))
                 {
                     _officialHolidays.Add(monday);
@@ -191,7 +187,6 @@ public class AdminPageModel : INotifyPropertyChanged
 
     private DateTime CalculateOrthodoxEaster(int year)
     {
-        // Gauss algorithm for Orthodox Easter date calculation
         int a = year % 4;
         int b = year % 7;
         int c = year % 19;
@@ -201,7 +196,7 @@ public class AdminPageModel : INotifyPropertyChanged
         int day = ((d + e + 114) % 31) + 1;
 
         DateTime easter = new DateTime(year, month, day);
-        return easter.AddDays(13); // Convert to Gregorian calendar
+        return easter.AddDays(13); 
     }
 
     private async Task LoadDataAsync()
@@ -279,7 +274,6 @@ public class AdminPageModel : INotifyPropertyChanged
             CalendarDays.Add(calendarDay);
         }
 
-        // Fill remaining cells to complete the grid
         var remainingCells = 42 - CalendarDays.Count;
         for (int i = 0; i < remainingCells; i++)
         {
