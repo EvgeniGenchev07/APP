@@ -114,18 +114,11 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         ViewAllAbsencesCommand = new Command(async () => await ViewAllAbsencesAsync());
         ViewAllBusinessTripsCommand = new Command(async () => await ViewAllBusinessTripsAsync());
         LogoutCommand = new Command(async () => await LogoutAsync());
-        MessagingCenter.Subscribe<RequestPageModel>(this, "BusinessTripCreated", async (sender) =>
-        {
-            await LoadDataAsync();
-        });
-        MessagingCenter.Subscribe<AbsencePageModel>(this, "AbsenceCreated", async (sender) =>
-        {
-            await LoadDataAsync();
-        });
+   
         _ = LoadDataAsync();
     }
 
-    private async Task LoadDataAsync()
+    internal async Task LoadDataAsync()
     {
         try
         {

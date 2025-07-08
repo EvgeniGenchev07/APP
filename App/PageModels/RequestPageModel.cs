@@ -179,8 +179,8 @@ namespace App.PageModels
                 if (success)
                 {
                     await Shell.Current.DisplayAlert("Успех", "Командировката е запазена успешно", "OK");
-                    MessagingCenter.Send(this, "BusinessTripCreated");
-                    await Shell.Current.GoToAsync("MainPage");
+                   
+                    await Shell.Current.GoToAsync("//MainPage");
                 }
                 else
                 {

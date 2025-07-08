@@ -9,4 +9,13 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         BindingContext = pageModel;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is MainPageModel pageModel)
+        {
+            pageModel.LoadDataAsync();
+        }
+    }
 } 

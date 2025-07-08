@@ -98,8 +98,8 @@ public partial class AbsencePageModel : ObservableObject
             if (success)
             {
                 await Shell.Current.DisplayAlert("Success", "Absence request submitted successfully", "OK");
-                MessagingCenter.Send(this, "AbsenceCreated");
-                await Shell.Current.GoToAsync("..");
+           
+                await Shell.Current.GoToAsync("//MainPage");
             }
             else
             {
