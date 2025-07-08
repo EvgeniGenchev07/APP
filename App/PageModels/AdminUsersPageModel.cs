@@ -17,7 +17,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     private bool _isBusy;
     private bool _isRefreshing;
     private string _searchText = string.Empty;
-    private List<UserViewModel> _allUsers = new(); // Maintains the complete source list
+    private List<UserViewModel> _allUsers = new(); 
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,7 +32,6 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             {
                 _searchText = value;
                 OnPropertyChanged();
-                // Don't await here to avoid blocking UI thread
                 Task.Run(() => SearchUsersAsync());
             }
         }
@@ -94,7 +93,6 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             var users = await _httpService.GetAllUsersAsync();
             _allUsers = users.Select(u => new UserViewModel(u)).ToList();
 
-            // Initially show all users
             Device.BeginInvokeOnMainThread(() =>
             {
                 foreach (var user in _allUsers)
@@ -119,14 +117,12 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            // Filter on background thread
             var filteredUsers = await Task.Run(() =>
                 string.IsNullOrWhiteSpace(SearchText)
                     ? _allUsers
                     : _allUsers.Where(u =>
                         u.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList());
 
-            // Update UI on main thread
             Device.BeginInvokeOnMainThread(() =>
             {
                 Users.Clear();

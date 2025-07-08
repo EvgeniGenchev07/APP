@@ -114,6 +114,10 @@ public class MainPageModel : INotifyPropertyChanged
         {
             await LoadDataAsync();
         });
+        MessagingCenter.Subscribe<AbsencePageModel>(this, "AbsenceCreated", async (sender) =>
+        {
+            await LoadDataAsync();
+        });
         _ = LoadDataAsync();
     }
 
@@ -143,7 +147,6 @@ public class MainPageModel : INotifyPropertyChanged
 
                 NoBusinessTrips = !recentTrips.Any();
 
-                // Load user's absences
                 var absences = await _httpService.GetUserAbsencesAsync(App.User.Id);
                 var recentAbsences = absences.OrderByDescending(a => a.Created).Take(5).ToList();
 
@@ -190,10 +193,7 @@ public class MainPageModel : INotifyPropertyChanged
     {
         try
         {
-            // Clear user data
             App.User = null;
-            
-            // Navigate to register page
             await Shell.Current.GoToAsync("//register");
         }
         catch (Exception ex)
