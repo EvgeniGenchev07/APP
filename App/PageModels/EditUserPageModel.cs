@@ -171,7 +171,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             if (success)
             {
                 await Application.Current.MainPage.DisplayAlert("Success", "User updated successfully", "OK");
-                await Shell.Current.GoToAsync("//");
+                await Shell.Current.GoToAsync("//AdminUsersPage");
             }
             else
             {
