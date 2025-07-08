@@ -195,30 +195,119 @@ namespace DataLayer
             {
                 try
                 {
-                    var command = new MySqlConnector.MySqlCommand(
-                        "SELECT * FROM User WHERE Email = @email",
-                        _eapDbContext.Connection);
+                    var query = @"
+            SELECT 
+                u.*,
+                a.id AS absence_id, a.type AS absence_type, a.daysCount AS absence_daysCount,
+                a.created AS absence_created, a.status AS absence_status, a.startDate AS absence_startDate,
+                bt.id AS trip_id, bt.status AS trip_status, bt.issueDate AS trip_issueDate,
+                bt.projectName, bt.userFullName, bt.task, bt.startDate AS trip_startDate,
+                bt.endDate AS trip_endDate, bt.totalDays, bt.carOwnerShip, bt.wage,
+                bt.accomodationMoney, bt.carBrand, bt.carRegistrationNumber,
+                bt.carTripDestination, bt.dateOfArrival, bt.carModel,
+                bt.carUsagePerHundredKm, bt.pricePerLiter, bt.departureDate,
+                bt.expensesResponsibility, bt.created AS trip_created
+            FROM 
+                User u
+            LEFT JOIN 
+                Absence a ON u.id = a.userId
+            LEFT JOIN 
+                BusinessTrip bt ON u.id = bt.userId
+            WHERE 
+                u.email = @email";
 
+                    var command = new MySqlConnector.MySqlCommand(query, _eapDbContext.Connection);
                     command.Parameters.AddWithValue("@email", email);
+
+                    User user = null;
+                    var processedAbsenceIds = new HashSet<int>();
+                    var processedTripIds = new HashSet<int>();
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (reader.Read())
+                        while (reader.Read())
                         {
-                            return new User
+                            // Initialize user if not done yet
+                            if (user == null)
                             {
-                                Id = reader["Id"].ToString(),
-                                Name = reader["Name"].ToString(),
-                                Email = reader["Email"].ToString(),
-                                Role = Enum.Parse<Role>(reader["Role"].ToString()),
-                                AbsenceDays = Convert.ToInt32(reader["AbsenceDays"]),
-                                Password = reader["Password"].ToString() // Only for authentication purposes
-                            };
+                                user = new User
+                                {
+                                    Id = reader["id"].ToString(),
+                                    Name = reader["name"].ToString(),
+                                    Email = reader["email"].ToString(),
+                                    Role = Enum.Parse<Role>(reader["role"].ToString()),
+                                    AbsenceDays = Convert.ToInt32(reader["absenceDays"]),
+                                    Password = reader["password"].ToString(),
+                                    Absences = new List<Absence>(),
+                                    BusinessTrips = new List<BusinessTrip>()
+                                };
+                            }
+
+                            // Process absence if exists and not already processed
+                            if (!reader.IsDBNull(reader.GetOrdinal("absence_id")))
+                            {
+                                var absenceId = Convert.ToInt32(reader["absence_id"]);
+                                if (!processedAbsenceIds.Contains(absenceId))
+                                {
+                                    user.Absences.Add(new Absence
+                                    {
+                                        Id = absenceId,
+                                        Type = Enum.Parse<AbsenceType>(reader["absence_type"].ToString()),
+                                        DaysCount = Convert.ToInt32(reader["absence_daysCount"]),
+                                        Created = Convert.ToDateTime(reader["absence_created"]),
+                                        Status = Enum.Parse<AbsenceStatus>(reader["absence_status"].ToString()),
+                                        StartDate = Convert.ToDateTime(reader["absence_startDate"]),
+                                        UserId = user.Id
+                                    });
+                                    processedAbsenceIds.Add(absenceId);
+                                }
+                            }
+
+                            // Process business trip if exists and not already processed
+                            if (!reader.IsDBNull(reader.GetOrdinal("trip_id")))
+                            {
+                                var tripId = Convert.ToInt32(reader["trip_id"]);
+                                if (!processedTripIds.Contains(tripId))
+                                {
+                                    user.BusinessTrips.Add(new BusinessTrip
+                                    {
+                                        Id = tripId,
+                                        Status = Enum.Parse<BusinessTripStatus>(reader["trip_status"].ToString()),
+                                        IssueDate = Convert.ToDateTime(reader["trip_issueDate"]),
+                                        ProjectName = reader["projectName"].ToString(),
+                                        UserFullName = reader["userFullName"].ToString(),
+                                        Task = reader["task"]?.ToString(),
+                                        StartDate = Convert.ToDateTime(reader["trip_startDate"]),
+                                        EndDate = Convert.ToDateTime(reader["trip_endDate"]),
+                                        TotalDays = Convert.ToByte(reader["totalDays"]),
+                                        CarOwnership = Enum.Parse<CarOwnership>(reader["carOwnerShip"].ToString()),
+                                        Wage = Convert.ToDecimal(reader["wage"]),
+                                        AccommodationMoney = Convert.ToDecimal(reader["accomodationMoney"]),
+                                        CarBrand = reader["carBrand"]?.ToString(),
+                                        CarRegistrationNumber = reader["carRegistrationNumber"]?.ToString(),
+                                        CarTripDestination = reader["carTripDestination"].ToString(),
+                                        DateOfArrival = Convert.ToDateTime(reader["dateOfArrival"]),
+                                        CarModel = reader["carModel"].ToString(),
+                                        CarUsagePerHundredKm = Convert.ToSingle(reader["carUsagePerHundredKm"]),
+                                        PricePerLiter = Convert.ToDouble(reader["pricePerLiter"]),
+                                        DepartureDate = Convert.ToDateTime(reader["departureDate"]),
+                                        ExpensesResponsibility = reader["expensesResponsibility"]?.ToString(),
+                                        Created = Convert.ToDateTime(reader["trip_created"]),
+                                        UserId = user.Id
+                                    });
+                                    processedTripIds.Add(tripId);
+                                }
+                            }
                         }
                     }
+
+                    return user;
                 }
                 catch (Exception ex)
                 {
+                    // Handle exception (log it, etc.)
+                    Console.WriteLine($"Error: {ex.Message}");
+                    return null;
                 }
                 finally
                 {
