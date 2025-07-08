@@ -196,25 +196,25 @@ namespace DataLayer
                 try
                 {
                     var query = @"
-            SELECT 
-                u.*,
-                a.id AS absence_id, a.type AS absence_type, a.daysCount AS absence_daysCount,
-                a.created AS absence_created, a.status AS absence_status, a.startDate AS absence_startDate,
-                bt.id AS trip_id, bt.status AS trip_status, bt.issueDate AS trip_issueDate,
-                bt.projectName, bt.userFullName, bt.task, bt.startDate AS trip_startDate,
-                bt.endDate AS trip_endDate, bt.totalDays, bt.carOwnerShip, bt.wage,
-                bt.accomodationMoney, bt.carBrand, bt.carRegistrationNumber,
-                bt.carTripDestination, bt.dateOfArrival, bt.carModel,
-                bt.carUsagePerHundredKm, bt.pricePerLiter, bt.departureDate,
-                bt.expensesResponsibility, bt.created AS trip_created
-            FROM 
-                User u
-            LEFT JOIN 
-                Absence a ON u.id = a.userId
-            LEFT JOIN 
-                BusinessTrip bt ON u.id = bt.userId
-            WHERE 
-                u.email = @email";
+                        SELECT 
+                            u.*,
+                            a.id AS absence_id, a.type AS absence_type, a.daysCount AS absence_daysCount,
+                            a.created AS absence_created, a.status AS absence_status, a.startDate AS absence_startDate,
+                            bt.id AS trip_id, bt.status AS trip_status, bt.issueDate AS trip_issueDate,
+                            bt.projectName, bt.userFullName, bt.task, bt.startDate AS trip_startDate,
+                            bt.endDate AS trip_endDate, bt.totalDays, bt.carOwnerShip, bt.wage,
+                            bt.accomodationMoney, bt.carBrand, bt.carRegistrationNumber,
+                            bt.carTripDestination, bt.dateOfArrival, bt.carModel,
+                            bt.carUsagePerHundredKm, bt.pricePerLiter, bt.departureDate,
+                            bt.expensesResponsibility, bt.created AS trip_created
+                        FROM 
+                            User u
+                        LEFT JOIN 
+                            Absence a ON u.id = a.userId
+                        LEFT JOIN 
+                            BusinessTrip bt ON u.id = bt.userId
+                        WHERE 
+                            u.email = @email";
 
                     var command = new MySqlConnector.MySqlCommand(query, _eapDbContext.Connection);
                     command.Parameters.AddWithValue("@email", email);
@@ -227,7 +227,6 @@ namespace DataLayer
                     {
                         while (reader.Read())
                         {
-                            // Initialize user if not done yet
                             if (user == null)
                             {
                                 user = new User
@@ -243,7 +242,6 @@ namespace DataLayer
                                 };
                             }
 
-                            // Process absence if exists and not already processed
                             if (!reader.IsDBNull(reader.GetOrdinal("absence_id")))
                             {
                                 var absenceId = Convert.ToInt32(reader["absence_id"]);
@@ -263,7 +261,6 @@ namespace DataLayer
                                 }
                             }
 
-                            // Process business trip if exists and not already processed
                             if (!reader.IsDBNull(reader.GetOrdinal("trip_id")))
                             {
                                 var tripId = Convert.ToInt32(reader["trip_id"]);
@@ -305,8 +302,6 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Handle exception (log it, etc.)
-                    Console.WriteLine($"Error: {ex.Message}");
                     return null;
                 }
                 finally
