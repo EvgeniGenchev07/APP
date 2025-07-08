@@ -1,4 +1,4 @@
-using App.Services;
+п»їusing App.Services;
 using App.ViewModels;
 using BusinessLayer;
 using System.Collections.ObjectModel;
@@ -105,7 +105,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспено зареждане на потребители: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµРЅРѕ Р·Р°СЂРµР¶РґР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»Рё: {ex.Message}", "OK");
         }
         finally
         {
@@ -136,7 +136,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно търсене на потребители: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ С‚СЉСЂСЃРµРЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»Рё: {ex.Message}", "OK");
         }
         finally
         {
@@ -163,10 +163,10 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         if (user == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърди изтриване",
-            $"Искате ли да изтриете потрибетел '{user.Name}'?",
-            "Изтрий",
-            "Отказ");
+            "РџРѕС‚РІСЉСЂРґРё РёР·С‚СЂРёРІР°РЅРµ",
+            $"РСЃРєР°С‚Рµ Р»Рё РґР° РёР·С‚СЂРёРµС‚Рµ РїРѕС‚СЂРµР±РёС‚РµР» '{user.Name}'?",
+            "РР·С‚СЂРёР№",
+            "РћС‚РєР°Р·");
 
         if (confirm)
         {
@@ -179,16 +179,16 @@ public class AdminUsersPageModel : INotifyPropertyChanged
                 {
                     _allUsers.Remove(user);
                     Users.Remove(user);
-                    await Application.Current.MainPage.DisplayAlert("Успех", "Успешно изтрит потребител", "OK");
+                    await Application.Current.MainPage.DisplayAlert("РЈСЃРїРµС…", "РЈСЃРїРµС€РЅРѕ РёР·С‚СЂРёС‚ РїРѕС‚СЂРµР±РёС‚РµР»", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно изтриване на потребител", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", "РќРµСѓСЃРїРµС€РЅРѕ РёР·С‚СЂРёРІР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно изтриване на потребител: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ РёР·С‚СЂРёРІР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»: {ex.Message}", "OK");
             }
             finally
             {

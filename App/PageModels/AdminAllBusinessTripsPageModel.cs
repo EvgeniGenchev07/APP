@@ -1,4 +1,4 @@
-using App.Services;
+п»їusing App.Services;
 using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -84,7 +84,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешко", $"Неуспешно зареждане на командировки: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ Р·Р°СЂРµР¶РґР°РЅРµ РЅР° РєРѕРјР°РЅРґРёСЂРѕРІРєРё: {ex.Message}", "OK");
         }
         finally
         {
@@ -97,10 +97,10 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         if (trip == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърдете одобрение", 
-            $"Искате ли да одобрите молбата за командировка?", 
-            "Одобри", 
-            "Отказ");
+            "РџРѕС‚РІСЉСЂРґРµС‚Рµ РѕРґРѕР±СЂРµРЅРёРµ", 
+            $"РСЃРєР°С‚Рµ Р»Рё РґР° РѕРґРѕР±СЂРёС‚Рµ РјРѕР»Р±Р°С‚Р° Р·Р° РєРѕРјР°РЅРґРёСЂРѕРІРєР°?", 
+            "РћРґРѕР±СЂРё", 
+            "РћС‚РєР°Р·");
 
         if (confirm)
         {
@@ -120,16 +120,16 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                     }
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(ApprovedTrips));
-                    await Application.Current.MainPage.DisplayAlert("Успех", "Командировката бе одобрена успешно", "OK");
+                    await Application.Current.MainPage.DisplayAlert("РЈСЃРїРµС…", "РљРѕРјР°РЅРґРёСЂРѕРІРєР°С‚Р° Р±Рµ РѕРґРѕР±СЂРµРЅР° СѓСЃРїРµС€РЅРѕ", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно одобряване на командировка", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", "РќРµСѓСЃРїРµС€РЅРѕ РѕРґРѕР±СЂСЏРІР°РЅРµ РЅР° РєРѕРјР°РЅРґРёСЂРѕРІРєР°", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно одобряване на командировка: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ РѕРґРѕР±СЂСЏРІР°РЅРµ РЅР° РєРѕРјР°РЅРґРёСЂРѕРІРєР°: {ex.Message}", "OK");
             }
             finally
             {
@@ -143,10 +143,10 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         if (trip == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърдете отхвърляне", 
-            $"Искате ли да отхвърлите молбата за командировка?", 
-            "Отхвърли", 
-            "Отказ");
+            "РџРѕС‚РІСЉСЂРґРµС‚Рµ РѕС‚С…РІСЉСЂР»СЏРЅРµ", 
+            $"РСЃРєР°С‚Рµ Р»Рё РґР° РѕС‚С…РІСЉСЂР»РёС‚Рµ РјРѕР»Р±Р°С‚Р° Р·Р° РєРѕРјР°РЅРґРёСЂРѕРІРєР°?", 
+            "РћС‚С…РІСЉСЂР»Рё", 
+            "РћС‚РєР°Р·");
 
         if (confirm)
         {
@@ -166,16 +166,16 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                     }
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(RejectedTrips));
-                    await Application.Current.MainPage.DisplayAlert("Успех", "Командировката бе откзана успешно", "OK");
+                    await Application.Current.MainPage.DisplayAlert("РЈСЃРїРµС…", "РљРѕРјР°РЅРґРёСЂРѕРІРєР°С‚Р° Р±Рµ РѕС‚РєР·Р°РЅР° СѓСЃРїРµС€РЅРѕ", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно отхвърялне на командировка", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", "РќРµСѓСЃРїРµС€РЅРѕ РѕС‚С…РІСЉСЂР»СЏРЅРµ РЅР° РєРѕРјР°РЅРґРёСЂРѕРІРєР°", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно отхвърялне на командировка: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ РѕС‚С…РІСЉСЂР»СЏРЅРµ РЅР° РєРѕРјР°РЅРґРёСЂРѕРІРєР°: {ex.Message}", "OK");
             }
             finally
             {

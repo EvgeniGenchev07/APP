@@ -1,4 +1,4 @@
-using BusinessLayer;
+﻿using BusinessLayer;
 using Microsoft.Maui.Graphics;
 using System;
 
@@ -23,13 +23,13 @@ namespace App.ViewModels
         public DateTime StartDate => _trip.StartDate;
         public DateTime EndDate => _trip.EndDate;
         public string UserId => _trip.UserId;
-        public string UserName => _trip.UserFullName ?? "Unknown User";
+        public string UserName => _trip.UserFullName ?? "Неизвестен потребител";
         public string UserFullName => _trip.UserFullName;
 
         public string ProjectName => _trip.ProjectName;
         public string CarTripDestination => _trip.CarTripDestination;
         public string Destination => _trip.CarTripDestination;
-        public string Task => _trip.Task ?? "No task specified";
+        public string Task => _trip.Task ?? "Няма посочена задача";
 
         public decimal Wage => _trip.Wage;
         public decimal AccommodationMoney => _trip.AccommodationMoney;
@@ -37,21 +37,21 @@ namespace App.ViewModels
 
         public int Days => (int)(_trip.EndDate - _trip.StartDate).TotalDays + 1;
 
-        public string DateRange => $"{_trip.StartDate:MM/dd/yyyy} - {_trip.EndDate:MM/dd/yyyy} ({Days} day{(Days == 1 ? "" : "s")})";
+        public string DateRange => $"{_trip.StartDate:MM/dd/yyyy} - {_trip.EndDate:MM/dd/yyyy} ({Days} ден{(Days == 1 ? "" : "'/'дни")})";
 
-        public string DurationText => $"{Days} day{(Days == 1 ? "" : "s")}";
-        public string CreatedText => $"Requested on {_trip.Created:MM/dd/yyyy}";
+        public string DurationText => $"{Days} ден{(Days == 1 ? "" : "'/'дни")}";
+        public string CreatedText => $"Заявено на {_trip.Created:MM/dd/yyyy}";
 
         public bool CanChangeStatus => Status == BusinessTripStatus.Pending;
 
         public string StatusText => _trip.Status switch
         {
-            BusinessTripStatus.Pending => "Pending",
-            BusinessTripStatus.Approved => "Approved",
-            BusinessTripStatus.Rejected => "Rejected",
-            BusinessTripStatus.Cancelled => "Cancelled",
-            BusinessTripStatus.Completed => "Completed",
-            _ => "Unknown"
+            BusinessTripStatus.Pending => "В очакване",
+            BusinessTripStatus.Approved => "Одобрен",
+            BusinessTripStatus.Rejected => "Отхвърлен",
+            BusinessTripStatus.Cancelled => "Отказан",
+            BusinessTripStatus.Completed => "Изпълнен",
+            _ => "Неизвестен"
         };
 
         public Color StatusColor => _trip.Status switch

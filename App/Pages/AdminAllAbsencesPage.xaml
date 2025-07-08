@@ -24,27 +24,24 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"/>
 
-<<<<<<< Updated upstream
-        <Button Grid.Column="2" 
+            <Button Grid.Column="2" 
                 Text="Filter" 
                 Command="{Binding FilterCommand}"
                 BackgroundColor="Transparent"
                 TextColor="White"
                 FontSize="16"
                 HorizontalOptions="End"/>
-    </Grid>
-=======
-            <Button Grid.Column="2" 
+        </Grid>
+        <Button Grid.Column="2" 
                     Text="Филтрирай" 
                     Command="{Binding FilterCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="End"/>
-        </Grid>
->>>>>>> Stashed changes
+    </Grid>
 
-        <!-- Content -->
+    <!-- Content -->
         <Grid Grid.Row="1" RowDefinitions="Auto,*">
             <!-- Stats -->
             <Frame Grid.Row="0" Margin="20,10,20,10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}">
