@@ -10,7 +10,7 @@
         <!-- Header -->
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
             <VerticalStackLayout Grid.Column="0" Spacing="10">
-                <Label Text="Welcome Back!" 
+                <Label Text="Добре дошли отново!" 
                        FontSize="24" 
                        FontAttributes="Bold" 
                        HorizontalOptions="Center"
@@ -20,9 +20,9 @@
                        HorizontalOptions="Center"
                        TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"/>
             </VerticalStackLayout>
-            
+
             <Button Grid.Column="1" 
-                    Text="Logout" 
+                    Text="Изход" 
                     Command="{Binding LogoutCommand}"
                     BackgroundColor="Transparent"
                     TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
@@ -40,6 +40,7 @@
                         StrokeThickness="1"
                         BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}"
                         Padding="20">
+<<<<<<< Updated upstream
                     <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto,Auto">
                         <Label Grid.Row="0" Grid.Column="0" Text="Absence Days" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="1" Text="Pending Absences" FontAttributes="Bold" HorizontalOptions="Center"/>
@@ -52,6 +53,16 @@
                         <Label Grid.Row="1" Grid.Column="2" Text="{Binding ApprovedAbsencesCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
                         <Label Grid.Row="1" Grid.Column="3" Text="{Binding PendingTripsCount}" FontSize="24" HorizontalOptions="Center"  TextColor="{StaticResource Warning}"/>
                         <Label Grid.Row="1" Grid.Column="4" Text="{Binding ApprovedTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
+=======
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Дни отпуск" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Чакащи командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Завършени командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding AbsenceDays}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding PendingTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Warning}"/>
+                        <Label Grid.Row="1" Grid.Column="2" Text="{Binding CompletedTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
+>>>>>>> Stashed changes
                     </Grid>
                 </Border>
 
@@ -62,9 +73,9 @@
                         Padding="20">
                     <VerticalStackLayout Spacing="15">
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Grid.Column="0" Text="Recent Absences" FontAttributes="Bold" FontSize="18"/>
+                            <Label Grid.Column="0" Text="Скорошни отпуски" FontAttributes="Bold" FontSize="18"/>
                             <Button Grid.Column="1" 
-                                    Text="View All" 
+                                    Text="Виж всички" 
                                     Command="{Binding ViewAllAbsencesCommand}"
                                     BackgroundColor="Transparent"
                                     TextColor="{StaticResource Primary}"
@@ -72,8 +83,12 @@
                                     HorizontalOptions="End"/>
                         </Grid>
 
+<<<<<<< Updated upstream
                         <CollectionView ItemsSource="{Binding RecentAbsences}" 
                                         VerticalScrollBarVisibility="Never"
+=======
+                        <CollectionView ItemsSource="{Binding RecentAbsences}"
+>>>>>>> Stashed changes
                                         HeightRequest="200">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewModels:AbsenceViewModel">
@@ -93,7 +108,7 @@ CommandParameter="{Binding .}"/>
                                             <Label Grid.Row="0" Grid.Column="1" 
                                                    Text="{Binding StatusText}" 
                                                    TextColor="{Binding StatusColor}"/>
-                                            
+
                                             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding DateRange}" 
                                                    FontSize="12"
@@ -104,9 +119,9 @@ CommandParameter="{Binding .}"/>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        
+
                         <Label IsVisible="{Binding NoAbsences}"
-                               Text="No recent absences" 
+                               Text="Няма скорошни отпуски" 
                                HorizontalOptions="Center"
                                TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
                     </VerticalStackLayout>
@@ -120,9 +135,9 @@ CommandParameter="{Binding .}"/>
                     
                     <VerticalStackLayout Spacing="15">
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Grid.Column="0" Text="Recent Business Trips" FontAttributes="Bold" FontSize="18"/>
+                            <Label Grid.Column="0" Text="Скорошни командировки" FontAttributes="Bold" FontSize="18"/>
                             <Button Grid.Column="1" 
-                                    Text="View All" 
+                                    Text="Виж всички" 
                                     Command="{Binding ViewAllBusinessTripsCommand}"
                                     BackgroundColor="Transparent"
                                     TextColor="{StaticResource Primary}"
@@ -130,8 +145,12 @@ CommandParameter="{Binding .}"/>
                                     HorizontalOptions="End"/>
                         </Grid>
 
+<<<<<<< Updated upstream
                         <CollectionView ItemsSource="{Binding RecentBusinessTrips}" 
                                         VerticalScrollBarVisibility="Never"
+=======
+                        <CollectionView ItemsSource="{Binding RecentBusinessTrips}"
+>>>>>>> Stashed changes
                                         HeightRequest="250">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewModels:BusinessTripViewModel">
@@ -151,16 +170,16 @@ CommandParameter="{Binding .}"/>
                                             <Label Grid.Row="0" Grid.Column="1" 
                                                    Text="{Binding StatusText}" 
                                                    TextColor="{Binding StatusColor}"/>
-                                            
+
                                             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding Task}" 
                                                    FontSize="12"/>
-                                            
+
                                             <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding DateRange}" 
                                                    FontSize="12"
                                                    TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
-                                            
+
                                             <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding Destination}" 
                                                    FontSize="12"
@@ -170,9 +189,9 @@ CommandParameter="{Binding .}"/>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                        
+
                         <Label IsVisible="{Binding NoBusinessTrips}"
-                               Text="No recent business trips" 
+                               Text="Няма скорошни командировки" 
                                HorizontalOptions="Center"
                                TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
                     </VerticalStackLayout>
@@ -181,13 +200,13 @@ CommandParameter="{Binding .}"/>
                 <!-- Action Buttons -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
                     <Button Grid.Column="0" 
-                            Text="Request Absence" 
+                            Text="Заявка за отпуск" 
                             Command="{Binding RequestAbsenceCommand}"
                             BackgroundColor="{StaticResource Primary}"
                             TextColor="White"/>
-                    
+
                     <Button Grid.Column="1" 
-                            Text="Request Business Trip" 
+                            Text="Заявка за командировка" 
                             Command="{Binding RequestBusinessTripCommand}"
                             BackgroundColor="{StaticResource Secondary}"
                             TextColor="White"/>
@@ -201,4 +220,4 @@ CommandParameter="{Binding .}"/>
                           IsVisible="{Binding IsBusy}"
                           HorizontalOptions="Center"/>
     </Grid>
-</ContentPage> 
+</ContentPage>

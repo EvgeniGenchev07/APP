@@ -2,24 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:App.PageModels"
-                xmlns:models="clr-namespace:BusinessLayer;assembly=BusinessLayer"
+             xmlns:models="clr-namespace:BusinessLayer;assembly=BusinessLayer"
              x:Class="App.Pages.BusinessTripsPage"
              x:DataType="pageModels:BusinessTripsPageModel">
 
     <Grid RowDefinitions="Auto,*,Auto">
-        
+
         <!-- Header with Back Button and User Info -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0" 
-                    Text="← Back" 
+                    Text="← Назад" 
                     Command="{Binding BackCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="Start"/>
-            
+
             <Label Grid.Column="1" 
-                   Text="My Business Trips" 
+                   Text="Моите командировки" 
                    FontSize="18" 
                    FontAttributes="Bold"
                    TextColor="White"
@@ -30,7 +30,7 @@
         <!-- Filters Section -->
         <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="15" Spacing="10">
-                
+
                 <!-- Search Bar -->
                 <Frame BorderColor="LightGray" CornerRadius="8" Padding="10">
                     <Grid ColumnDefinitions="*,Auto">
@@ -127,7 +127,7 @@
                                                          CommandParameter="{Binding .}"/>
                                 </Frame.GestureRecognizers>
                                 <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto" RowSpacing="5">
-                                    
+
                                     <!-- Project and Status -->
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Text="{Binding ProjectName}" 
@@ -206,4 +206,4 @@
                           Color="{AppThemeBinding Light=#007AFF, Dark=#0A84FF}"/>
 
     </Grid>
-</ContentPage> 
+</ContentPage>

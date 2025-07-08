@@ -17,7 +17,11 @@
                     HorizontalOptions="Start"/>
 
             <Label Grid.Column="1" 
+<<<<<<< Updated upstream
                    Text="Детайли за отсъствие" 
+=======
+                   Text="Подробности за отсъствието" 
+>>>>>>> Stashed changes
                    FontSize="18" 
                    FontAttributes="Bold"
                    TextColor="White"
