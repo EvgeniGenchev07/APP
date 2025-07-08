@@ -18,8 +18,7 @@ public class AbsenceViewModel
     public DateTime EndDate => _absence.StartDate.AddDays(_absence.DaysCount - 1);
     public int DaysCount => _absence.DaysCount;
     public int Days => _absence.DaysCount;
-    public DateTime Created => _absence.Created;
-    public DateTime CreatedDate => _absence.Created;
+    public string CreatedDate => _absence.Created.ToString("MM/dd/yyyy");
     public string UserId => _absence.UserId;
     public string UserName => _absence.User?.Name ?? "Unknown User";
 
@@ -59,11 +58,11 @@ public class AbsenceViewModel
         _ => Colors.Gray
     };
 
-    public string DateRange => $"{_absence.StartDate:dd/MM/yyyy} - {EndDate:dd/MM/yyyy} ({_absence.DaysCount} days)";
+    public string DateRange => $"{_absence.StartDate:MM/dd/yyyy} - {EndDate:MM/dd/yyyy} ({_absence.DaysCount} days)";
     
     public string DurationText => $"{_absence.DaysCount} day{(_absence.DaysCount == 1 ? "" : "s")}";
     
-    public string CreatedText => $"Requested on {_absence.Created:dd/MM/yyyy}";
+    public string CreatedText => $"Requested on {_absence.Created:MM/dd/yyyy}";
 
-    public bool CanChangeStatus => _absence.Status == AbsenceStatus.Pending;
+    public bool CanChangeStatus => Status == AbsenceStatus.Pending;
 } 

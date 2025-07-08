@@ -1,6 +1,7 @@
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -8,15 +9,15 @@ using System.Windows.Input;
 
 namespace App.PageModels;
 
-public class AdminAllAbsencesPageModel : INotifyPropertyChanged
+public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropertyChanged
 {
     private readonly HttpService _httpService;
     private bool _isBusy;
     private bool _isRefreshing;
 
     public event PropertyChangedEventHandler PropertyChanged;
-
-    public ObservableCollection<AbsenceViewModel> Absences { get; } = new();
+    [ObservableProperty]
+    public ObservableCollection<AbsenceViewModel> absences = new();
 
     public bool IsBusy
     {
@@ -110,9 +111,13 @@ public class AdminAllAbsencesPageModel : INotifyPropertyChanged
                 if (success)
                 {
                     absence.Status = AbsenceStatus.Approved;
+                    int index = Absences.IndexOf(absence);
+                    if (index >= 0)
+                    {
+                        Absences[index] = absence;
+                    }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(ApprovedAbsences));
-                    OnPropertyChanged(nameof(Absences));
                     await Application.Current.MainPage.DisplayAlert("Success", "Absence approved successfully", "OK");
                 }
                 else
@@ -151,9 +156,13 @@ public class AdminAllAbsencesPageModel : INotifyPropertyChanged
                 if (success)
                 {
                     absence.Status = AbsenceStatus.Rejected;
+                    int index = Absences.IndexOf(absence);
+                    if (index >= 0)
+                    {
+                        Absences[index] = absence;
+                    }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(RejectedAbsences));
-                    OnPropertyChanged(nameof(Absences));
                     await Application.Current.MainPage.DisplayAlert("Success", "Absence rejected successfully", "OK");
                 }
                 else
