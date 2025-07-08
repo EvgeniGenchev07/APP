@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
 using App.Pages;
+using System.Linq;
 
 namespace App.PageModels;
 
@@ -16,6 +17,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     private bool _isBusy;
     private bool _isRefreshing;
     private string _searchText = string.Empty;
+    private List<UserViewModel> _allUsers = new(); 
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -26,8 +28,12 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         get => _searchText;
         set
         {
-            _searchText = value;
-            OnPropertyChanged();
+            if (_searchText != value)
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                Task.Run(() => SearchUsersAsync());
+            }
         }
     }
 
@@ -36,8 +42,11 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         get => _isBusy;
         set
         {
-            _isBusy = value;
-            OnPropertyChanged();
+            if (_isBusy != value)
+            {
+                _isBusy = value;
+                OnPropertyChanged();
+            }
         }
     }
 
@@ -46,8 +55,11 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         get => _isRefreshing;
         set
         {
-            _isRefreshing = value;
-            OnPropertyChanged();
+            if (_isRefreshing != value)
+            {
+                _isRefreshing = value;
+                OnPropertyChanged();
+            }
         }
     }
 
@@ -55,18 +67,16 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     public ICommand EditUserCommand { get; }
     public ICommand DeleteUserCommand { get; }
     public ICommand SearchCommand { get; }
-    public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
     public AdminUsersPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+
         AddUserCommand = new Command(async () => await AddUserAsync());
         EditUserCommand = new Command<UserViewModel>(async (user) => await EditUserAsync(user));
         DeleteUserCommand = new Command<UserViewModel>(async (user) => await DeleteUserAsync(user));
         SearchCommand = new Command(async () => await SearchUsersAsync());
-        CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
         _ = LoadUsersAsync();
@@ -77,18 +87,54 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         try
         {
             IsBusy = true;
+            Users.Clear();
+            _allUsers.Clear();
 
             var users = await _httpService.GetAllUsersAsync();
+            _allUsers = users.Select(u => new UserViewModel(u)).ToList();
 
-            Users.Clear();
-            foreach (var user in users)
+            Device.BeginInvokeOnMainThread(() =>
             {
-                Users.Add(new UserViewModel(user));
-            }
+                foreach (var user in _allUsers)
+                {
+                    Users.Add(user);
+                }
+            });
         }
         catch (Exception ex)
         {
             await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load users: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task SearchUsersAsync()
+    {
+        try
+        {
+            IsBusy = true;
+
+            var filteredUsers = await Task.Run(() =>
+                string.IsNullOrWhiteSpace(SearchText)
+                    ? _allUsers
+                    : _allUsers.Where(u =>
+                        u.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList());
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Users.Clear();
+                foreach (var user in filteredUsers)
+                {
+                    Users.Add(user);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to search users: {ex.Message}", "OK");
         }
         finally
         {
@@ -105,7 +151,6 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     {
         if (user != null)
         {
-            // Pass the user to the edit page
             EditUserPage.SelectedUser = user;
             await Shell.Current.GoToAsync("EditUserPage");
         }
@@ -126,11 +171,11 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             try
             {
                 IsBusy = true;
-
-                // Call API to delete user
                 var success = await _httpService.DeleteUserAsync(user.Id);
+
                 if (success)
                 {
+                    _allUsers.Remove(user);
                     Users.Remove(user);
                     await Application.Current.MainPage.DisplayAlert("Success", "User deleted successfully", "OK");
                 }
@@ -150,17 +195,6 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         }
     }
 
-    private async Task CancelAsync()
-    {
-        await Shell.Current.GoToAsync("//AdminPage");
-    }
-
-    private async Task SearchUsersAsync()
-    {
-        // Implement search functionality
-        await LoadUsersAsync();
-    }
-
     private async Task RefreshAsync()
     {
         IsRefreshing = true;
@@ -172,4 +206,4 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-} 
+}

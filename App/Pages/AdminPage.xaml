@@ -12,7 +12,7 @@
                    FontAttributes="Bold" 
                    HorizontalOptions="Center"
                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"/>
-            
+
             <!-- Admin Navigation Buttons -->
             <Grid ColumnDefinitions="*,*,*,*" Margin="0,10,0,0">
                 <Button Grid.Column="0" 
@@ -40,11 +40,18 @@
                         TextColor="White"
                         FontSize="14"/>
             </Grid>
-            
+
             <Label Text="Business Trips Calendar View" 
                    FontSize="16" 
                    HorizontalOptions="Center"
                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"/>
+
+            <Button Text="Add Custom Holiday" 
+                    Command="{Binding ShowAddHolidayDialogCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    HorizontalOptions="Center"
+                    WidthRequest="200"/>
         </VerticalStackLayout>
 
         <!-- Calendar View -->
@@ -59,14 +66,14 @@
                             Command="{Binding PreviousMonthCommand}"
                             BackgroundColor="{StaticResource Primary}"
                             TextColor="White"/>
-                    
+
                     <Label Grid.Column="1" 
                            Text="{Binding CurrentMonthYear}" 
                            FontSize="18" 
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"/>
-                    
+
                     <Button Grid.Column="2" 
                             Text="&gt;" 
                             FontSize="18" 
@@ -83,7 +90,7 @@
                     <Grid ColumnDefinitions="*,*,*,*,*,*,*" 
                           RowDefinitions="Auto,*,*,*,*,*,*"
                           Padding="10">
-                        
+
                         <!-- Day Headers -->
                         <Label Grid.Row="0" Grid.Column="0" Text="Sun" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="1" Text="Mon" FontAttributes="Bold" HorizontalOptions="Center"/>
@@ -116,7 +123,7 @@
                                                    FontSize="12"
                                                    HorizontalOptions="Center"
                                                    TextColor="{Binding TextColor}"/>
-                                            
+
                                             <!-- Business Trip Indicators -->
                                             <VerticalStackLayout Grid.Row="1" Spacing="2">
                                                 <Frame IsVisible="{Binding HasBusinessTrips}"
@@ -150,27 +157,41 @@
                         Padding="15">
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Legend" FontAttributes="Bold" FontSize="16"/>
-                        <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto">
+                        <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
                             <Frame Grid.Row="0" Grid.Column="0" 
                                    BackgroundColor="{StaticResource Primary}" 
                                    WidthRequest="20" 
                                    HeightRequest="20" 
                                    CornerRadius="2"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="Approved Trips" VerticalOptions="Center"/>
-                            
+
                             <Frame Grid.Row="0" Grid.Column="2" 
                                    BackgroundColor="{StaticResource Warning}" 
                                    WidthRequest="20" 
                                    HeightRequest="20" 
                                    CornerRadius="2"/>
                             <Label Grid.Row="0" Grid.Column="3" Text="Pending Trips" VerticalOptions="Center"/>
-                            
+
                             <Frame Grid.Row="1" Grid.Column="0" 
                                    BackgroundColor="{StaticResource Success}" 
                                    WidthRequest="20" 
                                    HeightRequest="20" 
                                    CornerRadius="2"/>
                             <Label Grid.Row="1" Grid.Column="1" Text="Completed Trips" VerticalOptions="Center"/>
+
+                            <Frame Grid.Row="2" Grid.Column="0" 
+                                   BackgroundColor="LightPink" 
+                                   WidthRequest="20" 
+                                   HeightRequest="20" 
+                                   CornerRadius="2"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="Official Holidays" VerticalOptions="Center"/>
+
+                            <Frame Grid.Row="3" Grid.Column="0" 
+                                   BackgroundColor="LightBlue" 
+                                   WidthRequest="20" 
+                                   HeightRequest="20" 
+                                   CornerRadius="2"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="Custom Holidays" VerticalOptions="Center"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
@@ -183,9 +204,38 @@
                         Padding="15">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="{Binding SelectedDayTitle}" FontAttributes="Bold" FontSize="18"/>
-                        
+
+                        <!-- Holiday Info -->
+                        <Frame IsVisible="{Binding SelectedDay.IsHoliday}"
+                               BackgroundColor="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray800}}"
+                               Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Frame BackgroundColor="{Binding SelectedDay.HolidayColor}" 
+                                       WidthRequest="20" 
+                                       HeightRequest="20" 
+                                       CornerRadius="2"
+                                       VerticalOptions="Center"/>
+                                <Label Text="{Binding SelectedDay.HolidayTypeText}"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Frame>
+
+                        <!-- Delete Custom Holiday Button -->
+                        <Button Text="Delete Custom Holiday"
+                                IsVisible="{Binding SelectedDay.IsCustomHoliday}"
+                                Command="{Binding DeleteCustomHolidayCommand}"
+                                BackgroundColor="{StaticResource Error}"
+                                TextColor="White"/>
+
+                        <!-- Business Trips List -->
+                        <Label Text="Business Trips:" 
+                               IsVisible="{Binding SelectedDay.HasAnyTrips}"
+                               FontAttributes="Bold"/>
+
                         <CollectionView ItemsSource="{Binding SelectedDayTrips}"
-                                        HeightRequest="200">
+                                        HeightRequest="200"
+                                        IsVisible="{Binding SelectedDay.HasAnyTrips}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
@@ -199,11 +249,11 @@
                                             <Label Grid.Row="0" Grid.Column="1" 
                                                    Text="{Binding StatusText}" 
                                                    TextColor="{Binding StatusColor}"/>
-                                            
+
                                             <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding ProjectName}" 
                                                    FontSize="12"/>
-                                            
+
                                             <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                                                    Text="{Binding CarTripDestination}" 
                                                    FontSize="12"
@@ -213,10 +263,54 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
+
+                        <Label Text="No business trips for this day"
+                               IsVisible="{Binding SelectedDay.HasNoTrips}"
+                               FontAttributes="Italic"
+                               HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- Add Holiday Dialog -->
+        <Border Grid.RowSpan="3"
+                IsVisible="{Binding IsHolidayDialogVisible}"
+                BackgroundColor="#80000000"
+                Padding="40">
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                    Padding="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="15" WidthRequest="300">
+                    <Label Text="Add Custom Holiday" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+
+                    <DatePicker Date="{Binding SelectedHolidayDate}"
+                                MinimumDate="01/01/2000"
+                                MaximumDate="12/31/2100"/>
+
+                    <Entry Placeholder="Holiday Name"
+                           Text="{Binding HolidayName}"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button Grid.Column="0"
+                                Text="Cancel"
+                                Command="{Binding HideAddHolidayDialogCommand}"
+                                BackgroundColor="{StaticResource Gray200}"
+                                TextColor="{StaticResource Black}"/>
+
+                        <Button Grid.Column="1"
+                                Text="Add"
+                                Command="{Binding AddHolidayCommand}"
+                                BackgroundColor="{StaticResource Primary}"
+                                TextColor="{StaticResource White}"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+        </Border>
 
         <!-- Loading Indicator -->
         <ActivityIndicator Grid.Row="2" 
@@ -224,4 +318,4 @@
                           IsVisible="{Binding IsBusy}"
                           HorizontalOptions="Center"/>
     </Grid>
-</ContentPage> 
+</ContentPage>

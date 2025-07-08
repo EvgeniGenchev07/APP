@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace App.PageModels;
 
-public class MainPageModel : INotifyPropertyChanged
+public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
 {
     private readonly HttpService _httpService;
     private bool _isBusy;
@@ -22,8 +23,11 @@ public class MainPageModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public ObservableCollection<AbsenceViewModel> RecentAbsences { get; } = new();
-    public ObservableCollection<BusinessTripViewModel> RecentBusinessTrips { get; } = new();
+    [ObservableProperty]
+    public ObservableCollection<AbsenceViewModel> recentAbsences = new();
+
+    [ObservableProperty]
+    public ObservableCollection<BusinessTripViewModel> recentBusinessTrips = new();
 
     public string UserName
     {
@@ -110,14 +114,11 @@ public class MainPageModel : INotifyPropertyChanged
         ViewAllAbsencesCommand = new Command(async () => await ViewAllAbsencesAsync());
         ViewAllBusinessTripsCommand = new Command(async () => await ViewAllBusinessTripsAsync());
         LogoutCommand = new Command(async () => await LogoutAsync());
-        MessagingCenter.Subscribe<RequestPageModel>(this, "BusinessTripCreated", async (sender) =>
-        {
-            await LoadDataAsync();
-        });
+   
         _ = LoadDataAsync();
     }
 
-    private async Task LoadDataAsync()
+    internal async Task LoadDataAsync()
     {
         try
         {
@@ -143,7 +144,6 @@ public class MainPageModel : INotifyPropertyChanged
 
                 NoBusinessTrips = !recentTrips.Any();
 
-                // Load user's absences
                 var absences = await _httpService.GetUserAbsencesAsync(App.User.Id);
                 var recentAbsences = absences.OrderByDescending(a => a.Created).Take(5).ToList();
 
@@ -190,10 +190,7 @@ public class MainPageModel : INotifyPropertyChanged
     {
         try
         {
-            // Clear user data
             App.User = null;
-            
-            // Navigate to register page
             await Shell.Current.GoToAsync("//register");
         }
         catch (Exception ex)

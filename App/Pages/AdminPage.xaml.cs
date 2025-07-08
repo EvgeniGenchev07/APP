@@ -16,5 +16,6 @@ public partial class AdminPage : ContentPage
         {
             ((AdminPageModel)BindingContext).SelectDay(selectedDay);
         }
+        ((CollectionView)sender).SelectedItem = null;
     }
-} 
+}
