@@ -6,10 +6,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace App.PageModels;
 
-public class MainPageModel : INotifyPropertyChanged
+public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
 {
     private readonly HttpService _httpService;
     private bool _isBusy;
@@ -22,8 +23,11 @@ public class MainPageModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public ObservableCollection<AbsenceViewModel> RecentAbsences { get; } = new();
-    public ObservableCollection<BusinessTripViewModel> RecentBusinessTrips { get; } = new();
+    [ObservableProperty]
+    public ObservableCollection<AbsenceViewModel> recentAbsences = new();
+
+    [ObservableProperty]
+    public ObservableCollection<BusinessTripViewModel> recentBusinessTrips = new();
 
     public string UserName
     {
