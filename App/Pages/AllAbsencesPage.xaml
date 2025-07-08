@@ -51,9 +51,7 @@
             <RefreshView Grid.Row="1" 
                          IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding AllAbsences}"
-                                SelectionMode="Single"
-                                SelectionChanged="OnAbsenceSelected">
+                <CollectionView ItemsSource="{Binding AllAbsences}">
                     <CollectionView.Header>
                         <Label Text="Your Absence History" 
                                FontSize="18" 
@@ -68,6 +66,10 @@
                                     Margin="20,5"
                                     Padding="15"
                                     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AllAbsencesPageModel}}, Path=SelectAbsenceCommand}" 
+CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
                                     <!-- Header with Type and Status -->
                                     <Label Grid.Row="0" Grid.Column="0" 

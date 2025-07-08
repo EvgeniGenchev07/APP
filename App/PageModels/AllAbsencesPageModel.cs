@@ -7,10 +7,12 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Microsoft.Maui.Graphics;
 using App.Pages;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace App.PageModels;
 
-public class AllAbsencesPageModel : INotifyPropertyChanged
+public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyChanged
 {
     private readonly HttpService _httpService;
     private bool _isBusy;
@@ -21,8 +23,9 @@ public class AllAbsencesPageModel : INotifyPropertyChanged
     private int _rejectedAbsences;
 
     public event PropertyChangedEventHandler PropertyChanged;
+    [ObservableProperty]
 
-    public ObservableCollection<AbsenceViewModel> AllAbsences { get; } = new();
+    public ObservableCollection<AbsenceViewModel> allAbsences = new();
 
     public int TotalAbsences
     {
@@ -142,7 +145,7 @@ public class AllAbsencesPageModel : INotifyPropertyChanged
     {
         await Shell.Current.GoToAsync("//MainPage");
     }
-
+    [RelayCommand]
     public async void SelectAbsence(AbsenceViewModel absence)
     {
         if (absence != null)
