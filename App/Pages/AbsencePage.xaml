@@ -25,7 +25,8 @@
                    VerticalOptions="Center"/>
         </Grid>
 
-        <ScrollView Grid.Row="1">
+        <ScrollView Grid.Row="1" 
+                         VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="20" Spacing="15">
                 
                 <!-- Employee Info -->

@@ -28,7 +28,7 @@
         </Grid>
 
         <!-- Filters Section -->
-        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Default">
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="15" Spacing="10">
                 
                 <!-- Search Bar -->
@@ -112,7 +112,8 @@
                        HorizontalOptions="Center"/>
 
                 <!-- Business Trips List -->
-                <CollectionView ItemsSource="{Binding FilteredBusinessTrips}">
+                <CollectionView ItemsSource="{Binding FilteredBusinessTrips}"
+                                VerticalScrollBarVisibility="Never">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:BusinessTrip">
                             <Frame Margin="0,5" 

@@ -7,7 +7,7 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
 
-    <ScrollView>
+    <ScrollView VerticalScrollBarVisibility="Never">
         <Grid RowDefinitions="Auto,Auto,Auto" 
               RowSpacing="30"
               Padding="20,40,20,20"

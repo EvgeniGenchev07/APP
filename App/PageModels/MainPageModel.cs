@@ -149,8 +149,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
             {
                 UserName = App.User.Name;
                 AbsenceDays = App.User.AbsenceDays;
-
-                var businessTrips = await _httpService.GetUserBusinessTripsAsync(App.User.Id);
+                var businessTrips = App.User.BusinessTrips ?? new List<BusinessTrip>();
                 var recentTrips = businessTrips.OrderByDescending(t => t.Created).Take(5).ToList();
                 
                 PendingTripsCount = businessTrips.Count(t => t.Status == BusinessTripStatus.Pending);
@@ -164,7 +163,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
 
                 NoBusinessTrips = !recentTrips.Any();
 
-                var absences = await _httpService.GetUserAbsencesAsync(App.User.Id);
+                var absences = App.User.Absences ?? new List<Absence>();
                 var recentAbsences = absences.OrderByDescending(a => a.Created).Take(5).ToList();
 
                 RecentAbsences.Clear();

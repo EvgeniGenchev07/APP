@@ -59,6 +59,7 @@
                         IsRefreshing="{Binding IsRefreshing}" 
                         Command="{Binding RefreshCommand}">
                 <CollectionView ItemsSource="{Binding Users}"
+                         VerticalScrollBarVisibility="Never" 
                                Margin="20,0,20,20">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:UserViewModel">

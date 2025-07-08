@@ -51,7 +51,8 @@
             <RefreshView Grid.Row="1" 
                          IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding AllAbsences}">
+                <CollectionView ItemsSource="{Binding AllAbsences}"
+                               VerticalScrollBarVisibility="Never">
                     <CollectionView.Header>
                         <Label Text="Your Absence History" 
                                FontSize="18" 

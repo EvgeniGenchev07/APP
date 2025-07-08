@@ -45,11 +45,11 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
     
     public string StatusIcon => Absence?.Status switch
     {
-        BusinessLayer.AbsenceStatus.Pending => "⏳", // Pending
-        BusinessLayer.AbsenceStatus.Approved => "✅", // Approved
-        BusinessLayer.AbsenceStatus.Rejected => "❌", // Rejected
-        BusinessLayer.AbsenceStatus.Cancelled => "🚫", // Cancelled
-        _ => "❓"
+        BusinessLayer.AbsenceStatus.Pending => "\u23F3", // Pending
+        BusinessLayer.AbsenceStatus.Approved => "\u2713", // Approved
+        BusinessLayer.AbsenceStatus.Rejected => "\u274C", // Rejected
+        BusinessLayer.AbsenceStatus.Cancelled => "\U0001F6AB", // Cancelled
+        _ => "\u2753"
     };
 
     public string StatusDescription => Absence?.Status switch
@@ -97,7 +97,6 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
 
     private void LoadAbsenceDetails()
     {
-        // Get the selected absence from the static property
         if (AbsenceDetailsPage.SelectedAbsence != null)
         {
             Absence = AbsenceDetailsPage.SelectedAbsence;

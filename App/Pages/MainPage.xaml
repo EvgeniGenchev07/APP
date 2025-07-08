@@ -71,8 +71,9 @@
                                     FontSize="14"
                                     HorizontalOptions="End"/>
                         </Grid>
-                        
-                        <CollectionView ItemsSource="{Binding RecentAbsences}"
+
+                        <CollectionView ItemsSource="{Binding RecentAbsences}" 
+                                        VerticalScrollBarVisibility="Never"
                                         HeightRequest="200">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewModels:AbsenceViewModel">
@@ -128,8 +129,9 @@ CommandParameter="{Binding .}"/>
                                     FontSize="14"
                                     HorizontalOptions="End"/>
                         </Grid>
-                        
-                        <CollectionView ItemsSource="{Binding RecentBusinessTrips}"
+
+                        <CollectionView ItemsSource="{Binding RecentBusinessTrips}" 
+                                        VerticalScrollBarVisibility="Never"
                                         HeightRequest="250">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewModels:BusinessTripViewModel">

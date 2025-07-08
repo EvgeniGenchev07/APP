@@ -55,7 +55,7 @@
         </VerticalStackLayout>
 
         <!-- Calendar View -->
-        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Default">
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Spacing="15">
                 <!-- Month Navigation -->
                 <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,10">
@@ -104,6 +104,7 @@
                         <CollectionView Grid.Row="1" Grid.RowSpan="6" Grid.ColumnSpan="7"
                                         ItemsSource="{Binding CalendarDays}"
                                         SelectionMode="Single"
+                         VerticalScrollBarVisibility="Never"
                                         SelectionChanged="OnDaySelected">
                             <CollectionView.ItemsLayout>
                                 <GridItemsLayout Orientation="Vertical" 
