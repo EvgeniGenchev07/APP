@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:App"
     xmlns:pages="clr-namespace:App.Pages"
     Shell.FlyoutBehavior="Disabled"
+    NavigationPage.HasBackButton ="False"
+    NavigationPage.HasNavigationBar="False"
     Title="App">
     
     <ShellContent

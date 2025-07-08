@@ -160,7 +160,7 @@ public class AddUserPageModel : INotifyPropertyChanged
 
     private async Task CancelAsync()
     {
-        await Shell.Current.GoToAsync("..");
+        await Shell.Current.GoToAsync("//AdminUsersPage");
     }
 
     private bool ValidateForm()

@@ -4,15 +4,28 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
              x:Class="App.Pages.EditUserPage"
              x:DataType="pageModels:EditUserPageModel">
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
+        <Button Grid.Column="0" 
+            Text="Cancel" 
+            Command="{Binding CancelCommand}"
+            BackgroundColor="Transparent"
+            TextColor="White"
+            FontSize="16"
+            HorizontalOptions="Start"/>
 
-    <ScrollView>
+        <Label Grid.Column="1" 
+           Text="Edit User Page" 
+           FontSize="18" 
+           FontAttributes="Bold"
+           TextColor="White"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"/>
+    </Grid>
+
+    <ScrollView VerticalScrollBarVisibility="Never" Grid.Row="1">
+        
         <VerticalStackLayout Padding="20" Spacing="20">
-            <!-- Header -->
-            <Label Text="Edit User" 
-                   FontSize="24" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
-
             <!-- Name -->
             <VerticalStackLayout Spacing="5">
                 <Label Text="Name *" FontSize="16" FontAttributes="Bold"/>
@@ -89,12 +102,6 @@
                         FontSize="16"
                         HeightRequest="50"/>
                 
-                <Button Text="Cancel" 
-                        Command="{Binding CancelCommand}"
-                        BackgroundColor="Transparent"
-                        TextColor="{StaticResource Primary}"
-                        FontSize="16"
-                        HeightRequest="50"/>
             </VerticalStackLayout>
 
             <!-- Loading Indicator -->
@@ -103,4 +110,5 @@
                               HorizontalOptions="Center"/>
         </VerticalStackLayout>
     </ScrollView>
+    </Grid>
 </ContentPage> 

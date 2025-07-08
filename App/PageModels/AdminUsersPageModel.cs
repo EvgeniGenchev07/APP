@@ -55,6 +55,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     public ICommand EditUserCommand { get; }
     public ICommand DeleteUserCommand { get; }
     public ICommand SearchCommand { get; }
+    public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
     public AdminUsersPageModel(HttpService httpService)
@@ -65,6 +66,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         EditUserCommand = new Command<UserViewModel>(async (user) => await EditUserAsync(user));
         DeleteUserCommand = new Command<UserViewModel>(async (user) => await DeleteUserAsync(user));
         SearchCommand = new Command(async () => await SearchUsersAsync());
+        CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
         _ = LoadUsersAsync();
@@ -146,6 +148,11 @@ public class AdminUsersPageModel : INotifyPropertyChanged
                 IsBusy = false;
             }
         }
+    }
+
+    private async Task CancelAsync()
+    {
+        await Shell.Current.GoToAsync("//AdminPage");
     }
 
     private async Task SearchUsersAsync()
