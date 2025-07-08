@@ -9,15 +9,15 @@
         <!-- Header with Back Button -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0" 
-                    Text="← Back" 
+                    Text="← Назад" 
                     Command="{Binding BackCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="Start"/>
-            
+
             <Label Grid.Column="1" 
-                   Text="Absence Details" 
+                   Text="Детайли за отсъствие" 
                    FontSize="18" 
                    FontAttributes="Bold"
                    TextColor="White"
@@ -28,15 +28,15 @@
         <ScrollView Grid.Row="1"
                          VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="20" Spacing="20">
-                
+
                 <!-- Status Card -->
                 <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                         StrokeThickness="1"
                         BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                         Padding="20">
                     <VerticalStackLayout Spacing="15">
-                        <Label Text="Status" FontSize="18" FontAttributes="Bold"/>
-                        
+                        <Label Text="Статус" FontSize="18" FontAttributes="Bold"/>
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Frame Grid.Column="0" 
                                    BackgroundColor="{Binding StatusColor}" 
@@ -52,7 +52,7 @@
                                        HorizontalOptions="Center"
                                        VerticalOptions="Center"/>
                             </Frame>
-                            
+
                             <VerticalStackLayout Grid.Column="1" Spacing="5">
                                 <Label Text="{Binding StatusText}" 
                                        FontSize="20" 
@@ -72,12 +72,17 @@
                         BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                         Padding="20">
                     <VerticalStackLayout Spacing="15">
+<<<<<<< Updated upstream
                         <Label Text="Absence Information" FontSize="18" FontAttributes="Bold"/>
+=======
+                        <Label Text="Информация за отсъствието" FontSize="18" FontAttributes="Bold"/>
+>>>>>>> Stashed changes
 
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
-                            <Label Grid.Row="0" Grid.Column="0" Text="Type:" FontSize="14" FontAttributes="Bold"/>
+                            <Label Grid.Row="0" Grid.Column="0" Text="Тип:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding TypeText}" FontSize="14"/>
 
+<<<<<<< Updated upstream
                             <Label Grid.Row="1" Grid.Column="0" Text="Duration:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="1" Grid.Column="1" Text="{Binding DurationText}" FontSize="14"/>
 
@@ -88,23 +93,40 @@
                             <Label Grid.Row="3" Grid.Column="1" Text="{Binding EndDateText}" FontSize="14"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Text="Requested:" FontSize="14" FontAttributes="Bold"/>
+=======
+                            <Label Grid.Row="1" Grid.Column="0" Text="Продължителност:" FontSize="14" FontAttributes="Bold"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding DurationText}" FontSize="14"/>
+
+                            <Label Grid.Row="2" Grid.Column="0" Text="Начална дата:" FontSize="14" FontAttributes="Bold"/>
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding StartDateText}" FontSize="14"/>
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="Крайна дата:" FontSize="14" FontAttributes="Bold"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding EndDateText}" FontSize="14"/>
+
+                            <Label Grid.Row="4" Grid.Column="0" Text="Подадена:" FontSize="14" FontAttributes="Bold"/>
+>>>>>>> Stashed changes
                             <Label Grid.Row="4" Grid.Column="1" Text="{Binding CreatedText}" FontSize="14"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
+<<<<<<< Updated upstream
+=======
+                <!-- Timeline -->
+                
+>>>>>>> Stashed changes
                 <!-- Actions -->
                 <VerticalStackLayout Spacing="10" IsVisible="{Binding CanEdit}">
-                    <Label Text="Actions" FontSize="18" FontAttributes="Bold"/>
-                    
-                    <Button Text="Edit Request" 
+                    <Label Text="Действия" FontSize="18" FontAttributes="Bold"/>
+
+                    <Button Text="Редактирай заявка" 
                             Command="{Binding EditCommand}"
                             BackgroundColor="{StaticResource Primary}"
                             TextColor="White"
                             FontSize="16"
                             HeightRequest="50"/>
-                    
-                    <Button Text="Cancel Request" 
+
+                    <Button Text="Отмени заявка" 
                             Command="{Binding CancelCommand}"
                             BackgroundColor="{StaticResource Error}"
                             TextColor="White"
@@ -122,4 +144,4 @@
                           HorizontalOptions="Center"
                           VerticalOptions="Center"/>
     </Grid>
-</ContentPage> 
+</ContentPage>

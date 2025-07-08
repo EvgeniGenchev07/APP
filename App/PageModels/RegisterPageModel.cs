@@ -103,7 +103,7 @@ public class RegisterPageModel : INotifyPropertyChanged
             // Validate email format
             if (!Email.Contains("@") || !Email.Contains("."))
             {
-                ErrorMessage = "Please enter a valid email address";
+                ErrorMessage = "Моля въведи правилен имейл";
                 return;
             }
 
@@ -111,14 +111,14 @@ public class RegisterPageModel : INotifyPropertyChanged
             // Validate password length
             if (Password.Length < 6)
             {
-                ErrorMessage = "Password must be at least 6 characters";
+                ErrorMessage = "Паролата трябва да е поне 6 символа";
                 return;
             }
 
             User user = await _httpService.PostUserLogin(Email, Password);
             if (user == null)
             {
-                ErrorMessage = "Registration failed. Please try again.";
+                ErrorMessage = "Неуспешна регистрация. Моля опитайте отново.";
                 return;
             }
             App.User = user;
@@ -138,7 +138,7 @@ public class RegisterPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Registration failed: {ex.Message}";
+            ErrorMessage = $"Неуспешна регистрация: {ex.Message}";
         }
         finally
         {

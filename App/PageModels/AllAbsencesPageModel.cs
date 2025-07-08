@@ -126,7 +126,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load absences: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на отсъствията: {ex.Message}", "OK");
         }
         finally
         {

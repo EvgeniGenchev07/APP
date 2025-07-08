@@ -84,7 +84,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load business trips: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешко", $"Неуспешно зареждане на командировки: {ex.Message}", "OK");
         }
         finally
         {
@@ -97,10 +97,10 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         if (trip == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Confirm Approval", 
-            $"Are you sure you want to approve this business trip request?", 
-            "Approve", 
-            "Cancel");
+            "Потвърдете одобрение", 
+            $"Искате ли да одобрите молбата за командировка?", 
+            "Одобри", 
+            "Отказ");
 
         if (confirm)
         {
@@ -120,16 +120,16 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                     }
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(ApprovedTrips));
-                    await Application.Current.MainPage.DisplayAlert("Success", "Business trip approved successfully", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Командировката бе одобрена успешно", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to approve business trip", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно одобряване на командировка", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to approve business trip: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно одобряване на командировка: {ex.Message}", "OK");
             }
             finally
             {
@@ -143,10 +143,10 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         if (trip == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Confirm Rejection", 
-            $"Are you sure you want to reject this business trip request?", 
-            "Reject", 
-            "Cancel");
+            "Потвърдете отхвърляне", 
+            $"Искате ли да отхвърлите молбата за командировка?", 
+            "Отхвърли", 
+            "Отказ");
 
         if (confirm)
         {
@@ -166,16 +166,16 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                     }
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(RejectedTrips));
-                    await Application.Current.MainPage.DisplayAlert("Success", "Business trip rejected successfully", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Командировката бе откзана успешно", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to reject business trip", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно отхвърялне на командировка", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to reject business trip: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно отхвърялне на командировка: {ex.Message}", "OK");
             }
             finally
             {

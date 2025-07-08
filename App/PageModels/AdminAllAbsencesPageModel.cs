@@ -84,7 +84,7 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load absences: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на отсъствия: {ex.Message}", "OK");
         }
         finally
         {
@@ -97,10 +97,10 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         if (absence == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Confirm Approval", 
-            $"Are you sure you want to approve this absence request?", 
-            "Approve", 
-            "Cancel");
+            "Потвърдете одобрение",
+            $"Искате ли да одобрите молбата за командировка?",
+            "Одобри",
+            "Отказ");
 
         if (confirm)
         {
@@ -120,16 +120,16 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
                     }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(ApprovedAbsences));
-                    await Application.Current.MainPage.DisplayAlert("Success", "Absence approved successfully", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Отсъствието бе одобрено успешно", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to approve absence", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно одобрение на отсъствие", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to approve absence: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно одобрение на отсъствие: {ex.Message}", "OK");
             }
             finally
             {
@@ -143,10 +143,10 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         if (absence == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Confirm Rejection", 
-            $"Are you sure you want to reject this absence request?", 
-            "Reject", 
-            "Cancel");
+            "Потвърдете отхвърляне",
+            $"Искате ли да отхвърлите молбата за командировка?",
+            "Отхвърли",
+            "Отказ");
 
         if (confirm)
         {
@@ -165,16 +165,16 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
                     }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(RejectedAbsences));
-                    await Application.Current.MainPage.DisplayAlert("Success", "Absence rejected successfully", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Отсъствието бе отхвърлено успешно", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to reject absence", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно отхвърляне на отсъствие", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to reject absence: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно отхвърляне на отсъствие: {ex.Message}", "OK");
             }
             finally
             {

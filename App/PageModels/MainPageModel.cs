@@ -178,7 +178,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на данните: {ex.Message}", "OK");
         }
         finally
         {
@@ -232,7 +232,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Logout failed: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно излизане: {ex.Message}", "OK");
         }
     }
 

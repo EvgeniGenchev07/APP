@@ -54,11 +54,11 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
 
     public string StatusDescription => Absence?.Status switch
     {
-        BusinessLayer.AbsenceStatus.Pending => "Your request is being reviewed by management",
-        BusinessLayer.AbsenceStatus.Approved => "Your request has been approved",
-        BusinessLayer.AbsenceStatus.Rejected => "Your request has been rejected",
-        BusinessLayer.AbsenceStatus.Cancelled => "Your request has been cancelled",
-        _ => "Unknown status"
+        BusinessLayer.AbsenceStatus.Pending => "Твоята молба се разглежда от ръководството",
+        BusinessLayer.AbsenceStatus.Approved => "Твоята молбa бе одобрена",
+        BusinessLayer.AbsenceStatus.Rejected => "Твоята молба бе отхвърлена",
+        BusinessLayer.AbsenceStatus.Cancelled => "Твоята молба бе отказана",
+        _ => "Неизвестно състояние"
     };
 
     public string DurationText => Absence?.DurationText ?? string.Empty;
@@ -117,11 +117,11 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
             IsBusy = true;
             
             // Navigate to edit page (could be the same as AbsencePage with pre-filled data)
-            await Shell.Current.DisplayAlert("Edit", "Edit functionality will be implemented in the future", "OK");
+            await Shell.Current.DisplayAlert("Редактиране", "Фукнционалността за редактиране ще бъде въведена в бъдеще", "OK");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"Failed to edit absence: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Грешка", $"Неуспешно редактиране на отсъствие: {ex.Message}", "OK");
         }
         finally
         {
@@ -134,10 +134,10 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
         if (Absence == null) return;
 
         var confirmed = await Shell.Current.DisplayAlert(
-            "Cancel Request", 
-            "Are you sure you want to cancel this absence request? This action cannot be undone.", 
-            "Cancel Request", 
-            "Keep Request");
+            "Откажете молбата",
+            "Искате ли да откажете тази молба? Това действие не може да бъде отменено.", 
+            "Откажете молбата", 
+            "Запазете молбата");
 
         if (!confirmed) return;
 
@@ -150,17 +150,17 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
             
             if (success)
             {
-                await Shell.Current.DisplayAlert("Success", "Absence request has been cancelled", "OK");
+                await Shell.Current.DisplayAlert("Успех", "Молбата за отсъствие бе отказана", "OK");
                 await Shell.Current.GoToAsync("..");
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Failed to cancel absence request", "OK");
+                await Shell.Current.DisplayAlert("Грешка", "Неуспешно отказване на молба за отсъствие", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"Failed to cancel absence: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Грешка", $"Неуспешно отказване на молба за отсъствие: {ex.Message}", "OK");
         }
         finally
         {

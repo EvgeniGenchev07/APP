@@ -9,15 +9,15 @@
         <!-- Header with Back Button -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0" 
-                    Text="← Back" 
+                    Text="← Назад" 
                     Command="{Binding BackCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="Start"/>
-            
+
             <Label Grid.Column="1" 
-                   Text="Absence Request" 
+                   Text="Заявка за отсъствие" 
                    FontSize="18" 
                    FontAttributes="Bold"
                    TextColor="White"
@@ -28,17 +28,17 @@
         <ScrollView Grid.Row="1" 
                          VerticalScrollBarVisibility="Never">
             <VerticalStackLayout Padding="20" Spacing="15">
-                
+
                 <!-- Employee Info -->
                 <Frame BorderColor="LightGray" CornerRadius="5" Padding="15">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Employee Information" FontSize="16" FontAttributes="Bold"/>
+                        <Label Text="Информация за служителя" FontSize="16" FontAttributes="Bold"/>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="Name:" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text="Име:" FontSize="14" VerticalOptions="Center"/>
                             <Label Grid.Column="1" Text="{Binding EmployeeName}" FontSize="14" VerticalOptions="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="Available Days:" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text="Налични дни:" FontSize="14" VerticalOptions="Center"/>
                             <Label Grid.Column="1" Text="{Binding AvailableDays}" FontSize="14" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
                         </Grid>
                     </VerticalStackLayout>
@@ -47,32 +47,32 @@
                 <!-- Absence Type -->
                 <Frame BorderColor="LightGray" CornerRadius="5" Padding="15">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Absence Type" FontSize="16" FontAttributes="Bold"/>
+                        <Label Text="Тип отсъствие" FontSize="16" FontAttributes="Bold"/>
                         <Picker ItemsSource="{Binding AbsenceTypes}"
                                 SelectedItem="{Binding SelectedAbsenceType}"
                                 ItemDisplayBinding="{Binding DisplayName}"
-                                Title="Select Absence Type"/>
+                                Title="Изберете тип отсъствие"/>
                     </VerticalStackLayout>
                 </Frame>
 
                 <!-- Absence Period -->
                 <Frame BorderColor="LightGray" CornerRadius="5" Padding="15">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Absence Period" FontSize="16" FontAttributes="Bold"/>
-                        
+                        <Label Text="Период на отсъствие" FontSize="16" FontAttributes="Bold"/>
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="Start Date:" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text="Начална дата:" FontSize="14" VerticalOptions="Center"/>
                             <DatePicker Grid.Column="1" Date="{Binding StartDate}" MinimumDate="{Binding MinimumDate}"/>
                         </Grid>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="End Date:" FontSize="14" VerticalOptions="Center"/>
+                            <Label Text="Крайна дата:" FontSize="14" VerticalOptions="Center"/>
                             <DatePicker Grid.Column="1" Date="{Binding EndDate}" MinimumDate="{Binding StartDate}"/>
                         </Grid>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                            <Label Text="Duration:" FontSize="14" VerticalOptions="Center"/>
-                            <Label Grid.Column="1" Text="{Binding DurationDays, StringFormat='{0} days'}" FontSize="14" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
+                            <Label Text="Продължителност:" FontSize="14" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="{Binding DurationDays, StringFormat='{0} дни'}" FontSize="14" VerticalOptions="Center" TextColor="{StaticResource Primary}"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Frame>
@@ -83,14 +83,14 @@
                        CornerRadius="5" 
                        Padding="15"
                        BackgroundColor="{AppThemeBinding Light={StaticResource Error}, Dark={StaticResource Error}}"
-                       Opacity="0.1">
+                       Opacity="0.5">
                     <Label Text="{Binding ValidationMessage}" 
-                           TextColor="{StaticResource Error}"
+                           TextColor="Black"
                            FontSize="14"/>
                 </Frame>
 
                 <!-- Submit Button -->
-                <Button Text="Submit Absence Request"
+                <Button Text="Изпрати заявка за отсъствие"
                         Command="{Binding SubmitRequestCommand}"
                         HorizontalOptions="Fill"
                         Margin="0,20,0,0"
@@ -109,4 +109,4 @@
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
-</ContentPage> 
+</ContentPage>

@@ -209,7 +209,7 @@ public class AdminPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на данните: {ex.Message}", "OK");
         }
         finally
         {
@@ -285,7 +285,7 @@ public class AdminPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(HolidayName))
         {
-            await Application.Current.MainPage.DisplayAlert("Error", "Please enter a holiday name", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", "Моля въведете име на празник", "OK");
             return;
         }
 
@@ -296,11 +296,11 @@ public class AdminPageModel : INotifyPropertyChanged
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;
-            await Application.Current.MainPage.DisplayAlert("Success", "Holiday added successfully", "OK");
+            await Application.Current.MainPage.DisplayAlert("Успех", "Празникът бе успешно добавен", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to add holiday: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно добавяне на празник: {ex.Message}", "OK");
         }
         finally
         {
@@ -319,11 +319,11 @@ public class AdminPageModel : INotifyPropertyChanged
             _customHolidays.Remove(SelectedDay.Date.Date);
             GenerateCalendar();
             IsDaySelected = false;
-            await Application.Current.MainPage.DisplayAlert("Success", "Custom holiday deleted successfully", "OK");
+            await Application.Current.MainPage.DisplayAlert("Успех", "Персонализираният празник е изтрит успешно", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to delete holiday: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно изтриване на празник: {ex.Message}", "OK");
         }
         finally
         {
@@ -392,8 +392,8 @@ public class CalendarDay
     public bool HasAnyTrips => HasBusinessTrips || HasPendingTrips || HasCompletedTrips;
     public bool HasNoTrips => !HasAnyTrips;
 
-    public string HolidayTypeText => IsOfficialHoliday ? "Official Holiday" :
-                                   IsCustomHoliday ? "Custom Holiday" :
+    public string HolidayTypeText => IsOfficialHoliday ? "Официален празник" :
+                                   IsCustomHoliday ? "Персонализира празник" :
                                    string.Empty;
 
     public Color HolidayColor => IsOfficialHoliday ? Colors.LightPink :

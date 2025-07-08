@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App.Pages.RegisterPage"
@@ -15,7 +14,7 @@
 
             <!-- Header Section -->
             <VerticalStackLayout Grid.Row="0" Spacing="10" HorizontalOptions="Center">
-                <Label Text="Wellcome back" 
+                <Label Text="Добре дошли отново!" 
                        FontSize="28"
                        FontAttributes="Bold"
                        HorizontalOptions="Center" />
@@ -35,7 +34,7 @@
                        Padding="0"
                        HeightRequest="60">
                     <Entry Text="{Binding Email}" 
-                           Placeholder="Email address"
+                           Placeholder="Имейл адрес"
                            PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}"
                            Keyboard="Email"
                            ClearButtonVisibility="WhileEditing"
@@ -51,7 +50,7 @@
                        Padding="0"
                        HeightRequest="60">
                     <Entry Text="{Binding Password}" 
-                           Placeholder="Password"
+                           Placeholder="Парола"
                            PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}"
                            IsPassword="True"
                            FontSize="14"
@@ -71,7 +70,7 @@
             <!-- Footer Section -->
             <VerticalStackLayout Grid.Row="2" Spacing="20" Margin="15,0" MinimumWidthRequest="200" MaximumWidthRequest="400">
                 <!-- Register Button -->
-                <Button Text="Login" 
+                <Button Text="Вход" 
                         Command="{Binding RegisterCommand}"
                         IsEnabled="{Binding IsEnabled}"
                         BackgroundColor="{StaticResource Primary}"

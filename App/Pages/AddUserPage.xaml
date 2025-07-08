@@ -10,116 +10,121 @@
     <Grid RowDefinitions="Auto,*" Padding="20">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0" 
-        Text="Cancel" 
-        Command="{Binding CancelCommand}"
-        BackgroundColor="Transparent"
-        TextColor="White"
-        FontSize="16"
-        HorizontalOptions="Start"/>
+                    Text="Отказ" 
+                    Command="{Binding CancelCommand}"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontSize="16"
+                    HorizontalOptions="Start"/>
 
             <Label Grid.Column="1" 
-       Text="Add User Page" 
-       FontSize="18" 
-       FontAttributes="Bold"
-       TextColor="White"
-       HorizontalOptions="Center"
+                   Text="Добавяне на потребител" 
+                   FontSize="18" 
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
                    VerticalOptions="Center"/>
         </Grid>
+<<<<<<< Updated upstream
             <ScrollView Grid.Row="1" 
                          VerticalScrollBarVisibility="Never">
+=======
+
+        <ScrollView Grid.Row="1">
+>>>>>>> Stashed changes
             <VerticalStackLayout Padding="20" Spacing="20">
 
                 <!-- Name -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Name *" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Име *" FontSize="16" FontAttributes="Bold"/>
                     <Entry Text="{Binding Name}" 
-                       Placeholder="Enter full name"
-                       FontSize="16"/>
+                           Placeholder="Въведете пълно име"
+                           FontSize="16"/>
                     <Label Text="{Binding NameError}" 
-                       TextColor="Red" 
-                       FontSize="12"
-                       IsVisible="{Binding HasNameError}"/>
+                           TextColor="Red" 
+                           FontSize="12"
+                           IsVisible="{Binding HasNameError}"/>
                 </VerticalStackLayout>
 
                 <!-- Email -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Email *" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Имейл *" FontSize="16" FontAttributes="Bold"/>
                     <Entry Text="{Binding Email}" 
-                       Placeholder="Enter email address"
-                       Keyboard="Email"
-                       FontSize="16"/>
+                           Placeholder="Въведете имейл адрес"
+                           Keyboard="Email"
+                           FontSize="16"/>
                     <Label Text="{Binding EmailError}" 
-                       TextColor="Red" 
-                       FontSize="12"
-                       IsVisible="{Binding HasEmailError}"/>
+                           TextColor="Red" 
+                           FontSize="12"
+                           IsVisible="{Binding HasEmailError}"/>
                 </VerticalStackLayout>
 
                 <!-- Password -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Password *" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Парола *" FontSize="16" FontAttributes="Bold"/>
                     <Entry Text="{Binding Password}" 
-                       Placeholder="Enter password"
-                       IsPassword="True"
-                       FontSize="16"/>
+                           Placeholder="Въведете парола"
+                           IsPassword="True"
+                           FontSize="16"/>
                     <Label Text="{Binding PasswordError}" 
-                       TextColor="Red" 
-                       FontSize="12"
-                       IsVisible="{Binding HasPasswordError}"/>
+                           TextColor="Red" 
+                           FontSize="12"
+                           IsVisible="{Binding HasPasswordError}"/>
                 </VerticalStackLayout>
 
                 <!-- Confirm Password -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Confirm Password *" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Потвърди парола *" FontSize="16" FontAttributes="Bold"/>
                     <Entry Text="{Binding ConfirmPassword}" 
-                       Placeholder="Confirm password"
-                       IsPassword="True"
-                       FontSize="16"/>
+                           Placeholder="Потвърдете паролата"
+                           IsPassword="True"
+                           FontSize="16"/>
                     <Label Text="{Binding ConfirmPasswordError}" 
-                       TextColor="Red" 
-                       FontSize="12"
-                       IsVisible="{Binding HasConfirmPasswordError}"/>
+                           TextColor="Red" 
+                           FontSize="12"
+                           IsVisible="{Binding HasConfirmPasswordError}"/>
                 </VerticalStackLayout>
 
                 <!-- Role -->
                 <VerticalStackLayout Spacing="5">
-                    <Label Text="Role *" FontSize="16" FontAttributes="Bold"/>
-                    <Picker Title="Select role" 
-                        SelectedItem="{Binding SelectedRole}">
+                    <Label Text="Роля *" FontSize="16" FontAttributes="Bold"/>
+                    <Picker Title="Изберете роля" 
+                            SelectedItem="{Binding SelectedRole}">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
-                                <x:String>Employee</x:String>
-                                <x:String>Administrator</x:String>
+                                <x:String>Служител</x:String>
+                                <x:String>Администратор</x:String>
                             </x:Array>
                         </Picker.ItemsSource>
                     </Picker>
                     <Label Text="{Binding RoleError}" 
-                       TextColor="Red" 
-                       FontSize="12"
-                       IsVisible="{Binding HasRoleError}"/>
+                           TextColor="Red" 
+                           FontSize="12"
+                           IsVisible="{Binding HasRoleError}"/>
                 </VerticalStackLayout>
 
                 <!-- Buttons -->
                 <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
-                    <Button Text="Add User" 
-                        Command="{Binding AddUserCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White"
-                        FontSize="16"
-                        HeightRequest="50"/>
+                    <Button Text="Добави потребител" 
+                            Command="{Binding AddUserCommand}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            FontSize="16"
+                            HeightRequest="50"/>
 
-                    <Button Text="Cancel" 
-                        Command="{Binding CancelCommand}"
-                        BackgroundColor="Transparent"
-                        TextColor="{StaticResource Primary}"
-                        FontSize="16"
-                        HeightRequest="50"/>
+                    <Button Text="Отказ" 
+                            Command="{Binding CancelCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource Primary}"
+                            FontSize="16"
+                            HeightRequest="50"/>
                 </VerticalStackLayout>
 
                 <!-- Loading Indicator -->
                 <ActivityIndicator IsRunning="{Binding IsBusy}" 
-                              IsVisible="{Binding IsBusy}"
-                              HorizontalOptions="Center"/>
+                                   IsVisible="{Binding IsBusy}"
+                                   HorizontalOptions="Center"/>
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
-</ContentPage> 
+</ContentPage>

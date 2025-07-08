@@ -14,7 +14,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     private bool _isBusy;
     private string _name = string.Empty;
     private string _email = string.Empty;
-    private string _selectedRole = "Employee";
+    private string _selectedRole = "Служител";
     private string _password = string.Empty;
     private string _absenceDays = "0";
     private string _userId = string.Empty;
@@ -119,7 +119,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             Name = user.Name;
             Email = user.Email;
             Password = user.Password;
-            SelectedRole = user.Role == Role.Admin ? "Administrator" : "Employee";
+            SelectedRole = user.Role == Role.Admin ? "Administrator" : "Служител";
             AbsenceDays = user.AbsenceDays.ToString();
         }
     }
@@ -128,7 +128,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (!ValidateForm())
         {
-            await Application.Current.MainPage.DisplayAlert("Validation Error", "Please fix the errors in the form.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка при валидацията", "Моля поправи грешките във формуляра.", "OK");
             return;
         }
 
@@ -136,7 +136,7 @@ public class EditUserPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            var role = SelectedRole == "Administrator" ? Role.Admin : Role.Employee;
+            var role = SelectedRole == "Служител" ? Role.Admin : Role.Employee;
             
             if (!int.TryParse(AbsenceDays, out int absenceDays))
             {
@@ -170,17 +170,17 @@ public class EditUserPageModel : INotifyPropertyChanged
             var success = await _httpService.UpdateUserAsync(user);
             if (success)
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "User updated successfully", "OK");
+                await Application.Current.MainPage.DisplayAlert("Успех", "Потребителят бе обновен успешно", "OK");
                 await Shell.Current.GoToAsync("//AdminUsersPage");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to update user", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно обновяване на потребител", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to update user: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно обновяване на потребител: {ex.Message}", "OK");
         }
         finally
         {
@@ -208,11 +208,11 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            NameError = "Name is required";
+            NameError = "Името е задължително поле";
         }
         else if (Name.Length < 2)
         {
-            NameError = "Name must be at least 2 characters";
+            NameError = "Името трябва да е поне 2 символа";
         }
         else
         {
@@ -229,7 +229,7 @@ public class EditUserPageModel : INotifyPropertyChanged
         }
         else if (Password.Length < 6)
         {
-            PasswordError = "Password must be at least 6 characters";
+            PasswordError = "Паролата трябва да е поне 6 символа";
         }
         else
         {
@@ -240,11 +240,11 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Email))
         {
-            EmailError = "Email is required";
+            EmailError = "Имейлът е задължително поле";
         }
         else if (!Email.Contains("@") || !Email.Contains("."))
         {
-            EmailError = "Please enter a valid email address";
+            EmailError = "Моля въведи правилен имейл";
         }
         else
         {
@@ -258,7 +258,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(SelectedRole))
         {
-            RoleError = "Please select a role";
+            RoleError = "Моля избери роля";
         }
         else
         {
@@ -272,11 +272,11 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(AbsenceDays))
         {
-            AbsenceDaysError = "Absence days is required";
+            AbsenceDaysError = "Дните за отсъствие са задължително поле";
         }
         else if (!int.TryParse(AbsenceDays, out int days) || days < 0)
         {
-            AbsenceDaysError = "Please enter a valid number of days";
+            AbsenceDaysError = "Моля въведи правилен брой на дни";
         }
         else
         {

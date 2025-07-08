@@ -97,17 +97,22 @@ public partial class AbsencePageModel : ObservableObject
             
             if (success)
             {
+<<<<<<< Updated upstream
                 await Shell.Current.DisplayAlert("Success", "Absence request submitted successfully", "OK");
+=======
+                await Shell.Current.DisplayAlert("Успех", "Молбата за отсъствие е изпратена успешно", "OK");
+           
+>>>>>>> Stashed changes
                 await Shell.Current.GoToAsync("//MainPage");
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Failed to submit absence request", "OK");
+                await Shell.Current.DisplayAlert("Грешка", "Неуспешно изпращане на молба за отсъствие", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Грешка", $"Възникна грешка: {ex.Message}", "OK");
         }
         finally
         {
@@ -121,22 +126,22 @@ public partial class AbsencePageModel : ObservableObject
 
         if (SelectedAbsenceType == null)
         {
-            errors.Add("Please select an absence type");
+            errors.Add("Моля избери причина за отсъствието");
         }
 
         if (StartDate < DateTime.Today)
         {
-            errors.Add("Start date cannot be in the past");
+            errors.Add("Началната дата не може да бъде в миналото");
         }
 
         if (EndDate < StartDate)
         {
-            errors.Add("End date cannot be before start date");
+            errors.Add("Крайната дата не може д бъде преди началната");
         }
 
         if (DurationDays > AvailableDays)
         {
-            errors.Add($"You only have {AvailableDays} days available");
+            errors.Add($"Имаш още само {AvailableDays} сяободни дни");
         }
 
         HasValidationErrors = errors.Any();

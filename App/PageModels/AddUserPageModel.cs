@@ -15,7 +15,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _confirmPassword = string.Empty;
-    private string _selectedRole = "Employee";
+    private string _selectedRole = "Служител";
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -112,7 +112,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (!ValidateForm())
         {
-            await Application.Current.MainPage.DisplayAlert("Validation Error", "Please fix the errors in the form.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка при валидиране", "Моля поправете грешките във формуляра.", "OK");
             return;
         }
 
@@ -120,7 +120,7 @@ public class AddUserPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            var role = SelectedRole == "Administrator" ? Role.Admin : Role.Employee;
+            var role = SelectedRole == "Администратор" ? Role.Admin : Role.Employee;
             using (var md5 = MD5.Create())
             {
                 // Hash the password using MD5
@@ -140,17 +140,22 @@ public class AddUserPageModel : INotifyPropertyChanged
             var success = await _httpService.CreateUserAsync(user);
             if (success)
             {
+<<<<<<< Updated upstream
                 await Application.Current.MainPage.DisplayAlert("Success", "User created successfully", "OK");
                 await Shell.Current.GoToAsync("//AdminUsersPage");
+=======
+                await Application.Current.MainPage.DisplayAlert("Успех", "Потребителят бе създаден успешно", "OK");
+                await Shell.Current.GoToAsync("AdminUsersPage");
+>>>>>>> Stashed changes
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to create user", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно създаване на потребител", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to create user: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно създаване на потребител: {ex.Message}", "OK");
         }
         finally
         {
@@ -178,11 +183,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            NameError = "Name is required";
+            NameError = "Името е задължително поле";
         }
         else if (Name.Length < 2)
         {
-            NameError = "Name must be at least 2 characters";
+            NameError = "Името трябва да е поне 2 символа";
         }
         else
         {
@@ -196,11 +201,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Email))
         {
-            EmailError = "Email is required";
+            EmailError = "Имейлът е задължително поле";
         }
         else if (!Email.Contains("@") || !Email.Contains("."))
         {
-            EmailError = "Please enter a valid email address";
+            EmailError = "Моля въведете правилен имейл";
         }
         else
         {
@@ -214,11 +219,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Password))
         {
-            PasswordError = "Password is required";
+            PasswordError = "Паролата е задължително поле";
         }
         else if (Password.Length < 6)
         {
-            PasswordError = "Password must be at least 6 characters";
+            PasswordError = "Паролата трябва да е поне 6 символа";
         }
         else
         {
@@ -232,11 +237,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(ConfirmPassword))
         {
-            ConfirmPasswordError = "Please confirm your password";
+            ConfirmPasswordError = "Моля потвърдете паролата си";
         }
         else if (ConfirmPassword != Password)
         {
-            ConfirmPasswordError = "Passwords do not match";
+            ConfirmPasswordError = "Паролата не съвпада";
         }
         else
         {
@@ -250,7 +255,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(SelectedRole))
         {
-            RoleError = "Please select a role";
+            RoleError = "Моля изберете роля";
         }
         else
         {

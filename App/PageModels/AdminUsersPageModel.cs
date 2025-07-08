@@ -105,7 +105,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load users: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспено зареждане на потребители: {ex.Message}", "OK");
         }
         finally
         {
@@ -136,7 +136,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to search users: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно търсене на потребители: {ex.Message}", "OK");
         }
         finally
         {
@@ -163,10 +163,10 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         if (user == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Confirm Delete",
-            $"Are you sure you want to delete user '{user.Name}'?",
-            "Delete",
-            "Cancel");
+            "Потвърди изтриване",
+            $"Искате ли да изтриете потрибетел '{user.Name}'?",
+            "Изтрий",
+            "Отказ");
 
         if (confirm)
         {
@@ -179,16 +179,16 @@ public class AdminUsersPageModel : INotifyPropertyChanged
                 {
                     _allUsers.Remove(user);
                     Users.Remove(user);
-                    await Application.Current.MainPage.DisplayAlert("Success", "User deleted successfully", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Успешно изтрит потребител", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to delete user", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно изтриване на потребител", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to delete user: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно изтриване на потребител: {ex.Message}", "OK");
             }
             finally
             {

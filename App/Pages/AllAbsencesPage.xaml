@@ -10,15 +10,15 @@
         <!-- Header with Back Button -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0" 
-                    Text="← Back" 
+                    Text="← Назад" 
                     Command="{Binding BackCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="Start"/>
-            
+
             <Label Grid.Column="1" 
-                   Text="All Absences" 
+                   Text="Всички отсъствия" 
                    FontSize="18" 
                    FontAttributes="Bold"
                    TextColor="White"
@@ -35,11 +35,11 @@
                     Padding="20"
                     Margin="20,10,20,10">
                 <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto">
-                    <Label Grid.Row="0" Grid.Column="0" Text="Total" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <Label Grid.Row="0" Grid.Column="1" Text="Pending" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <Label Grid.Row="0" Grid.Column="2" Text="Approved" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    <Label Grid.Row="0" Grid.Column="3" Text="Rejected" FontAttributes="Bold" HorizontalOptions="Center"/>
-                    
+                    <Label Grid.Row="0" Grid.Column="0" Text="Общо" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="Чакащи" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Grid.Row="0" Grid.Column="2" Text="Одобрени" FontAttributes="Bold" HorizontalOptions="Center"/>
+                    <Label Grid.Row="0" Grid.Column="3" Text="Отхвърлени" FontAttributes="Bold" HorizontalOptions="Center"/>
+
                     <Label Grid.Row="1" Grid.Column="0" Text="{Binding TotalAbsences}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     <Label Grid.Row="1" Grid.Column="1" Text="{Binding PendingAbsences}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Warning}"/>
                     <Label Grid.Row="1" Grid.Column="2" Text="{Binding ApprovedAbsences}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
@@ -54,7 +54,7 @@
                 <CollectionView ItemsSource="{Binding AllAbsences}"
                                VerticalScrollBarVisibility="Never">
                     <CollectionView.Header>
-                        <Label Text="Your Absence History" 
+                        <Label Text="История на отсъствията" 
                                FontSize="18" 
                                FontAttributes="Bold" 
                                Margin="20,10,20,10"
@@ -81,21 +81,21 @@ CommandParameter="{Binding .}"/>
                                            Text="{Binding StatusText}" 
                                            TextColor="{Binding StatusColor}"
                                            FontAttributes="Bold"/>
-                                    
+
                                     <!-- Date Range -->
                                     <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                            Text="{Binding DateRange}" 
                                            FontSize="14"
                                            Margin="0,5,0,0"
                                            TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
-                                    
+
                                     <!-- Duration -->
                                     <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                                            Text="{Binding DurationText}" 
                                            FontSize="12"
                                            Margin="0,2,0,0"
                                            TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}"/>
-                                    
+
                                     <!-- Created Date -->
                                     <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                                            Text="{Binding CreatedText}" 
@@ -108,11 +108,11 @@ CommandParameter="{Binding .}"/>
                     </CollectionView.ItemTemplate>
                     <CollectionView.EmptyView>
                         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
-                            <Label Text="No absences found" 
+                            <Label Text="Няма намерени отсъствия" 
                                    FontSize="18" 
                                    HorizontalOptions="Center"
                                    TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
-                            <Label Text="You haven't submitted any absence requests yet." 
+                            <Label Text="Все още не сте подавали заявки за отсъствие." 
                                    FontSize="14" 
                                    HorizontalOptions="Center"
                                    TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray500}}"/>
@@ -129,4 +129,4 @@ CommandParameter="{Binding .}"/>
                           HorizontalOptions="Center"
                           VerticalOptions="Center"/>
     </Grid>
-</ContentPage> 
+</ContentPage>
