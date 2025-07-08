@@ -4,6 +4,8 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
                 xmlns:viewModels="clr-namespace:App.ViewModels"
              x:Class="App.Pages.AdminUsersPage"
+             NavigationPage.HasBackButton="False"
+                NavigationPage.HasNavigationBar="False"
              x:DataType="pageModels:AdminUsersPageModel">
 
     <Grid RowDefinitions="Auto,*" Padding="20">

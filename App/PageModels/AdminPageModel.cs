@@ -355,17 +355,17 @@ public class AdminPageModel : INotifyPropertyChanged
 
     private async Task NavigateToUsersAsync()
     {
-        await Shell.Current.GoToAsync("AdminUsersPage");
+        await Shell.Current.GoToAsync("//AdminUsersPage");
     }
 
     private async Task NavigateToAbsencesAsync()
     {
-        await Shell.Current.GoToAsync("AdminAllAbsencesPage");
+        await Shell.Current.GoToAsync("//AdminAllAbsencesPage");
     }
 
     private async Task NavigateToTripsAsync()
     {
-        await Shell.Current.GoToAsync("AdminAllBusinessTripsPage");
+        await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
     }
 
     private async Task LogoutAsync()
