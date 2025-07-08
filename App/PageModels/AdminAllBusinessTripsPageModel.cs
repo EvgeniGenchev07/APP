@@ -111,9 +111,13 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                 if (success)
                 {
                     trip.Status = BusinessTripStatus.Approved;
+                    int index = BusinessTrips.IndexOf(trip);
+                    if (index >= 0)
+                    {
+                        BusinessTrips[index] = trip;
+                    }
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(ApprovedTrips));
-                    OnPropertyChanged(nameof(BusinessTrips));
                     await Application.Current.MainPage.DisplayAlert("Success", "Business trip approved successfully", "OK");
                 }
                 else
@@ -153,9 +157,13 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                 if (success)
                 {
                     trip.Status = BusinessTripStatus.Rejected;
+                    int index = BusinessTrips.IndexOf(trip);
+                    if (index >= 0)
+                    {
+                        BusinessTrips[index] = trip;
+                    }
                     OnPropertyChanged(nameof(PendingTrips));
                     OnPropertyChanged(nameof(RejectedTrips));
-                    OnPropertyChanged(nameof(BusinessTrips));
                     await Application.Current.MainPage.DisplayAlert("Success", "Business trip rejected successfully", "OK");
                 }
                 else

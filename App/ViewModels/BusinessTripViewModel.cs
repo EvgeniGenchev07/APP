@@ -33,16 +33,16 @@ namespace App.ViewModels
 
         public decimal Wage => _trip.Wage;
         public decimal AccommodationMoney => _trip.AccommodationMoney;
-        public DateTime CreatedDate => _trip.Created.Date;
+        public string CreatedDate => _trip.Created.ToString("MM/dd/yyyy");
 
         public int Days => (int)(_trip.EndDate - _trip.StartDate).TotalDays + 1;
 
-        public string DateRange => $"{_trip.StartDate:dd/MM/yyyy} - {_trip.EndDate:dd/MM/yyyy} ({Days} day{(Days == 1 ? "" : "s")})";
+        public string DateRange => $"{_trip.StartDate:MM/dd/yyyy} - {_trip.EndDate:MM/dd/yyyy} ({Days} day{(Days == 1 ? "" : "s")})";
 
         public string DurationText => $"{Days} day{(Days == 1 ? "" : "s")}";
-        public string CreatedText => $"Requested on {_trip.Created:dd/MM/yyyy}";
+        public string CreatedText => $"Requested on {_trip.Created:MM/dd/yyyy}";
 
-        public bool CanChangeStatus => _trip.Status == BusinessTripStatus.Pending;
+        public bool CanChangeStatus => Status == BusinessTripStatus.Pending;
 
         public string StatusText => _trip.Status switch
         {
