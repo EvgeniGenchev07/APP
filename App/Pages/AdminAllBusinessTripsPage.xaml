@@ -6,24 +6,32 @@
              x:Class="App.Pages.AdminAllBusinessTripsPage"
              x:DataType="pageModels:AdminAllBusinessTripsPageModel">
 
-    <Grid RowDefinitions="Auto,*">
-        <!-- Header -->
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
-            <Label Grid.Column="0" 
-                   Text="All Business Trips" 
-                   FontSize="18" 
-                   FontAttributes="Bold"
-                   TextColor="White"
-                   VerticalOptions="Center"/>
-            
-            <Button Grid.Column="1" 
-                    Text="Filter" 
-                    Command="{Binding FilterCommand}"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    FontSize="16"
-                    HorizontalOptions="End"/>
-        </Grid>
+    <Grid RowDefinitions="Auto,*" Padding="20">
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
+        <Button Grid.Column="0"
+                      Text="Cancel" 
+                      Command="{Binding CancelCommand}"
+                      BackgroundColor="Transparent"
+                      TextColor="White"
+                      FontSize="16"
+                      HorizontalOptions="Start"/>
+
+        <Label Grid.Column="1" 
+               Text="Business Trips Management" 
+               FontSize="18" 
+               FontAttributes="Bold"
+               TextColor="White"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
+
+        <Button Grid.Column="2" 
+                Text="Add User" 
+                Command="{Binding FilterCommand}"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                FontSize="16"
+                HorizontalOptions="End"/>
+    </Grid>
 
         <!-- Content -->
         <Grid Grid.Row="1" RowDefinitions="Auto,*">

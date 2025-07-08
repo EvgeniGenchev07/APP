@@ -47,6 +47,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     public ICommand ApproveTripCommand { get; }
     public ICommand RejectTripCommand { get; }
     public ICommand FilterCommand { get; }
+    public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
     public AdminAllBusinessTripsPageModel(HttpService httpService)
@@ -56,6 +57,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         ApproveTripCommand = new Command<BusinessTripViewModel>(async (trip) => await ApproveTripAsync(trip));
         RejectTripCommand = new Command<BusinessTripViewModel>(async (trip) => await RejectTripAsync(trip));
         FilterCommand = new Command(async () => await FilterTripsAsync());
+        CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
         _ = LoadBusinessTripsAsync();
@@ -180,6 +182,11 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                 IsBusy = false;
             }
         }
+    }
+
+    private async Task CancelAsync()
+    {
+        await Shell.Current.GoToAsync("//AdminPage");
     }
 
     private async Task FilterTripsAsync()

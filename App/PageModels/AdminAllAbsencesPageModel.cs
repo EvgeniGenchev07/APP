@@ -47,6 +47,7 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
     public ICommand ApproveAbsenceCommand { get; }
     public ICommand RejectAbsenceCommand { get; }
     public ICommand FilterCommand { get; }
+    public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
     public AdminAllAbsencesPageModel(HttpService httpService)
@@ -56,6 +57,7 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         ApproveAbsenceCommand = new Command<AbsenceViewModel>(async (absence) => await ApproveAbsenceAsync(absence));
         RejectAbsenceCommand = new Command<AbsenceViewModel>(async (absence) => await RejectAbsenceAsync(absence));
         FilterCommand = new Command(async () => await FilterAbsencesAsync());
+        CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
         _ = LoadAbsencesAsync();
@@ -179,6 +181,11 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
                 IsBusy = false;
             }
         }
+    }
+
+    private async Task CancelAsync()
+    {
+        await Shell.Current.GoToAsync("//AdminPage");
     }
 
     private async Task FilterAbsencesAsync()

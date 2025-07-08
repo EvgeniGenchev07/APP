@@ -35,6 +35,14 @@
         Route="AbsencePage" />
 
     <ShellContent
+    ContentTemplate="{DataTemplate pages:AdminAllAbsencesPage}"
+    Route="AdminAllAbsencesPage" />
+
+    <ShellContent
+    ContentTemplate="{DataTemplate pages:AdminAllBusinessTripsPage}"
+    Route="AdminAllBusinessTripsPage" />
+
+    <ShellContent
         ContentTemplate="{DataTemplate pages:AllAbsencesPage}"
         Route="AllAbsencesPage" />
 
