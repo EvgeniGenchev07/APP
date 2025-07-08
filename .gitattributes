@@ -61,3 +61,7 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+###############################################################################
+# Enforce UTF-8 encoding for C# files to prevent character corruption
+###############################################################################
+*.cs text working-tree-encoding=UTF-8
