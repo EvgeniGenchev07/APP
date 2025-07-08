@@ -141,7 +141,7 @@ public class AddUserPageModel : INotifyPropertyChanged
             if (success)
             {
                 await Application.Current.MainPage.DisplayAlert("Success", "User created successfully", "OK");
-                await Shell.Current.GoToAsync("AdminUsersPage");
+                await Shell.Current.GoToAsync("//AdminUsersPage");
             }
             else
             {

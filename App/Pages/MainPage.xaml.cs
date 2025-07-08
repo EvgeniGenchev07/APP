@@ -15,7 +15,7 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
         if (BindingContext is MainPageModel pageModel)
         {
-            pageModel.LoadDataAsync();
+             pageModel.LoadDataAsync();
         }
     }
 } 

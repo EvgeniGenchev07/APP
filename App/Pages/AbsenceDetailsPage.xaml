@@ -71,71 +71,23 @@
                         Padding="20">
                     <VerticalStackLayout Spacing="15">
                         <Label Text="Absence Information" FontSize="18" FontAttributes="Bold"/>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
                             <Label Grid.Row="0" Grid.Column="0" Text="Type:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding TypeText}" FontSize="14"/>
-                            
+
                             <Label Grid.Row="1" Grid.Column="0" Text="Duration:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="1" Grid.Column="1" Text="{Binding DurationText}" FontSize="14"/>
-                            
+
                             <Label Grid.Row="2" Grid.Column="0" Text="Start Date:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="2" Grid.Column="1" Text="{Binding StartDateText}" FontSize="14"/>
-                            
+
                             <Label Grid.Row="3" Grid.Column="0" Text="End Date:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="3" Grid.Column="1" Text="{Binding EndDateText}" FontSize="14"/>
-                            
+
                             <Label Grid.Row="4" Grid.Column="0" Text="Requested:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="4" Grid.Column="1" Text="{Binding CreatedText}" FontSize="14"/>
                         </Grid>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Timeline -->
-                <Border Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
-                        StrokeThickness="1"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
-                        Padding="20">
-                    <VerticalStackLayout Spacing="15">
-                        <Label Text="Timeline" FontSize="18" FontAttributes="Bold"/>
-                        
-                        <VerticalStackLayout Spacing="10">
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
-                                <Frame Grid.Column="0" 
-                                       BackgroundColor="{StaticResource Success}" 
-                                       WidthRequest="20" 
-                                       HeightRequest="20" 
-                                       CornerRadius="10"/>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="Request Submitted" FontSize="14" FontAttributes="Bold"/>
-                                    <Label Text="{Binding CreatedText}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
-                                </VerticalStackLayout>
-                            </Grid>
-                            
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" IsVisible="{Binding IsApproved}">
-                                <Frame Grid.Column="0" 
-                                       BackgroundColor="{StaticResource Success}" 
-                                       WidthRequest="20" 
-                                       HeightRequest="20" 
-                                       CornerRadius="10"/>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="Request Approved" FontSize="14" FontAttributes="Bold"/>
-                                    <Label Text="Approved by management" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
-                                </VerticalStackLayout>
-                            </Grid>
-                            
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" IsVisible="{Binding IsRejected}">
-                                <Frame Grid.Column="0" 
-                                       BackgroundColor="{StaticResource Error}" 
-                                       WidthRequest="20" 
-                                       HeightRequest="20" 
-                                       CornerRadius="10"/>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2">
-                                    <Label Text="Request Rejected" FontSize="14" FontAttributes="Bold"/>
-                                    <Label Text="Rejected by management" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"/>
-                                </VerticalStackLayout>
-                            </Grid>
-                        </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
 

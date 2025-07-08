@@ -4,17 +4,16 @@ namespace App.Pages
 {
     public partial class BusinessTripsPage : ContentPage
     {
-        public BusinessTripsPage()
+        public BusinessTripsPage(BusinessTripsPageModel model)
         {
             InitializeComponent();
-            BindingContext = new BusinessTripsPageModel();
+            BindingContext = model;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             
-            // Refresh data when page appears
             if (BindingContext is BusinessTripsPageModel viewModel)
             {
                 viewModel.LoadBusinessTripsCommand.Execute(null);

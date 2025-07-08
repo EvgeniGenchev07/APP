@@ -172,7 +172,7 @@ namespace App.PageModels
             if (businessTrip != null)
             {
                 BusinessTripDetailsPage.SelectedBusinessTrip = businessTrip;
-                await Shell.Current.GoToAsync("businesstripdetails");
+                await Shell.Current.GoToAsync("//businesstripdetails");
             }
         }
 

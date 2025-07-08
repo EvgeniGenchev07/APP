@@ -23,7 +23,7 @@ namespace App.ViewModels
         public DateTime StartDate => _trip.StartDate;
         public DateTime EndDate => _trip.EndDate;
         public string UserId => _trip.UserId;
-        public string UserName => _trip.User?.Name ?? "Unknown User";
+        public string UserName => _trip.UserFullName ?? "Unknown User";
         public string UserFullName => _trip.UserFullName;
 
         public string ProjectName => _trip.ProjectName;

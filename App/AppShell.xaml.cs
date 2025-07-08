@@ -9,7 +9,7 @@ namespace App
             InitializeComponent();
             
             // Register routes for navigation
-            Routing.RegisterRoute("MainPage", typeof(MainPage));
+           /* Routing.RegisterRoute("MainPage", typeof(MainPage));
             Routing.RegisterRoute("AdminPage", typeof(AdminPage));
             Routing.RegisterRoute("AdminUsersPage", typeof(AdminUsersPage));
             Routing.RegisterRoute("AddUserPage", typeof(AddUserPage));
@@ -22,7 +22,7 @@ namespace App
             Routing.RegisterRoute("AllAbsencesPage", typeof(AllAbsencesPage));
             Routing.RegisterRoute("AbsenceDetailsPage", typeof(AbsenceDetailsPage));
             Routing.RegisterRoute("businesstripdetails", typeof(BusinessTripDetailsPage));
-            Routing.RegisterRoute("editbusinesstrip", typeof(BusinessTripDetailsPage));
+            Routing.RegisterRoute("editbusinesstrip", typeof(BusinessTripDetailsPage));*/
         }
     }
 }

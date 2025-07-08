@@ -14,7 +14,7 @@ namespace App.PageModels
         string _organization = "ЕНЕРГИЙНА АГЕНЦИЯ-ПЛОВДИВ";
 
         [ObservableProperty]
-        string _documentNumber = "16.0";
+        string _documentNumber = "16";
 
         [ObservableProperty]
         DateTime _documentDate = DateTime.Now;

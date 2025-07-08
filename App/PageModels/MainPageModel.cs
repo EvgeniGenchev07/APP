@@ -1,12 +1,14 @@
+using App.Pages;
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Graphics;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Microsoft.Maui.Graphics;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace App.PageModels;
 
@@ -17,7 +19,9 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
     private string _userName;
     private int _absenceDays;
     private int _pendingTripsCount;
-    private int _completedTripsCount;
+    private int _pendingAbsencesCount;
+    private int _approvedAbsencesCount;
+    private int _approvedTripsCount;
     private bool _noAbsences;
     private bool _noBusinessTrips;
 
@@ -59,16 +63,33 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         }
     }
 
-    public int CompletedTripsCount
+    public int ApprovedTripsCount
     {
-        get => _completedTripsCount;
+        get => _approvedTripsCount;
         set
         {
-            _completedTripsCount = value;
+            _approvedTripsCount = value;
             OnPropertyChanged();
         }
     }
-
+    public int PendingAbsencesCount
+    {
+        get => _pendingAbsencesCount;
+        set
+        {
+            _pendingAbsencesCount = value;
+            OnPropertyChanged();
+        }
+    }
+    public int ApprovedAbsencesCount
+    {
+        get => _approvedAbsencesCount;
+        set
+        {
+            _approvedAbsencesCount = value;
+            OnPropertyChanged();
+        }
+    }
     public bool NoAbsences
     {
         get => _noAbsences;
@@ -129,13 +150,12 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
                 UserName = App.User.Name;
                 AbsenceDays = App.User.AbsenceDays;
 
-                // Load user's business trips
                 var businessTrips = await _httpService.GetUserBusinessTripsAsync(App.User.Id);
                 var recentTrips = businessTrips.OrderByDescending(t => t.Created).Take(5).ToList();
                 
                 PendingTripsCount = businessTrips.Count(t => t.Status == BusinessTripStatus.Pending);
-                CompletedTripsCount = businessTrips.Count(t => t.Status == BusinessTripStatus.Completed);
-
+                ApprovedTripsCount = businessTrips.Count(t => t.Status == BusinessTripStatus.Approved);
+                
                 RecentBusinessTrips.Clear();
                 foreach (var trip in recentTrips)
                 {
@@ -152,7 +172,8 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
                 {
                     RecentAbsences.Add(new AbsenceViewModel(absence));
                 }
-
+                ApprovedAbsencesCount = RecentAbsences.Count(t => t.Status == AbsenceStatus.Approved);
+                PendingAbsencesCount = RecentAbsences.Count(t => t.Status == AbsenceStatus.Pending);
                 NoAbsences = !recentAbsences.Any();
             }
         }
@@ -185,7 +206,24 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
     {
         await Shell.Current.GoToAsync("//businesstrips");
     }
-
+    [RelayCommand]
+    private async Task AbsenceTapped(AbsenceViewModel absence)
+    {
+        if (absence != null)
+        {
+            AbsenceDetailsPage.SelectedAbsence =  absence;
+            await Shell.Current.GoToAsync("AbsenceDetailsPage");
+        }
+    }
+    [RelayCommand]
+    private async Task BusinessTripTapped(BusinessTripViewModel businessTrip)
+    {
+        if (businessTrip != null)
+        {
+            BusinessTripDetailsPage.SelectedBusinessTrip = App.User?.BusinessTrips?.FirstOrDefault(t => t.Id == businessTrip.Id);
+            await Shell.Current.GoToAsync("//businesstripdetails");
+        }
+    }
     private async Task LogoutAsync()
     {
         try

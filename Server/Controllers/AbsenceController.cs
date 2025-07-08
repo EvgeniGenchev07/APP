@@ -12,10 +12,11 @@ namespace Server.Controllers
     public class AbsenceController : Controller
     {
         private readonly AbsenceContext _absenceContext;
-
-        public AbsenceController(AbsenceContext absenceContext)
+        private readonly UserContext _userContext;
+        public AbsenceController(AbsenceContext absenceContext, UserContext userContext)
         {
             _absenceContext = absenceContext ?? throw new ArgumentNullException(nameof(absenceContext));
+            _userContext = userContext ?? throw new ArgumentNullException(nameof(absenceContext));
         }
 
         [HttpPost("create")]
@@ -25,7 +26,16 @@ namespace Server.Controllers
             {
                 return BadRequest("Invalid absence data.");
             }
-
+                User user = _userContext.GetById(absence.UserId);
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+                user.AbsenceDays -= absence.DaysCount;
+                if (!_userContext.Update(user))
+                {
+                    return BadRequest("Failed to update user absence days.");
+                }
             if (_absenceContext.Create(absence))
             {
                 return Ok(JsonSerializer.Serialize(absence));
@@ -136,6 +146,19 @@ namespace Server.Controllers
                 return NotFound("Absence not found.");
             }
             absence.Status = (AbsenceStatus)(request.Status);
+            if (absence.Status == AbsenceStatus.Rejected)
+            {
+                User user = _userContext.GetById(absence.UserId);
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+                user.AbsenceDays += absence.DaysCount;
+                if (!_userContext.Update(user))
+                {
+                    return BadRequest("Failed to update user absence days.");
+                }
+            }
             if (_absenceContext.Update(absence))
             {
                 return Ok(JsonSerializer.Serialize(absence));

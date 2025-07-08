@@ -25,7 +25,7 @@
                VerticalOptions="Center"/>
 
         <Button Grid.Column="2" 
-                Text="Add User" 
+                Text="Filter" 
                 Command="{Binding FilterCommand}"
                 BackgroundColor="Transparent"
                 TextColor="White"

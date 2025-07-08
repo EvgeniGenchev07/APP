@@ -84,7 +84,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         _ = LoadUsersAsync();
     }
 
-    private async Task LoadUsersAsync()
+    internal async Task LoadUsersAsync()
     {
         try
         {
