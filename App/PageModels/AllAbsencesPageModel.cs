@@ -143,7 +143,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
 
     private async Task BackAsync()
     {
-        await Shell.Current.GoToAsync("..");
+        await Shell.Current.GoToAsync("//MainPage");
     }
     [RelayCommand]
     public async void SelectAbsence(AbsenceViewModel absence)

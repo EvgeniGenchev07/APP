@@ -110,7 +110,14 @@ namespace App.PageModels
 
         private async Task CancelAsync()
         {
-            await Shell.Current.GoToAsync("//MainPage");
+            if (App.User.Role==Role.Admin)
+            {
+                await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("//businesstrips");
+            }
         }
 
         [RelayCommand]

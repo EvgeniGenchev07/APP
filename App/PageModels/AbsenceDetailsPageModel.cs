@@ -105,7 +105,14 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
 
     private async Task BackAsync()
     {
-        await Shell.Current.GoToAsync("//AllAbsencesPage");
+        if (App.User.Role == Role.Admin)
+        {
+            await Shell.Current.GoToAsync("//AdminAllAbsencesPage");
+        }
+        else
+        {
+            await Shell.Current.GoToAsync("//AllAbsencesPage");
+        }
     }
 
     private async Task EditAsync()

@@ -11,7 +11,7 @@
     <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="10">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0"
-            Text="Отказ" 
+            Text="← Назад" 
             Command="{Binding BackCommand}"
             BackgroundColor="Transparent"
             TextColor="White"

@@ -190,7 +190,7 @@ CommandParameter="{Binding .}"/>
                     <Button Grid.Column="1" 
                             Text="Заявка за командировка" 
                             Command="{Binding RequestBusinessTripCommand}"
-                            BackgroundColor="{StaticResource Secondary}"
+                            BackgroundColor="{StaticResource Primary}"
                             TextColor="White"/>
                 </Grid>
             </VerticalStackLayout>
