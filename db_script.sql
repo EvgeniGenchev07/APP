@@ -53,3 +53,10 @@ constraint FK_Business_User foreign key(userId)
 references User(id),
 constraint PK_BusinessTrip primary key(id));
 select * from User;
+
+create table HolidayDay(
+    id int auto_increment,
+    name varchar(30) not null,
+    date date not null,
+    constraint PK_HolidayDay primary key(id)
+);

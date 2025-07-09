@@ -16,6 +16,7 @@ builder.Services.AddScoped<EapDbContext>(_ =>
 builder.Services.AddScoped<UserContext>();
 builder.Services.AddScoped<AuthenticationContext>();
 builder.Services.AddScoped<AbsenceContext>();
+builder.Services.AddScoped<HolidayDayContext>();
 builder.Services.AddScoped<BusinessTripContext>();
 var app = builder.Build();
 

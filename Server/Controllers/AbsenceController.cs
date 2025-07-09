@@ -13,10 +13,12 @@ namespace Server.Controllers
     {
         private readonly AbsenceContext _absenceContext;
         private readonly UserContext _userContext;
-        public AbsenceController(AbsenceContext absenceContext, UserContext userContext)
+        private readonly HolidayDayContext _holidayDayContext;
+        public AbsenceController(AbsenceContext absenceContext, UserContext userContext, HolidayDayContext holidayDayContext)
         {
             _absenceContext = absenceContext ?? throw new ArgumentNullException(nameof(absenceContext));
             _userContext = userContext ?? throw new ArgumentNullException(nameof(absenceContext));
+            _holidayDayContext = holidayDayContext ?? throw new ArgumentNullException(nameof(holidayDayContext));
         }
 
         [HttpPost("create")]
@@ -31,8 +33,8 @@ namespace Server.Controllers
                 {
                     return NotFound("User not found.");
                 }
-                //_absenceContext.GetHolidays();
-                user.AbsenceDays -= absence.DaysCount;
+                var holidays = _holidayDayContext.GetAll();
+            user.AbsenceDays -= absence.DaysCount;
                 if (!_userContext.Update(user))
                 {
                     return BadRequest("Failed to update user absence days.");

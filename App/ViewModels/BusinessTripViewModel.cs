@@ -17,7 +17,7 @@ namespace App.ViewModels
         public BusinessTripStatus Status
         {
             get => _trip.Status;
-            set => _trip.Status = value; // Preserved from first version
+            set => _trip.Status = value;
         }
 
         public DateTime StartDate => _trip.StartDate;
