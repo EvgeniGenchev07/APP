@@ -42,8 +42,8 @@
                         Padding="20">
                     <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto,Auto">
                         <Label Grid.Row="0" Grid.Column="0" Text="Дни отпуск" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="1" Text="Pending Absences" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="2" Text="Approved Absences" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Чакащи отсъствия" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="2" Text="Одобрени отсъствия" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="3" Text="Чакащи командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="4" Text="Завършени командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
 
