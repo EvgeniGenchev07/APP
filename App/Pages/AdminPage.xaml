@@ -476,7 +476,7 @@ CommandParameter="{Binding .}"/>
                     StrokeShape="Rectangle"
                     Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                     >
-                <VerticalStackLayout Spacing="15" WidthRequest="300">
+                <VerticalStackLayout Spacing="15" WidthRequest="375">
                     <Label Text="Добавяне на персонализиран празник" 
                            FontSize="18" 
                            FontAttributes="Bold"
