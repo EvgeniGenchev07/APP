@@ -72,6 +72,10 @@
                                     Margin="0,5"
                                     Padding="15"
                                     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminAllAbsencesPageModel}}, Path=SelectAbsenceCommand}" 
+CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
                                     <!-- Absence Info -->
                                     <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="5">

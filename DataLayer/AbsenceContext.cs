@@ -183,7 +183,6 @@ namespace DataLayer
             }
             return absences;
         }
-
         public List<Absence> GetAll()
         {
             var absences = new List<Absence>();

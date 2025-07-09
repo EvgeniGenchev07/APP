@@ -25,8 +25,8 @@
                    VerticalOptions="Center"/>
 
             <Button Grid.Column="2" 
-                    Text="Филтрирай" 
-                    Command="{Binding FilterCommand}"
+                    Text="Отчети" 
+                    Command="{Binding SummaryCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
@@ -71,6 +71,10 @@
                                     Margin="0,5"
                                     Padding="15"
                                     BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminAllBusinessTripsPageModel}}, Path=ItemTappedCommand}" 
+                          CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
                                     <!-- Trip Info -->
                                     <VerticalStackLayout Grid.Column="0" Grid.Row="0" Spacing="5">

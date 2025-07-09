@@ -9,7 +9,7 @@
     NavigationPage.HasBackButton ="False"
     NavigationPage.HasNavigationBar="False"
     Title="EAP Administraion">
-    
+   
     <ShellContent
         ContentTemplate="{DataTemplate pages:RegisterPage}"
         Route="register" />
@@ -47,7 +47,9 @@
     <ShellContent
     ContentTemplate="{DataTemplate pages:AdminAllBusinessTripsPage}"
     Route="AdminAllBusinessTripsPage" />
-
+    <ShellContent
+ ContentTemplate="{DataTemplate pages:BusinessTripsSummaryPage}"
+ Route="BusinessTripsSummaryPage" />
     <ShellContent
         ContentTemplate="{DataTemplate pages:AllAbsencesPage}"
         Route="AllAbsencesPage" />

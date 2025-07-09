@@ -31,6 +31,7 @@ namespace Server.Controllers
                 {
                     return NotFound("User not found.");
                 }
+                //_absenceContext.GetHolidays();
                 user.AbsenceDays -= absence.DaysCount;
                 if (!_userContext.Update(user))
                 {

@@ -1,7 +1,9 @@
+using App.Pages;
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -91,7 +93,15 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             IsBusy = false;
         }
     }
-
+    [RelayCommand]
+    public async void SelectAbsence(AbsenceViewModel absence)
+    {
+        if (absence != null)
+        {
+            AbsenceDetailsPage.SelectedAbsence = absence;
+            await Shell.Current.GoToAsync("AbsenceDetailsPage");
+        }
+    }
     private async Task ApproveAbsenceAsync(AbsenceViewModel absence)
     {
         if (absence == null) return;

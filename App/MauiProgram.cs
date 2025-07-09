@@ -36,6 +36,7 @@ namespace App
             builder.Services.AddTransientWithShellRoute<AllAbsencesPage,AllAbsencesPageModel>("AllAbsencesPage");
             builder.Services.AddTransientWithShellRoute<AbsenceDetailsPage,AbsenceDetailsPageModel>("AbsenceDetailsPage");
             builder.Services.AddTransientWithShellRoute<BusinessTripsPage,BusinessTripsPageModel>("businesstrips");
+            builder.Services.AddTransientWithShellRoute<BusinessTripsSummaryPage, BusinessTripsSummaryPageModel>("BusinessTripsSummaryPage");
             builder.Services.AddTransient<BusinessTripDetailsPage>();
             builder.Services.AddScoped(_ =>
             {

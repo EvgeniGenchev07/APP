@@ -1,7 +1,9 @@
-﻿using App.Services;
+﻿using App.Pages;
+using App.Services;
 using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -40,13 +42,13 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     }
 
     public int TotalTrips => BusinessTrips.Count;
-    public int PendingTrips => BusinessTrips.Count(t => t.StatusText == BusinessTripStatus.Pending.ToString());
-    public int ApprovedTrips => BusinessTrips.Count(t => t.StatusText == BusinessTripStatus.Approved.ToString());
-    public int RejectedTrips => BusinessTrips.Count(t => t.StatusText == BusinessTripStatus.Rejected.ToString());
+    public int PendingTrips => BusinessTrips.Count(t => t.Status ==  BusinessTripStatus.Pending);
+    public int ApprovedTrips => BusinessTrips.Count(t => t.Status == BusinessTripStatus.Approved);
+    public int RejectedTrips => BusinessTrips.Count(t => t.Status == BusinessTripStatus.Rejected);
 
     public ICommand ApproveTripCommand { get; }
     public ICommand RejectTripCommand { get; }
-    public ICommand FilterCommand { get; }
+    public ICommand SummaryCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
@@ -56,7 +58,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         
         ApproveTripCommand = new Command<BusinessTripViewModel>(async (trip) => await ApproveTripAsync(trip));
         RejectTripCommand = new Command<BusinessTripViewModel>(async (trip) => await RejectTripAsync(trip));
-        FilterCommand = new Command(async () => await FilterTripsAsync());
+        SummaryCommand = new Command(async () => await SummaryAsync());
         CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
@@ -91,7 +93,15 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
             IsBusy = false;
         }
     }
-
+    [RelayCommand]
+    private async Task ItemTapped(BusinessTripViewModel businessTrip)
+    {
+        if (businessTrip != null)
+        {
+            //BusinessTripDetailsPage.SelectedBusinessTrip = businessTrip;
+            await Shell.Current.GoToAsync("//businesstripdetails");
+        }
+    }
     private async Task ApproveTripAsync(BusinessTripViewModel trip)
     {
         if (trip == null) return;
@@ -154,7 +164,6 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
             {
                 IsBusy = true;
                 
-                // Call API to reject business trip
                 var success = await _httpService.RejectBusinessTripAsync(trip.Id);
                 if (success)
                 {
@@ -189,10 +198,9 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         await Shell.Current.GoToAsync("//AdminPage");
     }
 
-    private async Task FilterTripsAsync()
+    private async Task SummaryAsync()
     {
-        // Implement filtering functionality
-        await LoadBusinessTripsAsync();
+        await Shell.Current.GoToAsync("//BusinessTripsSummaryPage");
     }
 
     private async Task RefreshAsync()

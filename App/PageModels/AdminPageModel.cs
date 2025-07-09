@@ -278,7 +278,7 @@ public class AdminPageModel : INotifyPropertyChanged
                 HasApprovedAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Approved),
                 HasPendingAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Pending),
                 HasRejectedAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Rejected),
-                Absences = dayAbsences
+                Absences = dayAbsences,
             };
 
             CalendarDays.Add(calendarDay);
@@ -345,7 +345,23 @@ public class AdminPageModel : INotifyPropertyChanged
     {
         if (day == null || day.IsEmpty || !day.IsCurrentMonth)
             return;
-
+        if(SelectedDay is not null)
+        {
+            SelectedDay.IsSelected = false; 
+            int index = CalendarDays.IndexOf(SelectedDay);
+            if (index >= 0)
+            {
+                CalendarDays[index] = SelectedDay;
+            }
+        }
+        {
+            day.IsSelected = true;
+            int index = CalendarDays.IndexOf(day);
+            if (index >= 0)
+            {
+                CalendarDays[index] = day;
+            }
+        }
         SelectedDay = day;
         IsDaySelected = true;
         SelectedDayTitle = day.Date.ToString("dddd, MMMM dd, yyyy");
@@ -429,8 +445,7 @@ public class CalendarDay
     {
         get
         {
-            if (IsSelected) return Color.FromArgb("#FFD700"); 
-            if (IsToday) return Color.FromArgb("#4169E1"); 
+            if (IsSelected) return Color.FromArgb("#4169E1"); 
             if (IsHoliday) return IsOfficialHoliday ? Colors.LightPink : Colors.LightBlue;
             return Colors.Transparent;
         }
