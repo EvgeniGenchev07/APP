@@ -24,16 +24,6 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"/>
 
-<<<<<<< Updated upstream
-        <Button Grid.Column="2" 
-                Text="Filter" 
-                Command="{Binding FilterCommand}"
-                BackgroundColor="Transparent"
-                TextColor="White"
-                FontSize="16"
-                HorizontalOptions="End"/>
-    </Grid>
-=======
             <Button Grid.Column="2" 
                     Text="Филтрирай" 
                     Command="{Binding FilterCommand}"
@@ -42,7 +32,6 @@
                     FontSize="16"
                     HorizontalOptions="End"/>
         </Grid>
->>>>>>> Stashed changes
 
         <!-- Content -->
         <Grid Grid.Row="1" RowDefinitions="Auto,*">

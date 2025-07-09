@@ -72,28 +72,12 @@
                         BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                         Padding="20">
                     <VerticalStackLayout Spacing="15">
-<<<<<<< Updated upstream
-                        <Label Text="Absence Information" FontSize="18" FontAttributes="Bold"/>
-=======
                         <Label Text="Информация за отсъствието" FontSize="18" FontAttributes="Bold"/>
->>>>>>> Stashed changes
 
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
                             <Label Grid.Row="0" Grid.Column="0" Text="Тип:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="0" Grid.Column="1" Text="{Binding TypeText}" FontSize="14"/>
 
-<<<<<<< Updated upstream
-                            <Label Grid.Row="1" Grid.Column="0" Text="Duration:" FontSize="14" FontAttributes="Bold"/>
-                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding DurationText}" FontSize="14"/>
-
-                            <Label Grid.Row="2" Grid.Column="0" Text="Start Date:" FontSize="14" FontAttributes="Bold"/>
-                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding StartDateText}" FontSize="14"/>
-
-                            <Label Grid.Row="3" Grid.Column="0" Text="End Date:" FontSize="14" FontAttributes="Bold"/>
-                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding EndDateText}" FontSize="14"/>
-
-                            <Label Grid.Row="4" Grid.Column="0" Text="Requested:" FontSize="14" FontAttributes="Bold"/>
-=======
                             <Label Grid.Row="1" Grid.Column="0" Text="Продължителност:" FontSize="14" FontAttributes="Bold"/>
                             <Label Grid.Row="1" Grid.Column="1" Text="{Binding DurationText}" FontSize="14"/>
 
@@ -104,17 +88,11 @@
                             <Label Grid.Row="3" Grid.Column="1" Text="{Binding EndDateText}" FontSize="14"/>
 
                             <Label Grid.Row="4" Grid.Column="0" Text="Подадена:" FontSize="14" FontAttributes="Bold"/>
->>>>>>> Stashed changes
                             <Label Grid.Row="4" Grid.Column="1" Text="{Binding CreatedText}" FontSize="14"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
-<<<<<<< Updated upstream
-=======
-                <!-- Timeline -->
-                
->>>>>>> Stashed changes
                 <!-- Actions -->
                 <VerticalStackLayout Spacing="10" IsVisible="{Binding CanEdit}">
                     <Label Text="Действия" FontSize="18" FontAttributes="Bold"/>

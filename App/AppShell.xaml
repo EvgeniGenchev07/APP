@@ -8,7 +8,7 @@
     Shell.FlyoutBehavior="Disabled"
     NavigationPage.HasBackButton ="False"
     NavigationPage.HasNavigationBar="False"
-    Title="App">
+    Title="EAP Administraion">
     
     <ShellContent
         ContentTemplate="{DataTemplate pages:RegisterPage}"

@@ -34,7 +34,7 @@
                 <!-- Search Bar -->
                 <Frame BorderColor="LightGray" CornerRadius="8" Padding="10">
                     <Grid ColumnDefinitions="*,Auto">
-                        <Entry Grid.Column="0" 
+                        <Entry Grid.Column="0"
                                Text="{Binding SearchText}" 
                                Placeholder="Търсене по проект, задача, дестинация..."
                                FontSize="14"/>
@@ -134,7 +134,7 @@
                                            FontSize="16" 
                                            FontAttributes="Bold"/>
                                     <Label Grid.Row="0" Grid.Column="1"
-                                           Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"
+                                           Text="{Binding Status}"
                                            FontSize="12"
                                            TextColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                                            FontAttributes="Bold"

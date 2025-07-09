@@ -25,15 +25,9 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center"/>
         </Grid>
-<<<<<<< Updated upstream
             <ScrollView Grid.Row="1" 
                          VerticalScrollBarVisibility="Never">
-=======
-
-        <ScrollView Grid.Row="1">
->>>>>>> Stashed changes
-            <VerticalStackLayout Padding="20" Spacing="20">
-
+            <VerticalStackLayout>
                 <!-- Name -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Име *" FontSize="16" FontAttributes="Bold"/>
