@@ -34,8 +34,15 @@ namespace Server.Controllers
                     return NotFound("User not found.");
                 }
                 var holidays = _holidayDayContext.GetAll();
+            int holidaysCount = holidays.Count(h => h.Date >= absence.StartDate && h.Date < absence.StartDate.AddDays(absence.DaysCount));
+            for(int i = 0; i < absence.DaysCount; i++)
+            {
+                DateTime dateTime = absence.StartDate.AddDays(i);
+                if(dateTime.DayOfWeek == DayOfWeek.Saturday|| dateTime.DayOfWeek == DayOfWeek.Sunday) holidaysCount++;
+            }
             user.AbsenceDays -= absence.DaysCount;
-                if (!_userContext.Update(user))
+            user.AbsenceDays += holidaysCount;
+            if (!_userContext.Update(user))
                 {
                     return BadRequest("Failed to update user absence days.");
                 }

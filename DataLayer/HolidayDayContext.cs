@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataLayer
 {
@@ -105,7 +106,7 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "SELECT * FROM Holiday ORDER BY created DESC",
+                        "SELECT * FROM HolidayDay ORDER BY date DESC",
                         _eapDbContext.Connection);
 
                     using (var reader = command.ExecuteReader())
@@ -127,6 +128,69 @@ namespace DataLayer
                 finally
                 {
                     _eapDbContext.Close();
+                }
+                holidays.AddRange(InitializeOfficialHolidays(DateTime.Now.Year).Result);
+            }
+            return holidays;
+        }
+        private DateTime CalculateOrthodoxEaster(int year)
+        {
+            int a = year % 4;
+            int b = year % 7;
+            int c = year % 19;
+            int d = (19 * c + 15) % 30;
+            int e = (2 * a + 4 * b - d + 34) % 7;
+            int month = (int)Math.Floor((d + e + 114) / 31M);
+            int day = ((d + e + 114) % 31) + 1;
+
+            DateTime easter = new DateTime(year, month, day);
+            return easter.AddDays(13);
+        }
+        private async Task<List<HolidayDay>> InitializeOfficialHolidays(int year)
+        {
+            var holidays = new List<HolidayDay>();
+            // Fixed date holidays
+            var fixedHolidays = new List<HolidayDay>
+        {
+            new HolidayDay(){Date=new DateTime(year, 1, 1),Name="" }  , // New Year
+             new HolidayDay(){Date=new DateTime(year, 3, 3),Name = ""}, // Liberation Day
+             new HolidayDay(){Date=new DateTime(year, 5, 1), Name = "" }, // Labor Day
+             new HolidayDay(){Date=new DateTime(year, 5, 6), Name = "" },// St. George's Day
+            new HolidayDay(){Date =new DateTime(year, 5, 24), Name = "" }, // Bulgarian Education and Culture Day
+             new HolidayDay(){Date=new DateTime(year, 9, 6), Name = "" },// Unification Day
+            new HolidayDay(){Date =new DateTime(year, 9, 22), Name = "" },// Independence Day
+             new HolidayDay(){Date=new DateTime(year, 12, 24), Name = "" },// Christmas Eve
+           new HolidayDay(){Date  =new DateTime(year, 12, 25), Name = "" },// Christmas Day
+            new HolidayDay(){Date= new DateTime(year, 12, 26), Name = "" } // Second Day of Christmas
+        };
+
+            // Calculate Easter and related holidays
+            var easter = CalculateOrthodoxEaster(year);
+            var easterHolidays = new List<HolidayDay>
+        {
+           new HolidayDay(){Date = easter.AddDays(-2),Name="" }, // Good Friday
+             new HolidayDay(){Date =easter.AddDays(-1),Name="" }, // Holy Saturday
+             new HolidayDay(){Date =easter,Name="" },     // Easter Sunday
+             new HolidayDay(){Date =easter.AddDays(1),Name="" }   // Easter Monday
+        };
+
+            holidays.AddRange(fixedHolidays);
+            holidays.AddRange(easterHolidays);
+            for (int i = 0; i < holidays.Count; i++)
+            {
+                var holiday = holidays[i];
+                if (holiday.Date.DayOfWeek == DayOfWeek.Saturday || holiday.Date.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    DateTime monday = holiday.Date;
+                    while (monday.DayOfWeek != DayOfWeek.Monday)
+                    {
+                        monday = monday.AddDays(1);
+                    }
+
+                    if (!holidays.Select(h=>h.Date).Contains(monday))
+                    {
+                        holidays.Add(new HolidayDay() {Date=monday,Name="" });
+                    }
                 }
             }
             return holidays;

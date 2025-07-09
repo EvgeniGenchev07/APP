@@ -46,6 +46,19 @@ namespace App.Services
             }
             return new List<BusinessTrip>();
         }
+        public async Task<List<HolidayDay>> GetAllHolidayDaysAsync()
+        {
+            var response = await _httpClient.GetAsync("HolidayDay/all");
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<HolidayDay>>(responseContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            return new List<HolidayDay>();
+        }
 
         public async Task<List<BusinessTrip>> GetUserBusinessTripsAsync(string userId)
         {
@@ -111,6 +124,23 @@ namespace App.Services
             }
             return false;
         }
+        public async Task<HolidayDay> CreateHolidayDayAsync(HolidayDay holidayDay)
+        {
+            var json = JsonSerializer.Serialize(holidayDay);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("HolidayDay/create", content);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                holidayDay = JsonSerializer.Deserialize<HolidayDay>(responseContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                return holidayDay;
+            }
+            return null;
+        }
+        
 
         public async Task<bool> CancelAbsenceAsync(int absenceId)
         {
@@ -202,5 +232,6 @@ namespace App.Services
             var response = await _httpClient.PutAsync($"BusinessTrip/requestupdate", content);
             return response.IsSuccessStatusCode;
         }
+       
     }
 }

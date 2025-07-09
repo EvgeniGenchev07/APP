@@ -9,6 +9,7 @@ using Microsoft.Maui.Storage;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace App.PageModels;
@@ -135,11 +136,10 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         ShowAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = true);
         HideAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = false);
 
-        InitializeOfficialHolidays(_currentDate.Year);
         _ = LoadDataAsync();
     }
 
-    private void InitializeOfficialHolidays(int year)
+    private async Task InitializeOfficialHolidays(int year)
     {
         _officialHolidays.Clear();
 
@@ -188,6 +188,8 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
                 }
             }
         }
+        var holidays =  await _httpService.GetAllHolidayDaysAsync();
+        _customHolidays = holidays.Select(h => h.Date.Date).ToList();
     }
     [RelayCommand]
     private async Task ItemTapped(BusinessTripViewModel businessTrip)
@@ -228,6 +230,8 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             IsBusy = true;
             _allBusinessTrips = await _httpService.GetAllBusinessTripsAsync();
             _allAbsences = await _httpService.GetAllAbsencesAsync();
+            _customHolidays = await _httpService.GetAllHolidayDaysAsync()
+                .ContinueWith(t => t.Result.Select(h => h.Date.Date).ToList());
             GenerateCalendar();
         }
         catch (Exception ex)
@@ -278,9 +282,8 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             var dayAbsences = _allAbsences.Where(a =>
                 date >= a.StartDate.Date && date <= a.StartDate.AddDays(a.DaysCount - 1).Date).ToList();
 
-            var isOfficialHoliday = _officialHolidays.Contains(date.Date);
             var isCustomHoliday = _customHolidays.Contains(date.Date);
-            var isHoliday = isOfficialHoliday || isCustomHoliday;
+            var isHoliday = isCustomHoliday;
 
             var calendarDay = new CalendarDay
             {
@@ -289,7 +292,6 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
                 IsCurrentMonth = true,
                 IsToday = date.Date == DateTime.Today,
                 IsHoliday = isHoliday,
-                IsOfficialHoliday = isOfficialHoliday,
                 IsCustomHoliday = isCustomHoliday,
                 HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved),
                 HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
@@ -323,6 +325,11 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         {
             IsBusy = true;
             _customHolidays.Add(SelectedHolidayDate.Date);
+            await _httpService.CreateHolidayDayAsync(new HolidayDay()
+            {
+                Name = HolidayName,
+                Date = SelectedHolidayDate.Date,
+            });
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;
