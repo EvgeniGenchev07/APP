@@ -81,7 +81,6 @@ public class AdminUsersPageModel : INotifyPropertyChanged
         CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
-        _ = LoadUsersAsync();
     }
 
     internal async Task LoadUsersAsync()
@@ -95,13 +94,10 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             var users = await _httpService.GetAllUsersAsync();
             _allUsers = users.Select(u => new UserViewModel(u)).ToList();
 
-            Device.BeginInvokeOnMainThread(() =>
-            {
                 foreach (var user in _allUsers)
                 {
                     Users.Add(user);
                 }
-            });
         }
         catch (Exception ex)
         {

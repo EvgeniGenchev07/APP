@@ -20,7 +20,7 @@ public class AbsenceViewModel
     public int Days => _absence.DaysCount;
     public string CreatedDate => _absence.Created.ToString("MM/dd/yyyy");
     public string UserId => _absence.UserId;
-    public string UserName => _absence.User?.Name ?? "Неизвестен потребител";
+    public string UserName => _absence.UserName ?? "Неизвестен потребител";
 
     public string TypeText => _absence.Type switch
     {
@@ -30,7 +30,7 @@ public class AbsenceViewModel
         AbsenceType.Other => "Други",
         _ => "Неизвестен"
     };
-
+        
     public string StatusText => _absence.Status switch
     {
         AbsenceStatus.Pending => "В очакване",

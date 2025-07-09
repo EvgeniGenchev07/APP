@@ -192,7 +192,7 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "SELECT * FROM Absence ORDER BY created DESC",
+                        "SELECT a.*, u.name FROM Absence a JOIN User u on u.id=a.userId ORDER BY a.created DESC",
                         _eapDbContext.Connection);
 
                     using (var reader = command.ExecuteReader())
@@ -207,7 +207,8 @@ namespace DataLayer
                                 Created = Convert.ToDateTime(reader["created"]),
                                 Status = (AbsenceStatus)Convert.ToInt32(reader["status"]),
                                 StartDate = Convert.ToDateTime(reader["startDate"]),
-                                UserId = reader["userId"].ToString()
+                                UserId = reader["userId"].ToString(),
+                                UserName = reader["name"].ToString()
                             });
                         }
                     }

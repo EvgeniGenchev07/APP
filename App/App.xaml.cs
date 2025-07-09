@@ -10,6 +10,7 @@ namespace App
         {
             InitializeComponent();
             MainPage = new AppShell();
+            Current.UserAppTheme = AppTheme.Light;
         }
     }
 }

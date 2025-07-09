@@ -131,7 +131,6 @@ public class AdminPageModel : INotifyPropertyChanged
         HideAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = false);
 
         InitializeOfficialHolidays(_currentDate.Year);
-        _ = LoadDataAsync();
     }
 
     private void InitializeOfficialHolidays(int year)
@@ -199,7 +198,7 @@ public class AdminPageModel : INotifyPropertyChanged
         return easter.AddDays(13); 
     }
 
-    private async Task LoadDataAsync()
+    internal async Task LoadDataAsync()
     {
         try
         {
@@ -268,7 +267,7 @@ public class AdminPageModel : INotifyPropertyChanged
                 HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved),
                 HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
                 HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed),
-                BusinessTrips = dayTrips
+                BusinessTrips = dayTrips,
             };
 
             CalendarDays.Add(calendarDay);
@@ -335,11 +334,26 @@ public class AdminPageModel : INotifyPropertyChanged
     {
         if (day == null || day.IsEmpty || !day.IsCurrentMonth)
             return;
-
+        if (SelectedDay is not null)
+        {
+            SelectedDay.IsSelected = false;
+            int index = CalendarDays.IndexOf(SelectedDay);
+            if (index >= 0 && index < CalendarDays.Count)
+            {
+                CalendarDays[index] = SelectedDay;
+            }
+        }
         SelectedDay = day;
         IsDaySelected = true;
+        day.IsSelected = true;
         SelectedDayTitle = day.Date.ToString("dddd, MMMM dd, yyyy");
-
+        {
+            int index = CalendarDays.IndexOf(day);
+            if (index >= 0 && index < CalendarDays.Count)
+            {
+                CalendarDays[index] = day;
+            }
+        }
         SelectedDayTrips.Clear();
         foreach (var trip in day.BusinessTrips)
         {
@@ -381,6 +395,7 @@ public class CalendarDay
     public bool IsEmpty { get; set; }
     public bool IsCurrentMonth { get; set; }
     public bool IsToday { get; set; }
+    public bool IsSelected { get; set; }
     public bool IsHoliday { get; set; }
     public bool IsOfficialHoliday { get; set; }
     public bool IsCustomHoliday { get; set; }
@@ -400,7 +415,7 @@ public class CalendarDay
                                IsCustomHoliday ? Colors.LightBlue :
                                Colors.Transparent;
 
-    public Color BackgroundColor => IsToday ? Colors.LightBlue :
+    public Color BackgroundColor => IsSelected ? Colors.LightBlue :
                                  IsHoliday ? (IsOfficialHoliday ? Colors.LightPink : Colors.LightBlue) :
                                  Colors.Transparent;
 
