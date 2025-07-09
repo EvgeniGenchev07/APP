@@ -37,9 +37,9 @@ namespace App.ViewModels
 
         public int Days => (int)(_trip.EndDate - _trip.StartDate).TotalDays + 1;
 
-        public string DateRange => $"{_trip.StartDate:MM/dd/yyyy} - {_trip.EndDate:MM/dd/yyyy} ({Days} ден{(Days == 1 ? "" : "'/'дни")})";
+        public string DateRange => $"{_trip.StartDate:MM/dd/yyyy} - {_trip.EndDate:MM/dd/yyyy} ({Days} {(Days == 1 ? "ден" : "дни")})";
 
-        public string DurationText => $"{Days} ден{(Days == 1 ? "" : "'/'дни")}";
+        public string DurationText => $"{Days} {(Days == 1 ? "ден" : "дни")}";
         public string CreatedText => $"Заявено на {_trip.Created:MM/dd/yyyy}";
 
         public string CarModel => _trip.CarModel ?? "Не е посочен модел на автомобила";
