@@ -1,4 +1,4 @@
-using BusinessLayer;
+﻿using BusinessLayer;
 using Microsoft.Maui.Graphics;
 
 namespace App.ViewModels;
@@ -23,9 +23,9 @@ public class UserViewModel
 
     public string RoleText => _user.Role switch
     {
-        Role.Admin => "Administrator",
-        Role.Employee => "Employee",
-        _ => "Unknown"
+        Role.Admin => "Администратор",
+        Role.Employee => "Служител",
+        _ => "Неизвестен"
     };
 
     public Color RoleColor => _user.Role switch

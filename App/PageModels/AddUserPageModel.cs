@@ -1,4 +1,4 @@
-using App.Services;
+п»їusing App.Services;
 using BusinessLayer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -15,7 +15,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _confirmPassword = string.Empty;
-    private string _selectedRole = "Служител";
+    private string _selectedRole = "РЎР»СѓР¶РёС‚РµР»";
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -112,7 +112,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (!ValidateForm())
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка при валидиране", "Моля поправете грешките във формуляра.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР° РїСЂРё РІР°Р»РёРґРёСЂР°РЅРµ", "РњРѕР»СЏ РїРѕРїСЂР°РІРµС‚Рµ РіСЂРµС€РєРёС‚Рµ РІСЉРІ С„РѕСЂРјСѓР»СЏСЂР°.", "OK");
             return;
         }
 
@@ -120,7 +120,7 @@ public class AddUserPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            var role = SelectedRole == "Администратор" ? Role.Admin : Role.Employee;
+            var role = SelectedRole == "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ" ? Role.Admin : Role.Employee;
             using (var md5 = MD5.Create())
             {
                 // Hash the password using MD5
@@ -140,17 +140,22 @@ public class AddUserPageModel : INotifyPropertyChanged
             var success = await _httpService.CreateUserAsync(user);
             if (success)
             {
+<<<<<<< HEAD
                 await Application.Current.MainPage.DisplayAlert("Success", "User created successfully", "OK");
                 await Shell.Current.GoToAsync("//AdminUsersPage");
+=======
+                await Application.Current.MainPage.DisplayAlert("РЈСЃРїРµС…", "РџРѕС‚СЂРµР±РёС‚РµР»СЏС‚ Р±Рµ СЃСЉР·РґР°РґРµРЅ СѓСЃРїРµС€РЅРѕ", "OK");
+                await Shell.Current.GoToAsync("AdminUsersPage");
+>>>>>>> 161cdccfa121aca2aa5c30c2621aaf502d2e368f
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно създаване на потребител", "OK");
+                await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", "РќРµСѓСЃРїРµС€РЅРѕ СЃСЉР·РґР°РІР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно създаване на потребител: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ СЃСЉР·РґР°РІР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»: {ex.Message}", "OK");
         }
         finally
         {
@@ -178,11 +183,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            NameError = "Името е задължително поле";
+            NameError = "РРјРµС‚Рѕ Рµ Р·Р°РґСЉР»Р¶РёС‚РµР»РЅРѕ РїРѕР»Рµ";
         }
         else if (Name.Length < 2)
         {
-            NameError = "Името трябва да е поне 2 символа";
+            NameError = "РРјРµС‚Рѕ С‚СЂСЏР±РІР° РґР° Рµ РїРѕРЅРµ 2 СЃРёРјРІРѕР»Р°";
         }
         else
         {
@@ -196,11 +201,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Email))
         {
-            EmailError = "Имейлът е задължително поле";
+            EmailError = "РРјРµР№Р»СЉС‚ Рµ Р·Р°РґСЉР»Р¶РёС‚РµР»РЅРѕ РїРѕР»Рµ";
         }
         else if (!Email.Contains("@") || !Email.Contains("."))
         {
-            EmailError = "Моля въведете правилен имейл";
+            EmailError = "РњРѕР»СЏ РІСЉРІРµРґРµС‚Рµ РїСЂР°РІРёР»РµРЅ РёРјРµР№Р»";
         }
         else
         {
@@ -214,11 +219,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Password))
         {
-            PasswordError = "Паролата е задължително поле";
+            PasswordError = "РџР°СЂРѕР»Р°С‚Р° Рµ Р·Р°РґСЉР»Р¶РёС‚РµР»РЅРѕ РїРѕР»Рµ";
         }
         else if (Password.Length < 6)
         {
-            PasswordError = "Паролата трябва да е поне 6 символа";
+            PasswordError = "РџР°СЂРѕР»Р°С‚Р° С‚СЂСЏР±РІР° РґР° Рµ РїРѕРЅРµ 6 СЃРёРјРІРѕР»Р°";
         }
         else
         {
@@ -232,11 +237,11 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(ConfirmPassword))
         {
-            ConfirmPasswordError = "Моля потвърдете паролата си";
+            ConfirmPasswordError = "РњРѕР»СЏ РїРѕС‚РІСЉСЂРґРµС‚Рµ РїР°СЂРѕР»Р°С‚Р° СЃРё";
         }
         else if (ConfirmPassword != Password)
         {
-            ConfirmPasswordError = "Паролата не съвпада";
+            ConfirmPasswordError = "РџР°СЂРѕР»Р°С‚Р° РЅРµ СЃСЉРІРїР°РґР°";
         }
         else
         {
@@ -250,7 +255,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(SelectedRole))
         {
-            RoleError = "Моля изберете роля";
+            RoleError = "РњРѕР»СЏ РёР·Р±РµСЂРµС‚Рµ СЂРѕР»СЏ";
         }
         else
         {

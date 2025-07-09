@@ -1,4 +1,4 @@
-using BusinessLayer;
+﻿using BusinessLayer;
 using Microsoft.Maui.Graphics;
 
 namespace App.ViewModels;
@@ -20,24 +20,24 @@ public class AbsenceViewModel
     public int Days => _absence.DaysCount;
     public string CreatedDate => _absence.Created.ToString("MM/dd/yyyy");
     public string UserId => _absence.UserId;
-    public string UserName => _absence.User?.Name ?? "Unknown User";
+    public string UserName => _absence.User?.Name ?? "Неизвестен потребител";
 
     public string TypeText => _absence.Type switch
     {
-        AbsenceType.Vacation => "Vacation",
-        AbsenceType.SickLeave => "Sick Leave",
-        AbsenceType.PersonalLeave => "Personal Leave",
-        AbsenceType.Other => "Other",
-        _ => "Unknown"
+        AbsenceType.Vacation => "Ваканция",
+        AbsenceType.SickLeave => "Болнични",
+        AbsenceType.PersonalLeave => "Отпуск",
+        AbsenceType.Other => "Други",
+        _ => "Неизвестен"
     };
 
     public string StatusText => _absence.Status switch
     {
-        AbsenceStatus.Pending => "Pending",
-        AbsenceStatus.Approved => "Approved",
-        AbsenceStatus.Rejected => "Rejected",
-        AbsenceStatus.Cancelled => "Cancelled",
-        _ => "Unknown"
+        AbsenceStatus.Pending => "В очакване",
+        AbsenceStatus.Approved => "Одобрен",
+        AbsenceStatus.Rejected => "Отхвърлен",
+        AbsenceStatus.Cancelled => "Отказан",
+        _ => "Неизвестен"
     };
 
     public Color StatusColor => _absence.Status switch
@@ -58,11 +58,11 @@ public class AbsenceViewModel
         _ => Colors.Gray
     };
 
-    public string DateRange => $"{_absence.StartDate:MM/dd/yyyy} - {EndDate:MM/dd/yyyy} ({_absence.DaysCount} days)";
+    public string DateRange => $"{_absence.StartDate:MM/dd/yyyy} - {EndDate:MM/dd/yyyy} ({_absence.DaysCount} дни)";
     
-    public string DurationText => $"{_absence.DaysCount} day{(_absence.DaysCount == 1 ? "" : "s")}";
+    public string DurationText => $"{_absence.DaysCount} ден{(_absence.DaysCount == 1 ? "" : "'/'дни")}";
     
-    public string CreatedText => $"Requested on {_absence.Created:MM/dd/yyyy}";
+    public string CreatedText => $"Заявено на {_absence.Created:MM/dd/yyyy}";
 
     public bool CanChangeStatus => Status == AbsenceStatus.Pending;
 } 

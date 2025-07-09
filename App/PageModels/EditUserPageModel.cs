@@ -1,4 +1,4 @@
-using App.Pages;
+п»їusing App.Pages;
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
@@ -14,7 +14,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     private bool _isBusy;
     private string _name = string.Empty;
     private string _email = string.Empty;
-    private string _selectedRole = "Служител";
+    private string _selectedRole = "РЎР»СѓР¶РёС‚РµР»";
     private string _password = string.Empty;
     private string _absenceDays = "0";
     private string _userId = string.Empty;
@@ -119,7 +119,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             Name = user.Name;
             Email = user.Email;
             Password = user.Password;
-            SelectedRole = user.Role == Role.Admin ? "Administrator" : "Служител";
+            SelectedRole = user.Role == Role.Admin ? "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ" : "РЎР»СѓР¶РёС‚РµР»";
             AbsenceDays = user.AbsenceDays.ToString();
         }
     }
@@ -128,7 +128,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (!ValidateForm())
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка при валидацията", "Моля поправи грешките във формуляра.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР° РїСЂРё РІР°Р»РёРґР°С†РёСЏС‚Р°", "РњРѕР»СЏ РїРѕРїСЂР°РІРё РіСЂРµС€РєРёС‚Рµ РІСЉРІ С„РѕСЂРјСѓР»СЏСЂР°.", "OK");
             return;
         }
 
@@ -136,7 +136,7 @@ public class EditUserPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            var role = SelectedRole == "Служител" ? Role.Admin : Role.Employee;
+            var role = SelectedRole == "РЎР»СѓР¶РёС‚РµР»" ? Role.Admin : Role.Employee;
             
             if (!int.TryParse(AbsenceDays, out int absenceDays))
             {
@@ -170,17 +170,17 @@ public class EditUserPageModel : INotifyPropertyChanged
             var success = await _httpService.UpdateUserAsync(user);
             if (success)
             {
-                await Application.Current.MainPage.DisplayAlert("Успех", "Потребителят бе обновен успешно", "OK");
+                await Application.Current.MainPage.DisplayAlert("РЈСЃРїРµС…", "РџРѕС‚СЂРµР±РёС‚РµР»СЏС‚ Р±Рµ РѕР±РЅРѕРІРµРЅ СѓСЃРїРµС€РЅРѕ", "OK");
                 await Shell.Current.GoToAsync("//AdminUsersPage");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно обновяване на потребител", "OK");
+                await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", "РќРµСѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІСЏРІР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно обновяване на потребител: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Р“СЂРµС€РєР°", $"РќРµСѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІСЏРІР°РЅРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»: {ex.Message}", "OK");
         }
         finally
         {
@@ -208,11 +208,11 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Name))
         {
-            NameError = "Името е задължително поле";
+            NameError = "РРјРµС‚Рѕ Рµ Р·Р°РґСЉР»Р¶РёС‚РµР»РЅРѕ РїРѕР»Рµ";
         }
         else if (Name.Length < 2)
         {
-            NameError = "Името трябва да е поне 2 символа";
+            NameError = "РРјРµС‚Рѕ С‚СЂСЏР±РІР° РґР° Рµ РїРѕРЅРµ 2 СЃРёРјРІРѕР»Р°";
         }
         else
         {
@@ -229,7 +229,7 @@ public class EditUserPageModel : INotifyPropertyChanged
         }
         else if (Password.Length < 6)
         {
-            PasswordError = "Паролата трябва да е поне 6 символа";
+            PasswordError = "РџР°СЂРѕР»Р°С‚Р° С‚СЂСЏР±РІР° РґР° Рµ РїРѕРЅРµ 6 СЃРёРјРІРѕР»Р°";
         }
         else
         {
@@ -240,11 +240,11 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(Email))
         {
-            EmailError = "Имейлът е задължително поле";
+            EmailError = "РРјРµР№Р»СЉС‚ Рµ Р·Р°РґСЉР»Р¶РёС‚РµР»РЅРѕ РїРѕР»Рµ";
         }
         else if (!Email.Contains("@") || !Email.Contains("."))
         {
-            EmailError = "Моля въведи правилен имейл";
+            EmailError = "РњРѕР»СЏ РІСЉРІРµРґРё РїСЂР°РІРёР»РµРЅ РёРјРµР№Р»";
         }
         else
         {
@@ -258,7 +258,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(SelectedRole))
         {
-            RoleError = "Моля избери роля";
+            RoleError = "РњРѕР»СЏ РёР·Р±РµСЂРё СЂРѕР»СЏ";
         }
         else
         {
@@ -272,11 +272,11 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(AbsenceDays))
         {
-            AbsenceDaysError = "Дните за отсъствие са задължително поле";
+            AbsenceDaysError = "Р”РЅРёС‚Рµ Р·Р° РѕС‚СЃСЉСЃС‚РІРёРµ СЃР° Р·Р°РґСЉР»Р¶РёС‚РµР»РЅРѕ РїРѕР»Рµ";
         }
         else if (!int.TryParse(AbsenceDays, out int days) || days < 0)
         {
-            AbsenceDaysError = "Моля въведи правилен брой на дни";
+            AbsenceDaysError = "РњРѕР»СЏ РІСЉРІРµРґРё РїСЂР°РІРёР»РµРЅ Р±СЂРѕР№ РЅР° РґРЅРё";
         }
         else
         {

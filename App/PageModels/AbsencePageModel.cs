@@ -1,4 +1,4 @@
-using App.Services;
+п»їusing App.Services;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -39,10 +39,10 @@ public partial class AbsencePageModel : ObservableObject
 
     public ObservableCollection<AbsenceTypeOption> AbsenceTypes { get; } = new()
     {
-        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.Vacation, DisplayName = "Vacation" },
-        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.SickLeave, DisplayName = "Sick Leave" },
-        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.PersonalLeave, DisplayName = "Personal Leave" },
-        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.Other, DisplayName = "Other" }
+        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.Vacation, DisplayName = "Р’Р°РєР°РЅС†РёСЏ" },
+        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.SickLeave, DisplayName = "Р‘РѕР»РЅРёС‡РЅРё" },
+        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.PersonalLeave, DisplayName = "РћС‚РїСѓСЃРє" },
+        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.Other, DisplayName = "Р”СЂСѓРіРё" }
     };
 
     public DateTime MinimumDate => DateTime.Today;
@@ -97,17 +97,22 @@ public partial class AbsencePageModel : ObservableObject
             
             if (success)
             {
+<<<<<<< HEAD
                 await Shell.Current.DisplayAlert("Success", "Absence request submitted successfully", "OK");
+=======
+                await Shell.Current.DisplayAlert("РЈСЃРїРµС…", "РњРѕР»Р±Р°С‚Р° Р·Р° РѕС‚СЃСЉСЃС‚РІРёРµ Рµ РёР·РїСЂР°С‚РµРЅР° СѓСЃРїРµС€РЅРѕ", "OK");
+           
+>>>>>>> 161cdccfa121aca2aa5c30c2621aaf502d2e368f
                 await Shell.Current.GoToAsync("//MainPage");
             }
             else
             {
-                await Shell.Current.DisplayAlert("Грешка", "Неуспешно изпращане на молба за отсъствие", "OK");
+                await Shell.Current.DisplayAlert("Р“СЂРµС€РєР°", "РќРµСѓСЃРїРµС€РЅРѕ РёР·РїСЂР°С‰Р°РЅРµ РЅР° РјРѕР»Р±Р° Р·Р° РѕС‚СЃСЉСЃС‚РІРёРµ", "OK");
             }
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Грешка", $"Възникна грешка: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlert("Р“СЂРµС€РєР°", $"Р’СЉР·РЅРёРєРЅР° РіСЂРµС€РєР°: {ex.Message}", "OK");
         }
         finally
         {
@@ -121,22 +126,22 @@ public partial class AbsencePageModel : ObservableObject
 
         if (SelectedAbsenceType == null)
         {
-            errors.Add("Моля избери причина за отсъствието");
+            errors.Add("РњРѕР»СЏ РёР·Р±РµСЂРё РїСЂРёС‡РёРЅР° Р·Р° РѕС‚СЃСЉСЃС‚РІРёРµС‚Рѕ");
         }
 
         if (StartDate < DateTime.Today)
         {
-            errors.Add("Началната дата не може да бъде в миналото");
+            errors.Add("РќР°С‡Р°Р»РЅР°С‚Р° РґР°С‚Р° РЅРµ РјРѕР¶Рµ РґР° Р±СЉРґРµ РІ РјРёРЅР°Р»РѕС‚Рѕ");
         }
 
         if (EndDate < StartDate)
         {
-            errors.Add("Крайната дата не може д бъде преди началната");
+            errors.Add("РљСЂР°Р№РЅР°С‚Р° РґР°С‚Р° РЅРµ РјРѕР¶Рµ РґР° Р±СЉРґРµ РїСЂРµРґРё РЅР°С‡Р°Р»РЅР°С‚Р°");
         }
 
         if (DurationDays > AvailableDays)
         {
-            errors.Add($"Имаш още само {AvailableDays} сяободни дни");
+            errors.Add($"РРјР°С€ РѕС‰Рµ СЃР°РјРѕ {AvailableDays} СЃРІРѕР±РѕРґРЅРё РґРЅРё");
         }
 
         HasValidationErrors = errors.Any();

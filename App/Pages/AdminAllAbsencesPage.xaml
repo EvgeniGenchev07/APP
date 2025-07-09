@@ -25,15 +25,30 @@
                    VerticalOptions="Center"/>
 
             <Button Grid.Column="2" 
+<<<<<<< HEAD
+=======
+                Text="Filter" 
+                Command="{Binding FilterCommand}"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                FontSize="16"
+                HorizontalOptions="End"/>
+        </Grid>
+        <Button Grid.Column="2" 
+>>>>>>> 161cdccfa121aca2aa5c30c2621aaf502d2e368f
                     Text="Филтрирай" 
                     Command="{Binding FilterCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="End"/>
+<<<<<<< HEAD
         </Grid>
+=======
+    </Grid>
+>>>>>>> 161cdccfa121aca2aa5c30c2621aaf502d2e368f
 
-        <!-- Content -->
+    <!-- Content -->
         <Grid Grid.Row="1" RowDefinitions="Auto,*">
             <!-- Stats -->
             <Frame Grid.Row="0" Margin="20,10,20,10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}">

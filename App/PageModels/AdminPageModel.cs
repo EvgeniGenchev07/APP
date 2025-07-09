@@ -1,4 +1,4 @@
-using App.Services;
+ï»¿using App.Services;
 using BusinessLayer;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -209,7 +209,7 @@ public class AdminPageModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Ãðåøêà", $"Íåóñïåøíî çàðåæäàíå íà äàííèòå: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Ð“Ñ€ÐµÑˆÐºÐ°", $"ÐÐµÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð·Ð°Ñ€ÐµÐ¶Ð´Ð°Ð½Ðµ Ð½Ð° Ð´Ð°Ð½Ð½Ð¸Ñ‚Ðµ: {ex.Message}", "OK");
         }
         finally
         {
@@ -285,7 +285,7 @@ public class AdminPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(HolidayName))
         {
-            await Application.Current.MainPage.DisplayAlert("Ãðåøêà", "Ìîëÿ âúâåäåòå èìå íà ïðàçíèê", "OK");
+            await Application.Current.MainPage.DisplayAlert("Ð“Ñ€ÐµÑˆÐºÐ°", "ÐœÐ¾Ð»Ñ Ð²ÑŠÐ²ÐµÐ´ÐµÑ‚Ðµ Ð¸Ð¼Ðµ Ð½Ð° Ð¿Ñ€Ð°Ð·Ð½Ð¸Ðº", "OK");
             return;
         }
 
@@ -296,11 +296,11 @@ public class AdminPageModel : INotifyPropertyChanged
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;
-            await Application.Current.MainPage.DisplayAlert("Óñïåõ", "Ïðàçíèêúò áå óñïåøíî äîáàâåí", "OK");
+            await Application.Current.MainPage.DisplayAlert("Ð£ÑÐ¿ÐµÑ…", "ÐŸÑ€Ð°Ð·Ð½Ð¸ÐºÑŠÑ‚ Ð±Ðµ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð´Ð¾Ð±Ð°Ð²ÐµÐ½", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Ãðåøêà", $"Íåóñïåøíî äîáàâÿíå íà ïðàçíèê: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Ð“Ñ€ÐµÑˆÐºÐ°", $"ÐÐµÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð´Ð¾Ð±Ð°Ð²ÑÐ½Ðµ Ð½Ð° Ð¿Ñ€Ð°Ð·Ð½Ð¸Ðº: {ex.Message}", "OK");
         }
         finally
         {
@@ -319,11 +319,11 @@ public class AdminPageModel : INotifyPropertyChanged
             _customHolidays.Remove(SelectedDay.Date.Date);
             GenerateCalendar();
             IsDaySelected = false;
-            await Application.Current.MainPage.DisplayAlert("Óñïåõ", "Ïåðñîíàëèçèðàíèÿò ïðàçíèê å èçòðèò óñïåøíî", "OK");
+            await Application.Current.MainPage.DisplayAlert("Ð£ÑÐ¿ÐµÑ…", "ÐŸÐµÑ€ÑÐ¾Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€Ð°Ð½Ð¸ÑÑ‚ Ð¿Ñ€Ð°Ð·Ð½Ð¸Ðº Ðµ Ð¸Ð·Ñ‚Ñ€Ð¸Ñ‚ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Ãðåøêà", $"Íåóñïåøíî èçòðèâàíå íà ïðàçíèê: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Ð“Ñ€ÐµÑˆÐºÐ°", $"ÐÐµÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð¸Ð·Ñ‚Ñ€Ð¸Ð²Ð°Ð½Ðµ Ð½Ð° Ð¿Ñ€Ð°Ð·Ð½Ð¸Ðº: {ex.Message}", "OK");
         }
         finally
         {
@@ -392,8 +392,8 @@ public class CalendarDay
     public bool HasAnyTrips => HasBusinessTrips || HasPendingTrips || HasCompletedTrips;
     public bool HasNoTrips => !HasAnyTrips;
 
-    public string HolidayTypeText => IsOfficialHoliday ? "Îôèöèàëåí ïðàçíèê" :
-                                   IsCustomHoliday ? "Ïåðñîíàëèçèðà ïðàçíèê" :
+    public string HolidayTypeText => IsOfficialHoliday ? "ÐžÑ„Ð¸Ñ†Ð¸Ð°Ð»ÐµÐ½ Ð¿Ñ€Ð°Ð·Ð½Ð¸Ðº" :
+                                   IsCustomHoliday ? "ÐŸÐµÑ€ÑÐ¾Ð½Ð°Ð»Ð¸Ð·Ð¸Ñ€Ð°Ð½ Ð¿Ñ€Ð°Ð·Ð½Ð¸Ðº" :
                                    string.Empty;
 
     public Color HolidayColor => IsOfficialHoliday ? Colors.LightPink :
