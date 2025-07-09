@@ -50,9 +50,9 @@ namespace App.ViewModels
 
         public string CarOwnership => _trip.CarOwnership switch
         {
-            BusinessLayer.CarOwnership.Personal => "Личен автомобил",
-            BusinessLayer.CarOwnership.Company => "Фирмен автомобил",
-            BusinessLayer.CarOwnership.Rental => "Нает автомобил",
+            BusinessLayer.CarOwnerShip.Personal => "Личен автомобил",
+            BusinessLayer.CarOwnerShip.Company => "Фирмен автомобил",
+            BusinessLayer.CarOwnerShip.Rental => "Нает автомобил",
             _ => "Неизвестно"
         };
 
@@ -82,5 +82,49 @@ namespace App.ViewModels
             BusinessTripStatus.Completed => Colors.Blue,
             _ => Colors.Gray
         };
+
+        public static BusinessTrip ToBusinessTrip(BusinessTripViewModel viewModel)
+        {
+            return new BusinessTrip
+            {
+                Id = viewModel.Id,
+                Status = viewModel.Status,
+                StartDate = viewModel.StartDate,
+                EndDate = viewModel.EndDate,
+                UserId = viewModel.UserId,
+                UserFullName = viewModel.UserFullName,
+                ProjectName = viewModel.ProjectName,
+                CarTripDestination = viewModel.Destination,
+                Task = viewModel.Task,
+                Wage = viewModel.Wage,
+                AccommodationMoney = viewModel.AccommodationMoney,
+                Created = DateTime.Parse(viewModel.CreatedDate), // or keep original if available
+                TotalDays = (byte)viewModel.Days,
+
+                CarModel = viewModel.CarModel == "Не е посочен модел на автомобила" ? string.Empty : viewModel.CarModel,
+                CarBrand = viewModel.CarBrand == "Не е посочена марка на автомобила" ? null : viewModel.CarBrand,
+                CarRegistrationNumber = viewModel.CarRegistrationNumber == "Не е посочен регистрационен номер" ? null : viewModel.CarRegistrationNumber,
+
+                CarOwnership = ParseCarOwnership(viewModel.CarOwnership),
+                CarUsagePerHundredKm = float.Parse(viewModel.CarUsagePerHundredKm.Replace(" л/100км", "")),
+                PricePerLiter = double.Parse(viewModel.PricePerLiter.Replace(" лв/л", "")),
+                ExpensesResponsibility = viewModel.ExpensesResponsibility == "Не е посочено" ? null : viewModel.ExpensesResponsibility,
+
+                DepartureDate = viewModel.StartDate,
+                DateOfArrival = viewModel.EndDate,
+                IssueDate = viewModel.CreatedDate == "" ? DateTime.Now : DateTime.Parse(viewModel.CreatedDate) // fallback
+            };
+        }
+        private static CarOwnerShip ParseCarOwnership(string text)
+        {
+            return text switch
+            {
+                "Личен автомобил" => CarOwnerShip.Personal,
+                "Фирмен автомобил" => CarOwnerShip.Company,
+                "Нает автомобил" => CarOwnerShip.Rental,
+                _ => CarOwnerShip.Personal
+            };
+        }
     }
-}
+} 
+

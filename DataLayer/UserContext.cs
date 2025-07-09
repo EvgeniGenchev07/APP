@@ -277,7 +277,7 @@ namespace DataLayer
                                         StartDate = Convert.ToDateTime(reader["trip_startDate"]),
                                         EndDate = Convert.ToDateTime(reader["trip_endDate"]),
                                         TotalDays = Convert.ToByte(reader["totalDays"]),
-                                        CarOwnership = Enum.Parse<CarOwnership>(reader["carOwnerShip"].ToString()),
+                                        CarOwnership = Enum.Parse<CarOwnerShip>(reader["carOwnerShip"].ToString()),
                                         Wage = Convert.ToDecimal(reader["wage"]),
                                         AccommodationMoney = Convert.ToDecimal(reader["accomodationMoney"]),
                                         CarBrand = reader["carBrand"]?.ToString(),

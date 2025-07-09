@@ -1,6 +1,6 @@
 namespace BusinessLayer
 {
-    public enum CarOwnership : byte
+    public enum CarOwnerShip
     {
         Company = 0,
         Personal = 1,

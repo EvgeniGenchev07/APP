@@ -98,7 +98,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     {
         if (businessTrip != null)
         {
-            //BusinessTripDetailsPage.SelectedBusinessTrip = businessTrip;
+            BusinessTripDetailsPage.SelectedBusinessTrip = businessTrip;
             await Shell.Current.GoToAsync("//businesstripdetails");
         }
     }

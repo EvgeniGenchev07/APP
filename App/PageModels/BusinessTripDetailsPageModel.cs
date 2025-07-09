@@ -29,6 +29,19 @@ namespace App.PageModels
         {
        
         }
+        public BusinessTripDetailsPageModel(BusinessTripViewModel businessTrip)
+        {
+            BusinessTrip = businessTrip;
+            _originalBusinessTrip = new BusinessTrip()
+            {
+                AccommodationMoney = businessTrip.AccommodationMoney,
+                CarBrand = businessTrip.CarBrand,
+                CarModel = businessTrip.CarModel,
+            };
+            CancelCommand = new Command(async () => await CancelAsync());
+            CalculateTotalExpenses();
+            UpdateCanEdit();
+        }
 
         public BusinessTripDetailsPageModel(BusinessTrip businessTrip)
         {

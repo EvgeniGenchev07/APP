@@ -77,11 +77,11 @@ public class RegisterPageModel : INotifyPropertyChanged
         {
             _isPasswordHidden = value;
             OnPropertyChanged();
-            OnPropertyChanged(nameof(ShowHidePasswordIcon));
+            OnPropertyChanged(nameof(EyeIcon));
         }
     }
 
-    public string ShowHidePasswordIcon => IsPasswordHidden ? "👁" : "👁️‍🗨️";
+    public string EyeIcon => IsPasswordHidden ? "eye_off.png" : "eye_on.png";
 
     public ICommand RegisterCommand { get; }
     public ICommand TogglePasswordCommand { get; }

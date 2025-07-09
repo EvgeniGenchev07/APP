@@ -17,7 +17,7 @@ namespace BusinessLayer
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public byte TotalDays { get; set; }
-        public CarOwnership CarOwnership { get; set; }
+        public CarOwnerShip CarOwnership { get; set; }
         public decimal Wage { get; set; }
         public decimal AccommodationMoney { get; set; }
         public string? CarBrand { get; set; }

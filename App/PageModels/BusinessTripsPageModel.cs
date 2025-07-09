@@ -1,4 +1,5 @@
 using App.Pages;
+using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -171,7 +172,7 @@ namespace App.PageModels
         {
             if (businessTrip != null)
             {
-                BusinessTripDetailsPage.SelectedBusinessTrip = businessTrip;
+                BusinessTripDetailsPage.SelectedBusinessTrip = new BusinessTripViewModel(businessTrip);
                 await Shell.Current.GoToAsync("//businesstripdetails");
             }
         }

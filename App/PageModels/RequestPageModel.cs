@@ -158,7 +158,7 @@ namespace App.PageModels
                     StartDate = TripStartDate,
                     EndDate = TripEndDate,
                     TotalDays = (byte)DurationDays,
-                    CarOwnership = CarOwnership.Personal, // Default to personal car
+                    CarOwnership = CarOwnerShip.Personal, // Default to personal car
                     Wage = DailyAllowanceRate,
                     AccommodationMoney = AccommodationAllowanceRate,
                     CarBrand = VehicleType,

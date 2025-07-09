@@ -59,16 +59,12 @@
                    TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
                    BackgroundColor="Transparent"/>
 
-                        <Label Grid.Column="1"
-                   Text="{Binding ShowHidePasswordIcon}"
-                   FontSize="16"
-                   VerticalOptions="Center"
-                   HorizontalOptions="End"
-                   Margin="0,0,10,0">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding TogglePasswordCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
+                        <ImageButton
+        Source="{Binding EyeIcon}"
+        BackgroundColor="Transparent"
+        HorizontalOptions="End"
+                            Command="{Binding TogglePasswordCommand}"
+        VerticalOptions="Center" />
                     </Grid>
                 </Frame>
 

@@ -1,11 +1,12 @@
 using App.PageModels;
+using App.ViewModels;
 using BusinessLayer;
 
 namespace App.Pages
 {
     public partial class BusinessTripDetailsPage : ContentPage
     {
-        public static BusinessTrip SelectedBusinessTrip { get; set; }
+        public static BusinessTripViewModel SelectedBusinessTrip { get; set; }
 
         public BusinessTripDetailsPage()
         {
