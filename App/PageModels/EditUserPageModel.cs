@@ -136,7 +136,7 @@ public class EditUserPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            var role = SelectedRole == "Служител" ? Role.Admin : Role.Employee;
+            var role = SelectedRole == "Служител" ? Role.Employee : Role.Admin;
             
             if (!int.TryParse(AbsenceDays, out int absenceDays))
             {
