@@ -1,14 +1,16 @@
 using App.Pages;
+using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 
 namespace App.PageModels
 {
     public partial class BusinessTripDetailsPageModel : ObservableObject
     {
         [ObservableProperty]
-        private BusinessTrip _businessTrip;
+        private BusinessTripViewModel _businessTrip;
 
         [ObservableProperty]
         private decimal _totalExpenses;
@@ -21,20 +23,23 @@ namespace App.PageModels
 
         private BusinessTrip _originalBusinessTrip;
 
+        public ICommand CancelCommand { get; }
+
         public BusinessTripDetailsPageModel()
         {
-            BusinessTrip = new BusinessTrip();
+       
         }
 
         public BusinessTripDetailsPageModel(BusinessTrip businessTrip)
         {
-            BusinessTrip = businessTrip;
+            BusinessTrip = new BusinessTripViewModel(businessTrip);
             _originalBusinessTrip = CloneBusinessTrip(businessTrip);
+            CancelCommand = new Command(async () => await CancelAsync());
             CalculateTotalExpenses();
             UpdateCanEdit();
         }
 
-        partial void OnBusinessTripChanged(BusinessTrip value)
+        partial void OnBusinessTripChanged(BusinessTripViewModel value)
         {
             CalculateTotalExpenses();
             UpdateCanEdit();
@@ -52,7 +57,7 @@ namespace App.PageModels
         {
             if (BusinessTrip != null)
             {
-                TotalExpenses = BusinessTrip.Wage * BusinessTrip.TotalDays + BusinessTrip.AccommodationMoney * BusinessTrip.TotalDays;
+                TotalExpenses = BusinessTrip.Wage * BusinessTrip.Days + BusinessTrip.AccommodationMoney * BusinessTrip.Days;
             }
         }
 
@@ -90,6 +95,11 @@ namespace App.PageModels
             };
         }
 
+        private async Task CancelAsync()
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
+
         [RelayCommand]
         private void ToggleEdit()
         {
@@ -106,7 +116,6 @@ namespace App.PageModels
                 
                 if (result)
                 {
-                    UpdateTotalDays();
                     CalculateTotalExpenses();
                     IsEditing = false;
                     
@@ -126,20 +135,12 @@ namespace App.PageModels
                 
                 if (result)
                 {
-                    BusinessTrip = CloneBusinessTrip(_originalBusinessTrip);
+                    BusinessTrip = new BusinessTripViewModel(CloneBusinessTrip(_originalBusinessTrip));
                     IsEditing = false;
                 }
             }
         }
 
-        private void UpdateTotalDays()
-        {
-            if (BusinessTrip.StartDate != default && BusinessTrip.EndDate != default)
-            {
-                var days = (BusinessTrip.EndDate - BusinessTrip.StartDate).Days + 1;
-                BusinessTrip.TotalDays = (byte)Math.Max(1, days);
-            }
-        }
 
         [RelayCommand]
         private async Task GoBack()

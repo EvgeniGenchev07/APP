@@ -42,6 +42,25 @@ namespace App.ViewModels
         public string DurationText => $"{Days} ден{(Days == 1 ? "" : "'/'дни")}";
         public string CreatedText => $"Заявено на {_trip.Created:MM/dd/yyyy}";
 
+        public string CarModel => _trip.CarModel ?? "Не е посочен модел на автомобила";
+
+        public string CarBrand => _trip.CarBrand ?? "Не е посочена марка на автомобила";
+
+        public string CarRegistrationNumber => _trip.CarRegistrationNumber ?? "Не е посочен регистрационен номер";
+
+        public string CarOwnership => _trip.CarOwnership switch
+        {
+            BusinessLayer.CarOwnership.Personal => "Личен автомобил",
+            BusinessLayer.CarOwnership.Company => "Фирмен автомобил",
+            BusinessLayer.CarOwnership.Rental => "Нает автомобил",
+            _ => "Неизвестно"
+        };
+
+        public string CarUsagePerHundredKm => _trip.CarUsagePerHundredKm.ToString("F2") + " л/100км";
+
+        public string PricePerLiter => _trip.PricePerLiter.ToString("F2") + " лв/л";
+
+        public string ExpensesResponsibility => _trip.ExpensesResponsibility ?? "Не е посочено";
         public bool CanChangeStatus => Status == BusinessTripStatus.Pending;
 
         public string StatusText => _trip.Status switch
