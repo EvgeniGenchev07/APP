@@ -4,10 +4,6 @@
              xmlns:pageModels="clr-namespace:App.PageModels"
              xmlns:viewModels="clr-namespace:App.ViewModels"
              x:Class="App.Pages.AllAbsencesPage"
-             Shell.FlyoutBehavior="Disabled"
-NavigationPage.HasBackButton ="False"
-Shell.NavBarIsVisible="False"
-NavigationPage.HasNavigationBar="False"
              x:DataType="pageModels:AllAbsencesPageModel">
 
     <Grid RowDefinitions="Auto,*">

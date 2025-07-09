@@ -220,7 +220,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         if (businessTrip != null)
         {
             BusinessTripDetailsPage.SelectedBusinessTrip = new BusinessTripViewModel( App.User?.BusinessTrips?.FirstOrDefault(t => t.Id == businessTrip.Id));
-            await Shell.Current.GoToAsync("businesstripdetails");
+            await Shell.Current.GoToAsync("//businesstripdetails");
         }
     }
     private async Task LogoutAsync()

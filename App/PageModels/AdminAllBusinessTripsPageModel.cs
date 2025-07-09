@@ -62,10 +62,9 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
-        _ = LoadBusinessTripsAsync();
     }
 
-    private async Task LoadBusinessTripsAsync()
+    internal async Task LoadBusinessTripsAsync()
     {
         try
         {

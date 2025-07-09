@@ -9,4 +9,12 @@ public partial class AdminAllBusinessTripsPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is AdminAllBusinessTripsPageModel viewModel)
+        {
+            await viewModel.LoadBusinessTripsAsync();
+        }
+    }
 } 
