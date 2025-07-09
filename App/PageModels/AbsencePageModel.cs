@@ -97,12 +97,7 @@ public partial class AbsencePageModel : ObservableObject
             
             if (success)
             {
-<<<<<<< HEAD
-                await Shell.Current.DisplayAlert("Success", "Absence request submitted successfully", "OK");
-=======
                 await Shell.Current.DisplayAlert("Успех", "Молбата за отсъствие е изпратена успешно", "OK");
-           
->>>>>>> 161cdccfa121aca2aa5c30c2621aaf502d2e368f
                 await Shell.Current.GoToAsync("//MainPage");
             }
             else

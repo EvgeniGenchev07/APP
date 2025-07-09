@@ -40,29 +40,19 @@
                         StrokeThickness="1"
                         BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}"
                         Padding="20">
-<<<<<<< Updated upstream
                     <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="Auto,Auto">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Absence Days" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="0" Text="Дни отпуск" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="1" Text="Pending Absences" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="2" Text="Approved Absences" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="3" Text="Pending Trips" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="4" Text="Approved Trips" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="3" Text="Чакащи командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="4" Text="Завършени командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
 
                         <Label Grid.Row="1" Grid.Column="0" Text="{Binding AbsenceDays}" HorizontalOptions="Center" FontSize="24" TextColor="{StaticResource Primary}"/>
                         <Label Grid.Row="1" Grid.Column="1" Text="{Binding PendingAbsencesCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Warning}"/>
                         <Label Grid.Row="1" Grid.Column="2" Text="{Binding ApprovedAbsencesCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
                         <Label Grid.Row="1" Grid.Column="3" Text="{Binding PendingTripsCount}" FontSize="24" HorizontalOptions="Center"  TextColor="{StaticResource Warning}"/>
                         <Label Grid.Row="1" Grid.Column="4" Text="{Binding ApprovedTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
-=======
-                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto">
-                        <Label Grid.Row="0" Grid.Column="0" Text="Дни отпуск" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="1" Text="Чакащи командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="2" Text="Завършени командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
-
-                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding AbsenceDays}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
-                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding PendingTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Warning}"/>
-                        <Label Grid.Row="1" Grid.Column="2" Text="{Binding CompletedTripsCount}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Success}"/>
->>>>>>> Stashed changes
+                      
                     </Grid>
                 </Border>
 
@@ -83,12 +73,8 @@
                                     HorizontalOptions="End"/>
                         </Grid>
 
-<<<<<<< Updated upstream
                         <CollectionView ItemsSource="{Binding RecentAbsences}" 
                                         VerticalScrollBarVisibility="Never"
-=======
-                        <CollectionView ItemsSource="{Binding RecentAbsences}"
->>>>>>> Stashed changes
                                         HeightRequest="200">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewModels:AbsenceViewModel">
@@ -145,12 +131,8 @@ CommandParameter="{Binding .}"/>
                                     HorizontalOptions="End"/>
                         </Grid>
 
-<<<<<<< Updated upstream
                         <CollectionView ItemsSource="{Binding RecentBusinessTrips}" 
                                         VerticalScrollBarVisibility="Never"
-=======
-                        <CollectionView ItemsSource="{Binding RecentBusinessTrips}"
->>>>>>> Stashed changes
                                         HeightRequest="250">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="viewModels:BusinessTripViewModel">

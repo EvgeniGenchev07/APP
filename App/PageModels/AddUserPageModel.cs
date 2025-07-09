@@ -140,13 +140,8 @@ public class AddUserPageModel : INotifyPropertyChanged
             var success = await _httpService.CreateUserAsync(user);
             if (success)
             {
-<<<<<<< HEAD
-                await Application.Current.MainPage.DisplayAlert("Success", "User created successfully", "OK");
-                await Shell.Current.GoToAsync("//AdminUsersPage");
-=======
                 await Application.Current.MainPage.DisplayAlert("Успех", "Потребителят бе създаден успешно", "OK");
                 await Shell.Current.GoToAsync("AdminUsersPage");
->>>>>>> 161cdccfa121aca2aa5c30c2621aaf502d2e368f
             }
             else
             {
