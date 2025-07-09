@@ -2,7 +2,6 @@
 using BusinessLayer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
 using System.Windows.Input;
 
 namespace App.PageModels;
@@ -14,11 +13,11 @@ public class RegisterPageModel : INotifyPropertyChanged
     private string _errorMessage;
     private bool _isBusy;
     private bool _isEnabled;
+    private bool _isPasswordHidden = true;
     private readonly HttpService _httpService;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-   
     public string Email
     {
         get => _email;
@@ -26,7 +25,6 @@ public class RegisterPageModel : INotifyPropertyChanged
         {
             _email = value;
             IsEnabled = CanRegister();
-
             OnPropertyChanged();
         }
     }
@@ -38,11 +36,9 @@ public class RegisterPageModel : INotifyPropertyChanged
         {
             _password = value;
             IsEnabled = CanRegister();
-
             OnPropertyChanged();
         }
     }
-
 
     public string ErrorMessage
     {
@@ -74,15 +70,29 @@ public class RegisterPageModel : INotifyPropertyChanged
         }
     }
 
+    public bool IsPasswordHidden
+    {
+        get => _isPasswordHidden;
+        set
+        {
+            _isPasswordHidden = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowHidePasswordIcon));
+        }
+    }
+
+    public string ShowHidePasswordIcon => IsPasswordHidden ? "👁" : "👁️‍🗨️";
+
     public ICommand RegisterCommand { get; }
+    public ICommand TogglePasswordCommand { get; }
+
     public RegisterPageModel(HttpService httpService)
     {
         RegisterCommand = new Command(async () => await RegisterAsync(), CanRegister);
+        TogglePasswordCommand = new Command(() => IsPasswordHidden = !IsPasswordHidden);
 
-        // Subscribe to property changes to re-evaluate CanExecute
         PropertyChanged += (_, __) => ((Command)RegisterCommand).ChangeCanExecute();
         _httpService = httpService;
-
     }
 
     private bool CanRegister()
@@ -100,15 +110,12 @@ public class RegisterPageModel : INotifyPropertyChanged
             IsEnabled = false;
             ErrorMessage = string.Empty;
 
-            // Validate email format
             if (!Email.Contains("@") || !Email.Contains("."))
             {
                 ErrorMessage = "Моля въведи правилен имейл";
                 return;
             }
 
-
-            // Validate password length
             if (Password.Length < 6)
             {
                 ErrorMessage = "Паролата трябва да е поне 6 символа";
@@ -121,18 +128,10 @@ public class RegisterPageModel : INotifyPropertyChanged
                 ErrorMessage = "Неуспешна регистрация. Моля опитайте отново.";
                 return;
             }
-            App.User = user;
-            // Registration successful - navigate based on role
-            if (user.Role == Role.Admin)
-            {
-                await Shell.Current.GoToAsync("//AdminPage");
-            }
-            else
-            {
-                await Shell.Current.GoToAsync("//MainPage");
-            }
 
-            // Clear form
+            App.User = user;
+            await Shell.Current.GoToAsync(user.Role == Role.Admin ? "//AdminPage" : "//MainPage");
+
             Email = string.Empty;
             Password = string.Empty;
         }
@@ -149,7 +148,6 @@ public class RegisterPageModel : INotifyPropertyChanged
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        //IsEnabled = CanRegister();
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

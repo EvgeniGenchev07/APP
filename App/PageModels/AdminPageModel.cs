@@ -28,6 +28,7 @@ public class AdminPageModel : INotifyPropertyChanged
 
     public ObservableCollection<CalendarDay> CalendarDays { get; } = new();
     public ObservableCollection<BusinessTripViewModel> SelectedDayTrips { get; } = new();
+    public ObservableCollection<AbsenceViewModel> SelectedDayAbsences { get; } = new();
 
     public string CurrentMonthYear => _currentDate.ToString("MMMM yyyy");
 
@@ -113,6 +114,7 @@ public class AdminPageModel : INotifyPropertyChanged
     public ICommand HideAddHolidayDialogCommand { get; }
 
     private List<BusinessTrip> _allBusinessTrips = new();
+    private List<Absence> _allAbsences = new();
 
     public AdminPageModel(HttpService httpService)
     {
@@ -131,6 +133,7 @@ public class AdminPageModel : INotifyPropertyChanged
         HideAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = false);
 
         InitializeOfficialHolidays(_currentDate.Year);
+        _ = LoadDataAsync();
     }
 
     private void InitializeOfficialHolidays(int year)
@@ -195,7 +198,7 @@ public class AdminPageModel : INotifyPropertyChanged
         int day = ((d + e + 114) % 31) + 1;
 
         DateTime easter = new DateTime(year, month, day);
-        return easter.AddDays(13); 
+        return easter.AddDays(13);
     }
 
     internal async Task LoadDataAsync()
@@ -204,11 +207,12 @@ public class AdminPageModel : INotifyPropertyChanged
         {
             IsBusy = true;
             _allBusinessTrips = await _httpService.GetAllBusinessTripsAsync();
+            _allAbsences = await _httpService.GetAllAbsencesAsync();
             GenerateCalendar();
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на данните: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
         }
         finally
         {
@@ -251,6 +255,9 @@ public class AdminPageModel : INotifyPropertyChanged
             var dayTrips = _allBusinessTrips.Where(t =>
                 date >= t.StartDate.Date && date <= t.EndDate.Date).ToList();
 
+            var dayAbsences = _allAbsences.Where(a =>
+                date >= a.StartDate.Date && date <= a.StartDate.AddDays(a.DaysCount - 1).Date).ToList();
+
             var isOfficialHoliday = _officialHolidays.Contains(date.Date);
             var isCustomHoliday = _customHolidays.Contains(date.Date);
             var isHoliday = isOfficialHoliday || isCustomHoliday;
@@ -268,6 +275,10 @@ public class AdminPageModel : INotifyPropertyChanged
                 HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
                 HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed),
                 BusinessTrips = dayTrips,
+                HasApprovedAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Approved),
+                HasPendingAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Pending),
+                HasRejectedAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Rejected),
+                Absences = dayAbsences
             };
 
             CalendarDays.Add(calendarDay);
@@ -284,7 +295,7 @@ public class AdminPageModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(HolidayName))
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", "Моля въведете име на празник", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Please enter a holiday name", "OK");
             return;
         }
 
@@ -295,11 +306,11 @@ public class AdminPageModel : INotifyPropertyChanged
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;
-            await Application.Current.MainPage.DisplayAlert("Успех", "Празникът бе успешно добавен", "OK");
+            await Application.Current.MainPage.DisplayAlert("Success", "Holiday added successfully", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно добавяне на празник: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to add holiday: {ex.Message}", "OK");
         }
         finally
         {
@@ -318,11 +329,11 @@ public class AdminPageModel : INotifyPropertyChanged
             _customHolidays.Remove(SelectedDay.Date.Date);
             GenerateCalendar();
             IsDaySelected = false;
-            await Application.Current.MainPage.DisplayAlert("Успех", "Персонализираният празник е изтрит успешно", "OK");
+            await Application.Current.MainPage.DisplayAlert("Success", "Custom holiday deleted successfully", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно изтриване на празник: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to delete holiday: {ex.Message}", "OK");
         }
         finally
         {
@@ -334,30 +345,23 @@ public class AdminPageModel : INotifyPropertyChanged
     {
         if (day == null || day.IsEmpty || !day.IsCurrentMonth)
             return;
-        if (SelectedDay is not null)
-        {
-            SelectedDay.IsSelected = false;
-            int index = CalendarDays.IndexOf(SelectedDay);
-            if (index >= 0 && index < CalendarDays.Count)
-            {
-                CalendarDays[index] = SelectedDay;
-            }
-        }
+
         SelectedDay = day;
         IsDaySelected = true;
-        day.IsSelected = true;
         SelectedDayTitle = day.Date.ToString("dddd, MMMM dd, yyyy");
-        {
-            int index = CalendarDays.IndexOf(day);
-            if (index >= 0 && index < CalendarDays.Count)
-            {
-                CalendarDays[index] = day;
-            }
-        }
+
+        // Update business trips for selected day
         SelectedDayTrips.Clear();
         foreach (var trip in day.BusinessTrips)
         {
             SelectedDayTrips.Add(new BusinessTripViewModel(trip));
+        }
+
+        // Update absences for selected day
+        SelectedDayAbsences.Clear();
+        foreach (var absence in day.Absences)
+        {
+            SelectedDayAbsences.Add(new AbsenceViewModel(absence));
         }
     }
 
@@ -402,24 +406,44 @@ public class CalendarDay
     public bool HasBusinessTrips { get; set; }
     public bool HasPendingTrips { get; set; }
     public bool HasCompletedTrips { get; set; }
+    public bool HasApprovedAbsences { get; set; }
+    public bool HasPendingAbsences { get; set; }
+    public bool HasRejectedAbsences { get; set; }
     public List<BusinessTrip> BusinessTrips { get; set; } = new();
+    public List<Absence> Absences { get; set; } = new();
 
     public bool HasAnyTrips => HasBusinessTrips || HasPendingTrips || HasCompletedTrips;
     public bool HasNoTrips => !HasAnyTrips;
+    public bool HasAnyAbsences => HasApprovedAbsences || HasPendingAbsences || HasRejectedAbsences;
+    public bool HasNoAbsences => !HasAnyAbsences;
 
-    public string HolidayTypeText => IsOfficialHoliday ? "Официален празник" :
-                                   IsCustomHoliday ? "Персонализиран празник" :
+    public string HolidayTypeText => IsOfficialHoliday ? "Official Holiday" :
+                                   IsCustomHoliday ? "Custom Holiday" :
                                    string.Empty;
 
     public Color HolidayColor => IsOfficialHoliday ? Colors.LightPink :
                                IsCustomHoliday ? Colors.LightBlue :
                                Colors.Transparent;
 
-    public Color BackgroundColor => IsSelected ? Colors.LightBlue :
-                                 IsHoliday ? (IsOfficialHoliday ? Colors.LightPink : Colors.LightBlue) :
-                                 Colors.Transparent;
+    public Color BackgroundColor
+    {
+        get
+        {
+            if (IsSelected) return Color.FromArgb("#FFD700"); 
+            if (IsToday) return Color.FromArgb("#4169E1"); 
+            if (IsHoliday) return IsOfficialHoliday ? Colors.LightPink : Colors.LightBlue;
+            return Colors.Transparent;
+        }
+    }
 
-    public Color TextColor => IsCurrentMonth ?
-                            (IsHoliday ? Colors.Red : Colors.Black) :
-                            Colors.Gray;
+    public Color TextColor
+    {
+        get
+        {
+            if (IsSelected) return Colors.Black; 
+            if (!IsCurrentMonth) return Colors.Gray;
+            if (IsHoliday) return Colors.DarkRed;
+            return Colors.Black;
+        }
+    }
 }

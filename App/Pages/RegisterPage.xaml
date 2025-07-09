@@ -48,14 +48,28 @@
                        BorderColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
                        Padding="0"
-                       HeightRequest="60">
-                    <Entry Text="{Binding Password}" 
-                           Placeholder="Парола"
-                           PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}"
-                           IsPassword="True"
-                           FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
-                           BackgroundColor="Transparent"/>
+                       HeightRequest="60">          
+                    <Grid ColumnDefinitions="*,Auto">
+                            <Entry Grid.Column="0"
+                   Text="{Binding Password}" 
+                   Placeholder="Парола"
+                   PlaceholderColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray500}}"
+                   IsPassword="{Binding IsPasswordHidden}"
+                   FontSize="14"
+                   TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                   BackgroundColor="Transparent"/>
+
+                        <Label Grid.Column="1"
+                   Text="{Binding ShowHidePasswordIcon}"
+                   FontSize="16"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   Margin="0,0,10,0">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TogglePasswordCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
                 </Frame>
 
 

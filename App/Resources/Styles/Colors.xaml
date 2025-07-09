@@ -51,4 +51,5 @@
     <Color x:Key="Gray50">#F9FAFB</Color>
     <Color x:Key="Warning">#F59E0B</Color>
     <Color x:Key="Success">#10B981</Color>
+    <Color x:Key="Info">#17a2b8</Color>   
 </ResourceDictionary>
