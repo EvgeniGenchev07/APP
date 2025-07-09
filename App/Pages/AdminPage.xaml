@@ -381,7 +381,7 @@
                                             Padding="10"
                                             >
                                         <Border.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminAllBusinessTripsPageModel}}, Path=ItemTappedCommand}" 
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminPageModel}}, Path=ItemTappedCommand}" 
 CommandParameter="{Binding .}"/>
                                         </Border.GestureRecognizers>
                                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
@@ -428,7 +428,7 @@ CommandParameter="{Binding .}"/>
                                             Padding="10"
                                             >
                                         <Border.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminAllAbsencesPageModel}}, Path=SelectAbsenceCommand}" 
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminPageModel}}, Path=SelectAbsenceCommand}" 
 CommandParameter="{Binding .}"/>
                                         </Border.GestureRecognizers>
                                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">

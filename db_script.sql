@@ -25,14 +25,6 @@ constraint FK_Absence_User foreign key(userId)
 references User(id),
 constraint PK_Absence primary key(id));
 
-/*create table User_Absence(
-userId int not null,
-absenceId int not null,
-constraint FK_UserId foreign key(userId) 
-references User(id),
-constraint FK_AbsenceId foreign key(absenceId) 
-references Absence(id),
-constraint PK_User_Absence primary key(userId,absenceId));*/
 create table BusinessTrip(
 id int auto_increment,
 status tinyint not null,
@@ -61,11 +53,3 @@ constraint FK_Business_User foreign key(userId)
 references User(id),
 constraint PK_BusinessTrip primary key(id));
 select * from User;
-/*create table User_BusinessTrip(
-userId int not null,
-businessTripId int not null,
-constraint FK_BusinessTrip_User foreign key(userId) 
-references User(id),
-constraint FK_BusinessTrip foreign key(businessTripId) 
-references BusinessTrip(id),
-constraint PK_User_BusinessTrip primary key(userId,businessTripId));*/

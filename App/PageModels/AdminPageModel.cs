@@ -1,16 +1,19 @@
-﻿using App.Services;
+﻿using App.Pages;
+using App.Services;
+using App.ViewModels;
 using BusinessLayer;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Storage;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Storage;
-using App.ViewModels;
 
 namespace App.PageModels;
 
-public class AdminPageModel : INotifyPropertyChanged
+public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
 {
     private readonly HttpService _httpService;
     private DateTime _currentDate;
@@ -186,7 +189,24 @@ public class AdminPageModel : INotifyPropertyChanged
             }
         }
     }
-
+    [RelayCommand]
+    private async Task ItemTapped(BusinessTripViewModel businessTrip)
+    {
+        if (businessTrip != null)
+        {
+            BusinessTripDetailsPage.SelectedBusinessTrip = businessTrip;
+            await Shell.Current.GoToAsync("//businesstripdetails");
+        }
+    }
+    [RelayCommand]
+    public async void SelectAbsence(AbsenceViewModel absence)
+    {
+        if (absence != null)
+        {
+            AbsenceDetailsPage.SelectedAbsence = absence;
+            await Shell.Current.GoToAsync("AbsenceDetailsPage");
+        }
+    }
     private DateTime CalculateOrthodoxEaster(int year)
     {
         int a = year % 4;

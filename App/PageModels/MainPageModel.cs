@@ -188,17 +188,17 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
 
     private async Task RequestAbsenceAsync()
     {
-        await Shell.Current.GoToAsync("//AbsencePage");
+        await Shell.Current.GoToAsync("AbsencePage");
     }
 
     private async Task RequestBusinessTripAsync()
     {
-        await Shell.Current.GoToAsync("//request");
+        await Shell.Current.GoToAsync("request");
     }
 
     private async Task ViewAllAbsencesAsync()
     {
-        await Shell.Current.GoToAsync("//AllAbsencesPage");
+        await Shell.Current.GoToAsync("AllAbsencesPage");
     }
 
     private async Task ViewAllBusinessTripsAsync()
@@ -220,7 +220,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         if (businessTrip != null)
         {
             BusinessTripDetailsPage.SelectedBusinessTrip = new BusinessTripViewModel( App.User?.BusinessTrips?.FirstOrDefault(t => t.Id == businessTrip.Id));
-            await Shell.Current.GoToAsync("//businesstripdetails");
+            await Shell.Current.GoToAsync("businesstripdetails");
         }
     }
     private async Task LogoutAsync()
