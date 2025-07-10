@@ -20,24 +20,6 @@ namespace Server.Controllers
             _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
         }
 
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] BusinessLayer.User user)
-        {
-            if (user == null || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
-            {
-                return BadRequest("Invalid user data.");
-            }
-
-            if (_authenticationContext.Register(user))
-            {
-                return Ok(JsonSerializer.Serialize(user));
-            }
-            else
-            {
-                return Conflict("User already exists.");
-            }
-
-        }
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel loginModel)
         {
@@ -101,7 +83,7 @@ namespace Server.Controllers
         }
 
         [HttpPost("edit")]
-        public IActionResult EditUser([FromBody] BusinessLayer.User user)
+        public IActionResult EditUser([FromBody] User user)
         {
             if (user == null || string.IsNullOrEmpty(user.Id) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
             {

@@ -3,7 +3,6 @@ create database EAPDigitalIntegrationDb;
 use EAPDigitalIntegrationDb;
 create table User(
 id varchar(40),
-contractDays int not null,
 absenceDays int,
 name varchar(70) not null,
 role tinyint not null,
@@ -67,3 +66,5 @@ add issueId int;
 alter table BusinessTrip
 add additionalExpences decimal;
 select * from user;
+alter table user
+add contractDays int not null;

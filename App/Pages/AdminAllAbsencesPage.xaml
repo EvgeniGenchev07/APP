@@ -36,18 +36,16 @@
             <Label Text="Избери година:" VerticalOptions="Center" HorizontalOptions="Start"/>
             <Picker x:Name="YearPicker" VerticalOptions="Center" WidthRequest="120"
             ItemsSource="{Binding AvailableYears}"
-            SelectedIndexChanged="SelectedIndexChanged"
             SelectedItem="{Binding SelectedYear}"/>
             <Label Text="Избери месец:" VerticalOptions="Center" HorizontalOptions="Start"/>
             <Picker x:Name="MonthPicker" VerticalOptions="Center" WidthRequest="150"
             ItemsSource="{Binding AvailableMonths}"
-            SelectedIndexChanged="SelectedIndexChanged"
             SelectedItem="{Binding SelectedMonth}"/>
-            <Label Text="Избери проект:" VerticalOptions="Center" HorizontalOptions="Start"/>
-            <Entry Text="{Binding Search}"  VerticalOptions="Center" WidthRequest="200" TextChanged="Entry_TextChanged"/>
+            <Label Text="Търси по име:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Entry Text="{Binding Search}"  VerticalOptions="Center" WidthRequest="200"/>
 
-            <Label Text="Общи разходи:" VerticalOptions="Center" HorizontalOptions="End"/>
-            <Label Text="{Binding .}" TextColor="{StaticResource Primary}" FontSize="Body" HorizontalOptions="End" VerticalOptions="Center"/>
+            <Label Text="Общо отпуски:" VerticalOptions="Center" HorizontalOptions="End"/>
+            <Label Text="{Binding TotalAbsences}" TextColor="{StaticResource Primary}" FontSize="Body" HorizontalOptions="End" VerticalOptions="Center"/>
         </StackLayout>
         <!-- Content -->
         <Grid Grid.Row="2" RowDefinitions="Auto,*">
@@ -155,7 +153,7 @@ CommandParameter="{Binding .}"/>
                    VerticalOptions="Center"/>
 
         <!-- Empty state -->
-        <Label Grid.Row="2" Text="Няма намерени служебни пътувания" IsVisible="{Binding HasNoResults}"
+        <Label Grid.Row="2" Text="Няма намерени отсъствия" IsVisible="{Binding HasNoResults}"
        HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Italic"/>
         <!-- Loading Indicator -->
        

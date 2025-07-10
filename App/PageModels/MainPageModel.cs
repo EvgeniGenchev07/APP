@@ -429,7 +429,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
                 IsCustomHoliday = holidayDay is not null && holidayDay.IsCustom,
                 HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved),
                 HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
-                HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed),
+                HasRejectedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Rejected),
                 BusinessTrips = dayTrips,
                 HasApprovedAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Approved),
                 HasPendingAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Pending),

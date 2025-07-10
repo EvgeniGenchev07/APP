@@ -226,7 +226,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
                 IsCustomHoliday = holidayDay is not null && holidayDay.IsCustom,
                 HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved),
                 HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
-                HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed),
+                HasRejectedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Rejected),
                 BusinessTrips = dayTrips,
                 HasApprovedAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Approved),
                 HasPendingAbsences = dayAbsences.Any(a => a.Status == AbsenceStatus.Pending),
@@ -381,14 +381,14 @@ public class CalendarDay
     public bool IsCustomHoliday { get; set; }
     public bool HasBusinessTrips { get; set; }
     public bool HasPendingTrips { get; set; }
-    public bool HasCompletedTrips { get; set; }
+    public bool HasRejectedTrips { get; set; }
     public bool HasApprovedAbsences { get; set; }
     public bool HasPendingAbsences { get; set; }
     public bool HasRejectedAbsences { get; set; }
     public List<BusinessTrip> BusinessTrips { get; set; } = new();
     public List<Absence> Absences { get; set; } = new();
 
-    public bool HasAnyTrips => HasBusinessTrips || HasPendingTrips || HasCompletedTrips;
+    public bool HasAnyTrips => HasBusinessTrips || HasPendingTrips || HasRejectedTrips;
     public bool HasNoTrips => !HasAnyTrips;
     public bool HasAnyAbsences => HasApprovedAbsences || HasPendingAbsences || HasRejectedAbsences;
     public bool HasNoAbsences => !HasAnyAbsences;

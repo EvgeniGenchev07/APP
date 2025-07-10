@@ -105,24 +105,7 @@ namespace Server.Controllers
             }
         }
 
-        [HttpGet("{businessTripId}")]
-        public IActionResult GetById(int businessTripId)
-        {
-            if (businessTripId <= 0)
-            {
-                return BadRequest("Invalid business trip ID.");
-            }
-
-            var businessTrip = _businessTripContext.GetById(businessTripId);
-            if (businessTrip != null)
-            {
-                return Ok(businessTrip);
-            }
-            else
-            {
-                return NotFound("Business trip not found.");
-            }
-        }
+        
         [HttpPut("requestupdate")]
         public IActionResult RequestUpdate([FromBody] RequestUpdateModel request)
         {

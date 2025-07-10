@@ -16,15 +16,14 @@ public class AbsenceViewModel
     public AbsenceStatus Status {get => _absence.Status;set => _absence.Status = value; }
     public DateTime StartDate => _absence.StartDate;
     public DateTime EndDate => _absence.StartDate.AddDays(_absence.DaysCount - 1);
-    public int DaysCount => _absence.DaysCount;
-    public int Days => _absence.DaysCount;
+    public byte Days => _absence.DaysCount;
     public string CreatedDate => _absence.Created.ToString("MM/dd/yyyy");
     public string UserId => _absence.UserId;
     public string UserName => _absence.UserName ?? "Неизвестен потребител";
-
+    public byte DaysTaken => _absence.DaysTaken;
+    public AbsenceType Type => _absence.Type;
     public string TypeText => _absence.Type switch
     {
-        AbsenceType.Vacation => "Ваканция",
         AbsenceType.SickLeave => "Болнични",
         AbsenceType.PersonalLeave => "Отпуск",
         AbsenceType.Other => "Други",
@@ -36,7 +35,6 @@ public class AbsenceViewModel
         AbsenceStatus.Pending => "В очакване",
         AbsenceStatus.Approved => "Одобрен",
         AbsenceStatus.Rejected => "Отхвърлен",
-        AbsenceStatus.Cancelled => "Отказан",
         _ => "Неизвестен"
     };
 
@@ -45,13 +43,11 @@ public class AbsenceViewModel
         AbsenceStatus.Pending => Colors.Orange,
         AbsenceStatus.Approved => Colors.Green,
         AbsenceStatus.Rejected => Colors.Red,
-        AbsenceStatus.Cancelled => Colors.Gray,
         _ => Colors.Gray
     };
 
     public Color TypeColor => _absence.Type switch
     {
-        AbsenceType.Vacation => Colors.Blue,
         AbsenceType.SickLeave => Colors.Red,
         AbsenceType.PersonalLeave => Colors.Purple,
         AbsenceType.Other => Colors.Gray,

@@ -58,7 +58,7 @@ namespace App.PageModels
 
         public BusinessTripsPageModel()
         {
-            SelectedStatusOption = StatusOptions[0]; // Default to "All"
+            SelectedStatusOption = StatusOptions[0];
             LoadBusinessTrips();
         }
 
@@ -183,7 +183,6 @@ namespace App.PageModels
             await Shell.Current.GoToAsync("//MainPage");
         }
 
-        // Property change handlers to trigger filtering
         partial void OnSearchTextChanged(string value) => ApplyFilters();
         partial void OnStartDateFilterChanged(DateTime? value) => ApplyFilters();
         partial void OnEndDateFilterChanged(DateTime? value) => ApplyFilters();

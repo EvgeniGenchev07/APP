@@ -6,30 +6,15 @@ public partial class AdminAllAbsencesPage : ContentPage
 {
     public AdminAllAbsencesPage(AdminAllAbsencesPageModel viewModel)
     {
-        InitializeComponent();
         BindingContext = viewModel;
+        InitializeComponent();
     }
     protected async override void OnAppearing()
     {
         base.OnAppearing();
         if (BindingContext is AdminAllAbsencesPageModel pageModel)
         {
-            await pageModel.LoadAbsencesAsync();
-        }
-    }
-    private void SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (BindingContext is AdminAllAbsencesPageModel viewModel)
-        {
-            viewModel.FilterAbsenceCommand.Execute(null);
-        }
-    }
-
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        if (BindingContext is AdminAllAbsencesPageModel viewModel)
-        {
-            viewModel.FilterAbsenceCommand.Execute(null);
+            await pageModel.LoadAbsencesCommand.ExecuteAsync(null);
         }
     }
 }

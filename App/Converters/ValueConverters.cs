@@ -14,7 +14,6 @@ namespace App.Converters
                     BusinessTripStatus.Pending => "Чакаща",
                     BusinessTripStatus.Approved => "Одобрена",
                     BusinessTripStatus.Rejected => "Отхвърлена",
-                    BusinessTripStatus.Completed => "Завършена",
                     _ => "Неизвестен"
                 };
             }
@@ -38,7 +37,6 @@ namespace App.Converters
                     BusinessTripStatus.Pending => Colors.Orange, // Pending
                     BusinessTripStatus.Approved => Colors.Green,  // Approved
                     BusinessTripStatus.Rejected => Colors.Red,    // Rejected
-                    BusinessTripStatus.Completed => Colors.Blue,   // Completed
                     _ => Colors.Gray
                 };
             }

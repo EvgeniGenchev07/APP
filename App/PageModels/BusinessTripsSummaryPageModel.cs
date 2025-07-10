@@ -39,7 +39,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
     private bool isRefreshing;
 
     [ObservableProperty]
-    private bool hasNoResults;
+    private bool hasNoResults = false;
     [ObservableProperty]
     private decimal summary;
 
@@ -67,8 +67,6 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
     private List<BusinessTripViewModel> _originalTrips = new();
     [ObservableProperty]
     private ObservableCollection<BusinessTripViewModel> trips = new();
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     partial void OnSelectedStatusChanged(StatusFilter value)
     {
@@ -133,7 +131,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
                     currentIndex++;
                 }
                 worksheet.Cell(currentIndex, 1).Value = "Общо за годината";
-                worksheet.Cell(currentIndex, 2).FormulaA1 = $"SUM(B2:B{currentIndex - 1})";
+                worksheet.Cell(currentIndex, 11).FormulaA1 = $"SUM(B2:B{currentIndex - 1})";
             }
             else
             {
@@ -168,7 +166,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
                     currentIndex++;
                 }
                 worksheet.Cell(currentIndex, 1).Value = "Общо за проекта";
-                worksheet.Cell(currentIndex, 2).FormulaA1 = $"SUM(F2:F{currentIndex - 1})";
+                worksheet.Cell(currentIndex, 11).FormulaA1 = $"SUM(F2:F{currentIndex - 1})";
             }
         }
         else
@@ -178,7 +176,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         stream.Position = 0;
-        var result = await FileSaver.Default.SaveAsync("BusinessTrips.xlsx", stream);
+        var result = await FileSaver.Default.SaveAsync($"BusinessTrips-{Guid.NewGuid().ToString().Substring(0,5)}.xlsx", stream);
     }
     private decimal AddSheet(XLWorkbook workbook,string month)
     {
@@ -215,7 +213,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
             currentIndex++;
         }
         worksheet.Cell(currentIndex, 1).Value = "Общо за месеца";
-        worksheet.Cell(currentIndex, 2).FormulaA1 = $"SUM(F2:F{currentIndex - 1})";
+        worksheet.Cell(currentIndex, 11).FormulaA1 = $"SUM(F2:F{currentIndex - 1})";
         return totalExpenses;
     }
     [RelayCommand]

@@ -130,24 +130,6 @@ namespace Server.Controllers
             }
         }
 
-        [HttpGet("{absenceId}")]
-        public IActionResult GetById(int absenceId)
-        {
-            if (absenceId <= 0)
-            {
-                return BadRequest("Invalid absence ID.");
-            }
-
-            var absence = _absenceContext.GetById(absenceId);
-            if (absence != null)
-            {
-                return Ok(absence);
-            }
-            else
-            {
-                return NotFound("Absence not found.");
-            }
-        }
         [HttpPut("requestupdate")]
         public IActionResult RequestUpdate([FromBody] RequestUpdateModel request)
         {

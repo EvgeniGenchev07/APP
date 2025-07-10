@@ -48,7 +48,6 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
         BusinessLayer.AbsenceStatus.Pending => "\u23F3", // Pending
         BusinessLayer.AbsenceStatus.Approved => "\u2713", // Approved
         BusinessLayer.AbsenceStatus.Rejected => "\u274C", // Rejected
-        BusinessLayer.AbsenceStatus.Cancelled => "\U0001F6AB", // Cancelled
         _ => "\u2753"
     };
 
@@ -57,13 +56,12 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
         BusinessLayer.AbsenceStatus.Pending => "Твоята молба се разглежда от ръководството",
         BusinessLayer.AbsenceStatus.Approved => "Твоята молбa бе одобрена",
         BusinessLayer.AbsenceStatus.Rejected => "Твоята молба бе отхвърлена",
-        BusinessLayer.AbsenceStatus.Cancelled => "Твоята молба бе отказана",
         _ => "Неизвестно състояние"
     };
 
     public string DurationText => Absence?.DurationText ?? string.Empty;
     public string StartDateText => Absence != null ? $"{Absence.StartDate:dd/MM/yyyy}" : string.Empty;
-    public string EndDateText => Absence != null ? $"{Absence.StartDate.AddDays(Absence.DaysCount - 1):dd/MM/yyyy}" : string.Empty;
+    public string EndDateText => Absence != null ? $"{Absence.StartDate.AddDays(Absence.Days - 1):dd/MM/yyyy}" : string.Empty;
     public string CreatedText => Absence?.CreatedText ?? string.Empty;
 
     public bool IsApproved => Absence?.Status == BusinessLayer.AbsenceStatus.Approved;

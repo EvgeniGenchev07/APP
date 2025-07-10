@@ -69,7 +69,6 @@ namespace App.ViewModels
             BusinessTripStatus.Pending => "В очакване",
             BusinessTripStatus.Approved => "Одобрен",
             BusinessTripStatus.Rejected => "Отхвърлен",
-            BusinessTripStatus.Completed => "Изпълнен",
             _ => "Неизвестен"
         };
 
@@ -78,7 +77,6 @@ namespace App.ViewModels
             BusinessTripStatus.Pending => Colors.Orange,
             BusinessTripStatus.Approved => Colors.Green,
             BusinessTripStatus.Rejected => Colors.Red,
-            BusinessTripStatus.Completed => Colors.Blue,
             _ => Colors.Gray
         };
         public BusinessTrip BusinessTrip => _trip;

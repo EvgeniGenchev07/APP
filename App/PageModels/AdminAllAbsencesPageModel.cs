@@ -2,6 +2,8 @@
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
+using ClosedXML.Excel;
+using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
@@ -12,22 +14,22 @@ using System.Windows.Input;
 
 namespace App.PageModels;
 
-public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropertyChanged
+public partial class AdminAllAbsencesPageModel : ObservableObject
 {
     private readonly HttpService _httpService;
+    [ObservableProperty]
     private bool _isBusy;
+    [ObservableProperty]
     private bool _isRefreshing;
     [ObservableProperty]
     private string _search;
     [ObservableProperty]
-    private ObservableCollection<int> availableYears;
-    [ObservableProperty]
-    private bool _hasNoResults;
+    private ObservableCollection<int> availableYears = new();
     [ObservableProperty]
     private int selectedYear;
 
     [ObservableProperty]
-    private ObservableCollection<string> availableMonths;
+    private ObservableCollection<string> availableMonths = new();
 
     [ObservableProperty]
     private string selectedMonth;
@@ -36,35 +38,11 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
     public ObservableCollection<AbsenceViewModel> absences = new();
     private List<AbsenceViewModel> _originalAbsences = new();
 
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool IsRefreshing
-    {
-        get => _isRefreshing;
-        set
-        {
-            _isRefreshing = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public int TotalAbsences => Absences.Count;
+    public int TotalAbsences => Absences.Sum(t => t.DaysTaken);
     public int PendingAbsences => Absences.Count(a => a.Status == AbsenceStatus.Pending);
     public int ApprovedAbsences => Absences.Count(a => a.Status == AbsenceStatus.Approved);
     public int RejectedAbsences => Absences.Count(a => a.Status == AbsenceStatus.Rejected);
-
-    public ICommand ApproveAbsenceCommand { get; }
-    public ICommand RejectAbsenceCommand { get; }
-    public ICommand CancelCommand { get; }
-    public ICommand RefreshCommand { get; }
+    public bool HasNoResults => !(Absences.Any());
 
     public AdminAllAbsencesPageModel(HttpService httpService)
     {
@@ -76,11 +54,6 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.Take(12));
         AvailableMonths.Add("Всички месеци");
         SelectedMonth = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[DateTime.Now.Month - 1];
-
-        ApproveAbsenceCommand = new Command<AbsenceViewModel>(async (absence) => await ApproveAbsenceAsync(absence));
-        RejectAbsenceCommand = new Command<AbsenceViewModel>(async (absence) => await RejectAbsenceAsync(absence));
-        CancelCommand = new Command(async () => await CancelAsync());
-        RefreshCommand = new Command(async () => await RefreshAsync());
 
     }
     [RelayCommand]
@@ -110,31 +83,38 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             {
                 filtered = new ObservableCollection<AbsenceViewModel>(filtered.Where(t => t.UserName.Contains(Search, StringComparison.OrdinalIgnoreCase)));
             }
+            Absences.Clear();
+            foreach (var item in filtered)
+            {
+                Absences.Add(item);
+            }
+            OnPropertyChanged(nameof(HasNoResults));
+            OnPropertyChanged(nameof(TotalAbsences));
+            OnPropertyChanged(nameof(PendingAbsences));
+            OnPropertyChanged(nameof(ApprovedAbsences));
+            OnPropertyChanged(nameof(RejectedAbsences));
 
-            Absences = filtered;
-            
         }
         finally
         {
             IsBusy = false;
-            HasNoResults = !Absences.Any();
         }
     }
-
-    internal async Task LoadAbsencesAsync()
+    [RelayCommand]
+    private async Task LoadAbsencesAsync()
     {
         try
         {
             IsBusy = true;
-            
-            var absences = await _httpService.GetAllAbsencesAsync();
-            _originalAbsences = absences.Select(a => new AbsenceViewModel(a)).ToList();
-            Absences.Clear();
-            foreach (var absence in absences)
-            {
-                Absences.Add(new AbsenceViewModel(absence));
-            }
 
+            var absences = await _httpService.GetAllAbsencesAsync();
+            _originalAbsences = absences.Select(a => new AbsenceViewModel(a)).Where(a=>a.Status==AbsenceStatus.Approved).ToList();
+            Absences.Clear();
+            foreach (var absence in _originalAbsences)
+            {
+                Absences.Add(absence);
+            }
+            OnPropertyChanged(nameof(HasNoResults));
             OnPropertyChanged(nameof(TotalAbsences));
             OnPropertyChanged(nameof(PendingAbsences));
             OnPropertyChanged(nameof(ApprovedAbsences));
@@ -158,7 +138,8 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             await Shell.Current.GoToAsync("AbsenceDetailsPage");
         }
     }
-    private async Task ApproveAbsenceAsync(AbsenceViewModel absence)
+    [RelayCommand]
+    private async Task ApproveAbsence(AbsenceViewModel absence)
     {
         if (absence == null) return;
 
@@ -173,7 +154,7 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             try
             {
                 IsBusy = true;
-                
+
                 // Call API to approve absence
                 var success = await _httpService.ApproveAbsenceAsync(absence.Id);
                 if (success)
@@ -203,8 +184,8 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             }
         }
     }
-
-    private async Task RejectAbsenceAsync(AbsenceViewModel absence)
+    [RelayCommand]
+    private async Task RejectAbsence(AbsenceViewModel absence)
     {
         if (absence == null) return;
 
@@ -219,7 +200,7 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             try
             {
                 IsBusy = true;
-                
+
                 var success = await _httpService.RejectAbsenceAsync(absence.Id);
                 if (success)
                 {
@@ -248,26 +229,82 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
             }
         }
     }
-
-    private async Task CancelAsync()
+    [RelayCommand]
+    private async Task Cancel()
     {
         await Shell.Current.GoToAsync("//AdminPage");
     }
     [RelayCommand]
     private async Task Export()
     {
-        
+
+        using var workbook = new XLWorkbook();
+        {
+            if (SelectedMonth == "Всички месеци")
+            {
+                AddSheet(workbook, "Отпуски", absences.Where(a => a.Type == AbsenceType.PersonalLeave).ToList());
+                AddSheet(workbook, "Болнични", absences.Where(a => a.Type == AbsenceType.SickLeave).ToList());
+                AddSheet(workbook, "Други", absences.Where(a => a.Type == AbsenceType.Other).ToList());
+                AddSheet(workbook, "Всички", absences.ToList());
+            }
+            else
+            {
+                var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;
+                AddSheet(workbook, "Отпуски", absences.Where(a => a.Type == AbsenceType.PersonalLeave && a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Болнични", absences.Where(a => a.Type == AbsenceType.SickLeave && a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Други", absences.Where(a => a.Type == AbsenceType.Other && a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Всички", absences.Where(a => a.StartDate.Month == monthIndex).ToList());
+            }
+        }
+        using var stream = new MemoryStream();
+        workbook.SaveAs(stream);
+        stream.Position = 0;
+        var result = await FileSaver.Default.SaveAsync($"Absences-{Guid.NewGuid().ToString().Substring(0,5)}.xlsx", stream);
     }
 
-    private async Task RefreshAsync()
+    private void AddSheet(XLWorkbook workbook,string type, List<AbsenceViewModel> absences)
+    {
+        var worksheet = workbook.Worksheets.Add($"{SelectedYear} {type}");
+        worksheet.Cell(1, 1).Value = "Месец";
+        int horizontalIndex = 2;
+        var names = Absences.Select(t => t.UserName).Distinct().ToList();
+        int verticalIndex = 2;
+
+        foreach (var name in names)
+        {
+            worksheet.Cell(1, horizontalIndex).Value = name;
+            for (int i = 0; i < 12; i++)
+            {
+                worksheet.Cell(i+verticalIndex, horizontalIndex).Value = 0;
+            }
+            horizontalIndex++;
+        }
+        for (int month = 1; month <= 12; month++)
+        {
+            worksheet.Cell(verticalIndex, 1).Value = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+            foreach (var absence in absences.Where(a => a.StartDate.Year == SelectedYear && a.StartDate.Month == month))
+            {
+                int columnIndex = names.IndexOf(absence.UserName) + 2;
+                var value = worksheet.Cell(verticalIndex, columnIndex).Value.GetNumber();
+                worksheet.Cell(verticalIndex, columnIndex).Value = absence.DaysTaken + value;
+            }
+            verticalIndex++;
+        }
+        worksheet.Cell(verticalIndex, 1).Value = "Общо";
+        for (int i = 2; i < horizontalIndex; i++)
+        {
+            worksheet.Cell(verticalIndex, i).FormulaA1 = $"SUM({worksheet.Cell(2, i).Address}:{worksheet.Cell(verticalIndex - 1, i).Address})";
+        }
+    }
+    [RelayCommand]
+    private async Task Refresh()
     {
         IsRefreshing = true;
         await LoadAbsencesAsync();
         IsRefreshing = false;
     }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-} 
+    partial void OnSelectedMonthChanged(string value) => FilterAbsence();
+    partial void OnSelectedYearChanged(int value) => FilterAbsence();
+    partial void OnSearchChanged(string value) => FilterAbsence();
+}

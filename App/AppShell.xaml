@@ -40,7 +40,7 @@
     <ShellContent
         ContentTemplate="{DataTemplate pages:AbsencePage}"
         Route="AbsencePage" />
-
+   
     <ShellContent
     ContentTemplate="{DataTemplate pages:AdminAllAbsencesPage}"
     Route="AdminAllAbsencesPage" />
