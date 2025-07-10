@@ -182,7 +182,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
             }
 
             // Filter by month
-            if (!string.IsNullOrEmpty(SelectedMonth))
+            if (!string.IsNullOrEmpty(SelectedMonth) && selectedMonth!="Всички месеци")
             {
                 var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;
                 filtered = new ObservableCollection<BusinessTripViewModel>(

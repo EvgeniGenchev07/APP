@@ -157,29 +157,27 @@ namespace DataLayer
         private async Task<List<HolidayDay>> InitializeOfficialHolidays(int year)
         {
             var holidays = new List<HolidayDay>();
-            // Fixed date holidays
             var fixedHolidays = new List<HolidayDay>
         {
-            new HolidayDay(){Date=new DateTime(year, 1, 1),Name="" }  , // New Year
-             new HolidayDay(){Date=new DateTime(year, 3, 3),Name = ""}, // Liberation Day
-             new HolidayDay(){Date=new DateTime(year, 5, 1), Name = "" }, // Labor Day
-             new HolidayDay(){Date=new DateTime(year, 5, 6), Name = "" },// St. George's Day
-            new HolidayDay(){Date =new DateTime(year, 5, 24), Name = "" }, // Bulgarian Education and Culture Day
-             new HolidayDay(){Date=new DateTime(year, 9, 6), Name = "" },// Unification Day
-            new HolidayDay(){Date =new DateTime(year, 9, 22), Name = "" },// Independence Day
-             new HolidayDay(){Date=new DateTime(year, 12, 24), Name = "" },// Christmas Eve
-           new HolidayDay(){Date  =new DateTime(year, 12, 25), Name = "" },// Christmas Day
-            new HolidayDay(){Date= new DateTime(year, 12, 26), Name = "" } // Second Day of Christmas
+            new HolidayDay(){Date=new DateTime(year, 1, 1),Name="Нова година" },
+             new HolidayDay(){Date=new DateTime(year, 3, 3),Name = "Ден на Освобождението"},
+             new HolidayDay(){Date=new DateTime(year, 5, 1), Name = "Ден на труда" },
+             new HolidayDay(){Date=new DateTime(year, 5, 6), Name = "Гергьовден" },
+            new HolidayDay(){Date =new DateTime(year, 5, 24), Name = "Ден на българската просвета и култура" },
+             new HolidayDay(){Date=new DateTime(year, 9, 6), Name = "Ден на Съединението" },
+            new HolidayDay(){Date =new DateTime(year, 9, 22), Name = "Ден на Независимостта" },
+             new HolidayDay(){Date=new DateTime(year, 12, 24), Name = "Бъдни вечер" },
+           new HolidayDay(){Date  =new DateTime(year, 12, 25), Name = "Коледа" },
+            new HolidayDay(){Date= new DateTime(year, 12, 26), Name = "Коледа" }
         };
 
-            // Calculate Easter and related holidays
             var easter = CalculateOrthodoxEaster(year);
             var easterHolidays = new List<HolidayDay>
         {
-           new HolidayDay(){Date = easter.AddDays(-2),Name="" }, // Good Friday
-             new HolidayDay(){Date =easter.AddDays(-1),Name="" }, // Holy Saturday
-             new HolidayDay(){Date =easter,Name="" },     // Easter Sunday
-             new HolidayDay(){Date =easter.AddDays(1),Name="" }   // Easter Monday
+           new HolidayDay(){Date = easter.AddDays(-2),Name="Разпети петък" },
+             new HolidayDay(){Date =easter.AddDays(-1),Name="Страстна събота" },
+             new HolidayDay(){Date =easter,Name="Великден" },
+             new HolidayDay(){Date =easter.AddDays(1),Name="Великден" }
         };
 
             holidays.AddRange(fixedHolidays);
@@ -197,7 +195,7 @@ namespace DataLayer
 
                     if (!holidays.Select(h=>h.Date).Contains(monday))
                     {
-                        holidays.Add(new HolidayDay() {Date=monday,Name="" });
+                        holidays.Add(new HolidayDay() {Date=monday,Name=$"Почивен поради {holiday.Name}" });
                     }
                 }
             }

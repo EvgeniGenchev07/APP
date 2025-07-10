@@ -350,7 +350,7 @@
                                        HeightRequest="20" 
                                        CornerRadius="2"
                                        VerticalOptions="Center"/>
-                                <Label Text="{Binding SelectedDay.HolidayTypeText}"
+                                <Label Text="{Binding SelectedDay.HolidayName}"
                                        FontAttributes="Bold"
                                        VerticalOptions="Center"/>
                             </HorizontalStackLayout>
