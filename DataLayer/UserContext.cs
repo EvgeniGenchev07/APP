@@ -101,12 +101,13 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "UPDATE User SET Name = @name, Email = @email, Role = @role, " +
+                        "UPDATE User SET Name = @name, Email = @email, Password = @password, Role = @role, " +
                         "AbsenceDays = @absenceDays WHERE Id = @id",
                         _eapDbContext.Connection);
 
                     command.Parameters.AddWithValue("@name", user.Name);
                     command.Parameters.AddWithValue("@email", user.Email);
+                    command.Parameters.AddWithValue("@password", user.Password);
                     command.Parameters.AddWithValue("@role", (int)user.Role);
                     command.Parameters.AddWithValue("@absenceDays", user.AbsenceDays);
                     command.Parameters.AddWithValue("@id", user.Id);

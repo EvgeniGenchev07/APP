@@ -19,6 +19,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     private string _absenceDays = "0";
     private string _userId = string.Empty;
     private bool _isPasswordChanged = false;
+    private string _passwordHash = string.Empty;
     public event PropertyChangedEventHandler PropertyChanged;
 
     public string Name
@@ -118,7 +119,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             _userId = user.Id;
             Name = user.Name;
             Email = user.Email;
-            Password = user.Password;
+            _passwordHash = user.Password;
             SelectedRole = user.Role == Role.Admin ? "Администратор" : "Служител";
             AbsenceDays = user.AbsenceDays.ToString();
         }
@@ -152,7 +153,7 @@ public class EditUserPageModel : INotifyPropertyChanged
                 {
                     var passwordBytes = System.Text.Encoding.UTF8.GetBytes(Password);
                     var hashedBytes = md5.ComputeHash(passwordBytes);
-                    Password = BitConverter.ToString(hashedBytes).Replace("-", "").ToLowerInvariant();
+                    _passwordHash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLowerInvariant();
                 }
             }
             }
@@ -161,7 +162,7 @@ public class EditUserPageModel : INotifyPropertyChanged
                 Id = _userId,
                 Name = Name,
                 Email = Email,
-                Password = Password,
+                Password = _passwordHash,
                 Role = role,
                 AbsenceDays = absenceDays
             };

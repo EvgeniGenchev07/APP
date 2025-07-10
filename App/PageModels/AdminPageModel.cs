@@ -172,7 +172,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на данните: {ex.Message}", "OK");
         }
         finally
         {
@@ -248,7 +248,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(HolidayName))
         {
-            await Application.Current.MainPage.DisplayAlert("Error", "Please enter a holiday name", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", "Моля въведете име на почивния ден!", "OK");
             return;
         }
 
@@ -266,11 +266,11 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;
-            await Application.Current.MainPage.DisplayAlert("Success", "Holiday added successfully", "OK");
+            await Application.Current.MainPage.DisplayAlert("Успех", "Почивния ден бе успешно добавен!", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to add holiday: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно добавяне на почивен ден: {ex.Message}", "OK");
         }
         finally
         {
@@ -289,11 +289,11 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             _customHolidays.Remove(SelectedDay.Date.Date);
             GenerateCalendar();
             IsDaySelected = false;
-            await Application.Current.MainPage.DisplayAlert("Success", "Custom holiday deleted successfully", "OK");
+            await Application.Current.MainPage.DisplayAlert("Success", "Почивният ден бе успешно изтрит!", "OK");
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to delete holiday: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно изтриване: {ex.Message}", "OK");
         }
         finally
         {
