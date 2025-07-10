@@ -1,4 +1,4 @@
-
+drop database EAPDigitalIntegrationDb;
 create database EAPDigitalIntegrationDb;
 use EAPDigitalIntegrationDb;
 create table User(
@@ -53,6 +53,7 @@ userId varchar(40) not null,
 constraint FK_Business_User foreign key(userId) 
 references User(id),
 constraint PK_BusinessTrip primary key(id));
+select * from User;
 
 create table HolidayDay(
     id int auto_increment,
@@ -61,3 +62,6 @@ create table HolidayDay(
     isCustom bool not null,
     constraint PK_HolidayDay primary key(id)
 );
+alter table businesstrip
+add issueId int not null;
+select *  from businesstrip;

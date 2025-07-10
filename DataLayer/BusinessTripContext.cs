@@ -21,17 +21,19 @@ namespace DataLayer
             {
                 try
                 {
+
                     var command = new MySqlConnector.MySqlCommand(
-                        "INSERT INTO BusinessTrip (status, issueDate, projectName, userFullName, task, " +
+                        "INSERT INTO BusinessTrip (issueId, status, issueDate, projectName, userFullName, task, " +
                         "startDate, endDate, totalDays, carOwnerShip, wage, accomodationMoney, carBrand, " +
                         "carRegistrationNumber, carTripDestination, dateOfArrival, carModel, carUsagePerHundredKm, " +
                         "pricePerLiter, departureDate, expensesResponsibility, created, userId) " +
-                        "VALUES (@status, @issueDate, @projectName, @userFullName, @task, @startDate, @endDate, " +
+                        "VALUES (@issueId, @status, @issueDate, @projectName, @userFullName, @task, @startDate, @endDate, " +
                         "@totalDays, @carOwnerShip, @wage, @accomodationMoney, @carBrand, @carRegistrationNumber, " +
                         "@carTripDestination, @dateOfArrival, @carModel, @carUsagePerHundredKm, @pricePerLiter, " +
                         "@departureDate, @expensesResponsibility, @created, @userId)",
                         _eapDbContext.Connection);
 
+                    command.Parameters.AddWithValue("@issueId", 0);
                     command.Parameters.AddWithValue("@status", (int)businessTrip.Status);
                     command.Parameters.AddWithValue("@issueDate", businessTrip.IssueDate);
                     command.Parameters.AddWithValue("@projectName", businessTrip.ProjectName);
@@ -56,6 +58,37 @@ namespace DataLayer
                     command.Parameters.AddWithValue("@userId", businessTrip.UserId);
 
                     int rowsAffected = command.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        using (var transaction = _eapDbContext.Connection.BeginTransaction())
+                        {
+                            try
+                            {
+
+                                var transactionCommand = new MySqlConnector.MySqlCommand(
+                                @"WITH RankedIssues AS (
+                                SELECT
+                                    id,
+                                    DENSE_RANK() OVER (
+                                        PARTITION BY YEAR(issueDate), MONTH(issueDate)
+                                        ORDER BY issueDate
+                                    ) AS newIssueId
+                                FROM BusinessTrip
+                            )
+                            UPDATE BusinessTrip bt
+                            JOIN RankedIssues r ON bt.id = r.id
+                            SET bt.issueId = r.newIssueId;",
+                                _eapDbContext.Connection, transaction);
+                                transactionCommand.ExecuteNonQuery();
+                                transaction.Commit();
+                            }
+                            catch (Exception ex)
+                            {
+                                transaction.Rollback();
+                                throw new Exception("Error updating issueId: " + ex.Message);
+                            }
+                        }
+                    }
                     _eapDbContext.Close();
                     return rowsAffected > 0;
                 }
@@ -75,7 +108,7 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "UPDATE BusinessTrip SET status = @status, issueDate = @issueDate, projectName = @projectName, " +
+                        "UPDATE BusinessTrip SET issueId=@issueId, status = @status, issueDate = @issueDate, projectName = @projectName, " +
                         "userFullName = @userFullName, task = @task, startDate = @startDate, endDate = @endDate, " +
                         "totalDays = @totalDays, carOwnerShip = @carOwnerShip, wage = @wage, accomodationMoney = @accomodationMoney, " +
                         "carBrand = @carBrand, carRegistrationNumber = @carRegistrationNumber, carTripDestination = @carTripDestination, " +
@@ -84,6 +117,7 @@ namespace DataLayer
                         "WHERE id = @id",
                         _eapDbContext.Connection);
 
+                    command.Parameters.AddWithValue("@issueId", businessTrip.IssueId);
                     command.Parameters.AddWithValue("@status", (int)businessTrip.Status);
                     command.Parameters.AddWithValue("@issueDate", businessTrip.IssueDate);
                     command.Parameters.AddWithValue("@projectName", businessTrip.ProjectName);
@@ -315,4 +349,4 @@ namespace DataLayer
             return businessTrips;
         }
     }
-} 
+}
