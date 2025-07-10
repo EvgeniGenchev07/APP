@@ -16,6 +16,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     private string _email = string.Empty;
     private string _selectedRole = "Служител";
     private string _password = string.Empty;
+    private string _contractDays = string.Empty;
     private string _absenceDays = string.Empty;
     private string _userId = string.Empty;
     private bool _isPasswordChanged = false;
@@ -65,6 +66,17 @@ public class EditUserPageModel : INotifyPropertyChanged
         }
     }
 
+    public string ContractDays
+    {
+        get => _contractDays;
+        set
+        {
+            _contractDays = value;
+            OnPropertyChanged();
+            ValidateContractDays();
+        }
+    }
+
     public string AbsenceDays
     {
         get => _absenceDays;
@@ -91,11 +103,13 @@ public class EditUserPageModel : INotifyPropertyChanged
     public string EmailError { get; private set; } = string.Empty;
     public string PasswordError { get; set; } = string.Empty;
     public string RoleError { get; private set; } = string.Empty;
+    public string ContractDaysError { get; private set; } = string.Empty;
     public string AbsenceDaysError { get; private set; } = string.Empty;
     public bool HasPasswordError => !string.IsNullOrEmpty(Password) && Password.Length < 6;
     public bool HasNameError => !string.IsNullOrEmpty(NameError);
     public bool HasEmailError => !string.IsNullOrEmpty(EmailError);
     public bool HasRoleError => !string.IsNullOrEmpty(RoleError);
+    public bool HasContractDaysError => !string.IsNullOrEmpty(ContractDaysError);
     public bool HasAbsenceDaysError => !string.IsNullOrEmpty(AbsenceDaysError);
 
     public ICommand UpdateUserCommand { get; }
@@ -121,6 +135,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             Email = user.Email;
             _passwordHash = user.Password;
             SelectedRole = user.Role == Role.Admin ? "Администратор" : "Служител";
+            ContractDays = user.ContractDays.ToString();
             AbsenceDays = user.AbsenceDays.ToString();
         }
     }
@@ -164,6 +179,7 @@ public class EditUserPageModel : INotifyPropertyChanged
                 Email = Email,
                 Password = _passwordHash,
                 Role = role,
+                ContractDays = int.TryParse(ContractDays, out int contractDays) ? contractDays : 0,
                 AbsenceDays = absenceDays
             };
 
@@ -200,6 +216,7 @@ public class EditUserPageModel : INotifyPropertyChanged
         ValidateEmail();
         ValidatePassword();
         ValidateRole();
+        ValidateContractDays();
         ValidateAbsenceDays();
 
         return !HasNameError && !HasEmailError && !HasRoleError && !HasAbsenceDaysError;
@@ -267,6 +284,24 @@ public class EditUserPageModel : INotifyPropertyChanged
         }
         OnPropertyChanged(nameof(RoleError));
         OnPropertyChanged(nameof(HasRoleError));
+    }
+
+    private void ValidateContractDays()
+    {
+        if (string.IsNullOrWhiteSpace(AbsenceDays))
+        {
+            ContractDaysError = "Дните за отсъствие са задължително поле";
+        }
+        else if (!int.TryParse(ContractDays, out int days) || days < 0)
+        {
+            ContractDaysError = "Моля въведи правилен брой на дни";
+        }
+        else
+        {
+            ContractDaysError = string.Empty;
+        }
+        OnPropertyChanged(nameof(ContractDaysError));
+        OnPropertyChanged(nameof(HasContractDaysError));
     }
 
     private void ValidateAbsenceDays()

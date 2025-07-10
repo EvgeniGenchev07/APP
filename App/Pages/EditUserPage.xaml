@@ -81,6 +81,19 @@
                            IsVisible="{Binding HasRoleError}"/>
                 </VerticalStackLayout>
 
+                <!-- Contract Days -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Дни отпуск по договор" FontSize="16" FontAttributes="Bold"/>
+                    <Entry Text="{Binding ContractDays}" 
+                        Placeholder="Въведете дни отпуск"
+                        Keyboard="Numeric"
+                        FontSize="16"/>
+                    <Label Text="{Binding ContractDaysError}" 
+                        TextColor="Red" 
+                        FontSize="12"
+                        IsVisible="{Binding HasContractDaysError}"/>
+                </VerticalStackLayout>
+
                 <!-- Absence Days -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Дни отпуск" FontSize="16" FontAttributes="Bold"/>

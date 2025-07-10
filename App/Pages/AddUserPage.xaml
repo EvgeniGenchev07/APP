@@ -79,19 +79,6 @@
                            IsVisible="{Binding HasConfirmPasswordError}"/>
                 </VerticalStackLayout>
 
-                <!-- Absence Days -->
-                <VerticalStackLayout Spacing="5">
-                    <Label Text="Дни отпуск" FontSize="16" FontAttributes="Bold"/>
-                    <Entry Text="{Binding AbsenceDays}" 
-           Placeholder="Въведете дни отпуск"
-           Keyboard="Numeric"
-           FontSize="16"/>
-                    <Label Text="{Binding AbsenceDaysError}" 
-           TextColor="Red" 
-           FontSize="12"
-           IsVisible="{Binding HasAbsenceDaysError}"/>
-                </VerticalStackLayout>
-
                 <!-- Role -->
                 <VerticalStackLayout Spacing="5">
                     <Label Text="Роля *" FontSize="16" FontAttributes="Bold"/>
@@ -108,6 +95,19 @@
                            TextColor="Red" 
                            FontSize="12"
                            IsVisible="{Binding HasRoleError}"/>
+                </VerticalStackLayout>
+
+                <!-- Contract Days -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Дни отпуск по договор" FontSize="16" FontAttributes="Bold"/>
+                    <Entry Text="{Binding ContractDays}" 
+                        Placeholder="Въведете дни отпуск"
+                        Keyboard="Numeric"
+                        FontSize="16"/>
+                    <Label Text="{Binding ContractDaysError}" 
+                        TextColor="Red" 
+                        FontSize="12"
+                        IsVisible="{Binding HasContractDaysError}"/>
                 </VerticalStackLayout>
 
                 <!-- Buttons -->

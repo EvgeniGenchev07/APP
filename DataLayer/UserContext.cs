@@ -35,6 +35,7 @@ namespace DataLayer
                                 Email = reader["Email"].ToString(),
                                 Password = reader["Password"].ToString(),
                                 Role = (Role)Convert.ToInt32(reader["Role"]),
+                                ContractDays = Convert.ToInt32(reader["ContractDays"]),
                                 AbsenceDays = Convert.ToInt32(reader["AbsenceDays"])
                             });
                         }
@@ -69,8 +70,8 @@ namespace DataLayer
 
 
                     var command = new MySqlConnector.MySqlCommand(
-                        "INSERT INTO User (Id, Name, Email, Password, Role, AbsenceDays) " +
-                        "VALUES (@id, @name, @email, @password, @role, @absenceDays)",
+                        "INSERT INTO User (Id, Name, Email, Password, Role, ContractDays, AbsenceDays) " +
+                        "VALUES (@id, @name, @email, @password, @role, @contractDays, @absenceDays)",
                         _eapDbContext.Connection);
 
                     command.Parameters.AddWithValue("@id", user.Id);
@@ -78,6 +79,7 @@ namespace DataLayer
                     command.Parameters.AddWithValue("@email", user.Email);
                     command.Parameters.AddWithValue("@password", user.Password);
                     command.Parameters.AddWithValue("@role", (int)user.Role);
+                    command.Parameters.AddWithValue("@contractDays", user.ContractDays);
                     command.Parameters.AddWithValue("@absenceDays", user.AbsenceDays);
 
                     int rowsAffected = command.ExecuteNonQuery();
@@ -102,13 +104,14 @@ namespace DataLayer
                 {
                     var command = new MySqlConnector.MySqlCommand(
                         "UPDATE User SET Name = @name, Email = @email, Password = @password, Role = @role, " +
-                        "AbsenceDays = @absenceDays WHERE Id = @id",
+                        "ContractDays = @contractDays, AbsenceDays = @absenceDays WHERE Id = @id",
                         _eapDbContext.Connection);
 
                     command.Parameters.AddWithValue("@name", user.Name);
                     command.Parameters.AddWithValue("@email", user.Email);
                     command.Parameters.AddWithValue("@password", user.Password);
                     command.Parameters.AddWithValue("@role", (int)user.Role);
+                    command.Parameters.AddWithValue("@contractDays", user.ContractDays);
                     command.Parameters.AddWithValue("@absenceDays", user.AbsenceDays);
                     command.Parameters.AddWithValue("@id", user.Id);
 
@@ -173,6 +176,7 @@ namespace DataLayer
                                 Name = reader["Name"].ToString(),
                                 Email = reader["Email"].ToString(),
                                 Role = Enum.Parse<Role>(reader["Role"].ToString()),
+                                ContractDays = Convert.ToInt32(reader["ContractDays"]),
                                 AbsenceDays = Convert.ToInt32(reader["AbsenceDays"])
                             };
                         }
@@ -236,6 +240,7 @@ namespace DataLayer
                                     Name = reader["name"].ToString(),
                                     Email = reader["email"].ToString(),
                                     Role = Enum.Parse<Role>(reader["role"].ToString()),
+                                    ContractDays = Convert.ToInt32(reader["contractDays"]),
                                     AbsenceDays = Convert.ToInt32(reader["absenceDays"]),
                                     Password = reader["password"].ToString(),
                                     Absences = new List<Absence>(),

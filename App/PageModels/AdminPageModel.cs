@@ -289,7 +289,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             _customHolidays.Remove(SelectedDay.Date.Date);
             GenerateCalendar();
             IsDaySelected = false;
-            await Application.Current.MainPage.DisplayAlert("Success", "Почивният ден бе успешно изтрит!", "OK");
+            await Application.Current.MainPage.DisplayAlert("Успех", "Почивният ден бе успешно изтрит!", "OK");
         }
         catch (Exception ex)
         {

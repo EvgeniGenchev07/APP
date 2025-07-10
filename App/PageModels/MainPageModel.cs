@@ -17,6 +17,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
     private readonly HttpService _httpService;
     private bool _isBusy;
     private string _userName;
+    private int _contractDays;
     private int _absenceDays;
     private int _pendingTripsCount;
     private int _pendingAbsencesCount;
@@ -39,6 +40,16 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         set
         {
             _userName = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int ContractDays
+    {
+        get => _contractDays;
+        set
+        {
+            _contractDays = value;
             OnPropertyChanged();
         }
     }
@@ -151,6 +162,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
             if (App.User != null)
             {
                 UserName = App.User.Name;
+                ContractDays = App.User.ContractDays;
                 AbsenceDays = App.User.AbsenceDays;
                 var businessTrips = App.User.BusinessTrips ?? new List<BusinessTrip>();
                 var recentTrips = businessTrips.OrderByDescending(t => t.Created).Take(5).ToList();

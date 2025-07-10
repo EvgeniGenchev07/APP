@@ -15,8 +15,9 @@ public class AddUserPageModel : INotifyPropertyChanged
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _confirmPassword = string.Empty;
-    private string _absenceDays = string.Empty;
     private string _selectedRole = "Служител";
+    private string _contractDays = "0";
+    private string _absenceDays = "0";
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -64,17 +65,6 @@ public class AddUserPageModel : INotifyPropertyChanged
         }
     }
 
-    public string AbsenceDays
-    {
-        get => _absenceDays; 
-        set
-        {
-            _absenceDays = value;
-            OnPropertyChanged();
-            ValidateAbsenceDays();
-        }
-    }
-
     public string SelectedRole
     {
         get => _selectedRole;
@@ -83,6 +73,28 @@ public class AddUserPageModel : INotifyPropertyChanged
             _selectedRole = value;
             OnPropertyChanged();
             ValidateRole();
+        }
+    }
+
+    public string ContractDays
+    {
+        get => _contractDays;
+        set
+        {
+            _contractDays = value;
+            OnPropertyChanged();
+            ValidateContractDays();
+        }
+    }
+
+    public string AbsenceDays
+    {
+        get => _absenceDays;
+        set
+        {
+            _absenceDays = value;
+            OnPropertyChanged();
+            ValidateAbsenceDays();                    ;
         }
     }
 
@@ -102,7 +114,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     public string PasswordError { get; private set; } = string.Empty;
     public string ConfirmPasswordError { get; private set; } = string.Empty;
     public string RoleError { get; private set; } = string.Empty;
-
+    public string ContractDaysError { get; private set; } = string.Empty;
     public string AbsenceDaysError { get; private set; } = string.Empty;
 
     public bool HasNameError => !string.IsNullOrEmpty(NameError);
@@ -110,7 +122,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     public bool HasPasswordError => !string.IsNullOrEmpty(PasswordError);
     public bool HasConfirmPasswordError => !string.IsNullOrEmpty(ConfirmPasswordError);
     public bool HasRoleError => !string.IsNullOrEmpty(RoleError);
-
+    public bool HasContractDaysError => !string.IsNullOrEmpty(ContractDaysError);
     public bool HasAbsenceDaysError => !string.IsNullOrEmpty(AbsenceDaysError);
 
     public ICommand AddUserCommand { get; }
@@ -150,8 +162,9 @@ public class AddUserPageModel : INotifyPropertyChanged
                     Name = Name,
                     Email = Email,
                     Password = Password,
-                    AbsenceDays = int.TryParse(AbsenceDays, out int absenceDays) ? absenceDays : 0,
-                    Role = role
+                    Role = role,
+                    ContractDays = int.TryParse(ContractDays, out int contractDays) ? contractDays : 0,
+                    AbsenceDays = int.Parse(ContractDays)
                 };
 
             // Call API to create user
@@ -189,6 +202,8 @@ public class AddUserPageModel : INotifyPropertyChanged
         ValidateConfirmPassword();
         ValidateAbsenceDays();
         ValidateRole();
+        ValidateContractDays();
+        ValidateAbsenceDays();
 
         return !HasNameError && !HasEmailError && !HasPasswordError && !HasConfirmPasswordError && !HasAbsenceDaysError && !HasRoleError;
     }
@@ -265,6 +280,38 @@ public class AddUserPageModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(HasConfirmPasswordError));
     }
 
+    private void ValidateRole()
+    {
+        if (string.IsNullOrWhiteSpace(SelectedRole))
+        {
+            RoleError = "Моля изберете роля";
+        }
+        else
+        {
+            RoleError = string.Empty;
+        }
+        OnPropertyChanged(nameof(RoleError));
+        OnPropertyChanged(nameof(HasRoleError));
+    }
+
+    private void ValidateContractDays()
+    {
+        if (string.IsNullOrWhiteSpace(AbsenceDays))
+        {
+            ContractDaysError = "Дните за отсъствие са задължително поле";
+        }
+        else if (!int.TryParse(ContractDays, out int days) || days < 0)
+        {
+            ContractDaysError = "Моля въведи правилен брой на дни";
+        }
+        else
+        {
+            ContractDaysError = string.Empty;
+        }
+        OnPropertyChanged(nameof(ContractDaysError));
+        OnPropertyChanged(nameof(HasContractDaysError));
+    }
+
     private void ValidateAbsenceDays()
     {
         if (string.IsNullOrWhiteSpace(AbsenceDays))
@@ -281,20 +328,6 @@ public class AddUserPageModel : INotifyPropertyChanged
         }
         OnPropertyChanged(nameof(AbsenceDaysError));
         OnPropertyChanged(nameof(HasAbsenceDaysError));
-    }
-
-    private void ValidateRole()
-    {
-        if (string.IsNullOrWhiteSpace(SelectedRole))
-        {
-            RoleError = "Моля изберете роля";
-        }
-        else
-        {
-            RoleError = string.Empty;
-        }
-        OnPropertyChanged(nameof(RoleError));
-        OnPropertyChanged(nameof(HasRoleError));
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
