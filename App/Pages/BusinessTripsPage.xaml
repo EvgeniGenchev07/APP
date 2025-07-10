@@ -141,7 +141,7 @@
                                            FontSize="16" 
                                            FontAttributes="Bold"/>
                                     <Label Grid.Row="0" Grid.Column="1"
-                                           Text="{Binding Status,Converter={StaticResource StatusToTextConverter}}}"
+                                           Text="{Binding Status,Converter={StaticResource StatusToTextConverter}}"
                                            FontSize="12"
                                            TextColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                                            FontAttributes="Bold"
