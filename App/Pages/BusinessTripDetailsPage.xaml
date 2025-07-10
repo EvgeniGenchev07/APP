@@ -127,7 +127,7 @@
                             <Label Text="Натиснете бутона за да редактирате командировката" FontSize="12"/>
                         </VerticalStackLayout>
                         <Button Grid.Column="1" 
-                                Text="{Binding IsEditing}"
+                                Text="{Binding EditButtonText}"
                                 Command="{Binding ToggleEditCommand}"
                                 BackgroundColor="{AppThemeBinding Light=#007AFF, Dark=#0A84FF}"
                                 TextColor="White"
@@ -140,7 +140,7 @@
                 <Frame BorderColor="LightGray" CornerRadius="10" Padding="20" HasShadow="True">
                     <VerticalStackLayout Spacing="15">
                         <Label Text="📋 Детайли за командировка" FontSize="18" FontAttributes="Bold"/>
-                        
+
                         <!-- Project Name -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Проект:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -150,7 +150,7 @@
                                    TextColor="{Binding IsEditing}"
                                    FontSize="14"/>
                         </Grid>
-                        
+
                         <!-- Task -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Задача:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -160,7 +160,7 @@
                                    TextColor="{Binding IsEditing}"
                                    FontSize="14"/>
                         </Grid>
-                        
+
                         <!-- Dates -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Начална дата:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -171,7 +171,7 @@
                                        TextColor="{Binding IsEditing}"
                                        FontSize="14"/>
                         </Grid>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Крайна дата:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <DatePicker Grid.Column="1" 
@@ -181,7 +181,7 @@
                                        TextColor="{Binding IsEditing}"
                                        FontSize="14"/>
                         </Grid>
-                        
+
                         <!-- Destination -->
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Дестинация:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
@@ -207,7 +207,7 @@
                 <Frame BorderColor="LightGray" CornerRadius="10" Padding="20" HasShadow="True">
                     <VerticalStackLayout Spacing="15">
                         <Label Text="💰 Финансова информация" FontSize="18" FontAttributes="Bold"/>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Дневни издръжки:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
@@ -217,7 +217,7 @@
                                    TextColor="{Binding IsEditing}"
                                    FontSize="14"/>
                         </Grid>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Квартирни издръжки:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
@@ -227,7 +227,17 @@
                                    TextColor="{Binding IsEditing}"
                                    FontSize="14"/>
                         </Grid>
-                        
+
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                            <Label Text="Други разходи:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Entry Grid.Column="1" 
+                                Text="{Binding BusinessTrip.AdditionalExpences}" 
+                                IsEnabled="{Binding IsEditing}"
+                                Keyboard="Numeric"
+                                TextColor="{Binding IsEditing}"
+                                FontSize="14"/>
+                        </Grid>
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Общо:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Label Grid.Column="1" 
@@ -242,7 +252,7 @@
                 <Frame BorderColor="LightGray" CornerRadius="10" Padding="20" HasShadow="True">
                     <VerticalStackLayout Spacing="15">
                         <Label Text="🚗 Транспортна информация" FontSize="18" FontAttributes="Bold"/>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Марка:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
@@ -251,7 +261,7 @@
                                    TextColor="{Binding IsEditing}"
                                    FontSize="14"/>
                         </Grid>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Модел:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
@@ -260,7 +270,7 @@
                                    TextColor="{Binding IsEditing}"
                                    FontSize="14"/>
                         </Grid>
-                        
+
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Рег. номер:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
@@ -309,7 +319,7 @@
                             TextColor="White"
                             FontSize="16"
                             HeightRequest="50"/>
-                    
+
                     <Button Text="Отказ" 
                             Command="{Binding CancelEditCommand}"
                             IsVisible="{Binding IsEditing}"
@@ -318,7 +328,7 @@
                             TextColor="White"
                             FontSize="16"
                             HeightRequest="50"/>
-                    
+
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

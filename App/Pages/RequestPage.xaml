@@ -84,7 +84,7 @@
                         </Grid>
 
                         <!-- Trip Dates -->
-                        <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto,*" ColumnSpacing="8">
+                        <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8">
                             <Label Text="Срок:" FontSize="14" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" Text="{Binding DurationDays}" WidthRequest="40" Keyboard="Numeric" FontSize="14"/>
                             <Label Grid.Column="2" Text="дни от" FontSize="14" VerticalOptions="Center"/>
@@ -106,13 +106,16 @@
                     <VerticalStackLayout Spacing="8">
                         <Label Text="Издръжки" FontSize="14" FontAttributes="Bold"/>
 
-                        <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+                        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,*,Auto,Auto,*" ColumnSpacing="8">
                             <Label Text="Дневни:" FontSize="14" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" Text="{Binding DailyAllowanceRate}" WidthRequest="60" Keyboard="Numeric" FontSize="14"/>
                             <Label Grid.Column="2" Text="лв/ден" FontSize="14" VerticalOptions="Center"/>
                             <Label Grid.Column="3" Text="Квартирни:" FontSize="14" VerticalOptions="Center"/>
                             <Entry Grid.Column="4" Text="{Binding AccommodationAllowanceRate}" WidthRequest="60" Keyboard="Numeric" FontSize="14"/>
                             <Label Grid.Column="5" Text="лв/ден" FontSize="14" VerticalOptions="Center"/>
+                            <Label Grid.Column="6" Text="Допълнителни разходи:" FontSize="14" VerticalOptions="Center"/>
+                            <Entry Grid.Column="7" Text="{Binding AdditionalExpenses}" WidthRequest="60" Keyboard="Numeric" FontSize="14"/>
+                            <Label Grid.Column="8" Text="лв/ден" FontSize="14" VerticalOptions="Center"/>
                         </Grid>
 
                         <Label Text="{Binding TotalExpenses, StringFormat='Общо разходи: {0:N2} лв'}" FontSize="14" FontAttributes="Bold"/>

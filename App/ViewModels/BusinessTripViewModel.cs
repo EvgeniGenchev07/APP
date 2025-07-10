@@ -44,6 +44,7 @@ namespace App.ViewModels
 
         public string CarModel => _trip.CarModel ?? "Не е посочен модел на автомобила";
 
+        public decimal AdditionalExpences => _trip.AdditionalExpences;
         public string CarBrand => _trip.CarBrand ?? "Не е посочена марка на автомобила";
 
         public string CarRegistrationNumber => _trip.CarRegistrationNumber ?? "Не е посочен регистрационен номер";
@@ -100,6 +101,7 @@ namespace App.ViewModels
                 TotalDays = (byte)viewModel.Days,
 
                 CarModel = viewModel.CarModel == "Не е посочен модел на автомобила" ? string.Empty : viewModel.CarModel,
+                AdditionalExpences = viewModel.AdditionalExpences,
                 CarBrand = viewModel.CarBrand == "Не е посочена марка на автомобила" ? null : viewModel.CarBrand,
                 CarRegistrationNumber = viewModel.CarRegistrationNumber == "Не е посочен регистрационен номер" ? null : viewModel.CarRegistrationNumber,
 

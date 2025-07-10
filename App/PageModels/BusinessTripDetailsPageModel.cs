@@ -19,6 +19,9 @@ namespace App.PageModels
         private bool _canEdit;
 
         [ObservableProperty]
+        private string _editButtonText = "Редактирай";
+
+        [ObservableProperty]
         private bool _isEditing;
 
         private BusinessTrip _originalBusinessTrip;
@@ -70,7 +73,7 @@ namespace App.PageModels
         {
             if (BusinessTrip != null)
             {
-                TotalExpenses = BusinessTrip.Wage * BusinessTrip.Days + BusinessTrip.AccommodationMoney * BusinessTrip.Days;
+                TotalExpenses = BusinessTrip.Wage * BusinessTrip.Days + BusinessTrip.AccommodationMoney * BusinessTrip.Days + BusinessTrip.AdditionalExpences;
             }
         }
 
@@ -100,6 +103,7 @@ namespace App.PageModels
                 CarTripDestination = original.CarTripDestination,
                 DateOfArrival = original.DateOfArrival,
                 CarModel = original.CarModel,
+                AdditionalExpences = original.AdditionalExpences,
                 CarUsagePerHundredKm = original.CarUsagePerHundredKm,
                 PricePerLiter = original.PricePerLiter,
                 DepartureDate = original.DepartureDate,
@@ -124,6 +128,7 @@ namespace App.PageModels
         private void ToggleEdit()
         {
             IsEditing = !IsEditing;
+            EditButtonText = IsEditing ? "Запази" : "Редактирай";
         }
 
         [RelayCommand]
