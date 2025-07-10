@@ -25,7 +25,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     private DateTime _selectedHolidayDate = DateTime.Today;
     private string _holidayName;
     private bool _isHolidayDialogVisible;
-    private List<DateTime> _officialHolidays = new();
+    private ObservableCollection<HolidayDay> _holidayDays;
     private List<DateTime> _customHolidays = new();
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -138,58 +138,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
 
     }
 
-    private async Task InitializeOfficialHolidays(int year)
-    {
-        _officialHolidays.Clear();
-
-
-        var fixedHolidays = new List<DateTime>
-        {
-            new DateTime(year, 1, 1),   // New Year
-            new DateTime(year, 3, 3),   // Liberation Day
-            new DateTime(year, 5, 1),   // Labor Day
-            new DateTime(year, 5, 6),   // St. George's Day
-            new DateTime(year, 5, 24),  // Bulgarian Education and Culture Day
-            new DateTime(year, 9, 6),   // Unification Day
-            new DateTime(year, 9, 22),  // Independence Day
-            new DateTime(year, 12, 24), // Christmas Eve
-            new DateTime(year, 12, 25), // Christmas Day
-            new DateTime(year, 12, 26)  // Second Day of Christmas
-        };
-
-        
-        var easter = CalculateOrthodoxEaster(year);
-        var easterHolidays = new List<DateTime>
-        {
-            easter.AddDays(-2), 
-            easter.AddDays(-1), 
-            easter,             
-            easter.AddDays(1)   
-        };
-
-        _officialHolidays.AddRange(fixedHolidays);
-        _officialHolidays.AddRange(easterHolidays);
-
-        for (int i = 0; i < _officialHolidays.Count; i++)
-        {
-            var holiday = _officialHolidays[i];
-            if (holiday.DayOfWeek == DayOfWeek.Saturday || holiday.DayOfWeek == DayOfWeek.Sunday)
-            {
-                DateTime monday = holiday;
-                while (monday.DayOfWeek != DayOfWeek.Monday)
-                {
-                    monday = monday.AddDays(1);
-                }
-
-                if (!_officialHolidays.Contains(monday))
-                {
-                    _officialHolidays.Add(monday);
-                }
-            }
-        }
-        var holidays =  await _httpService.GetAllHolidayDaysAsync();
-        _customHolidays = holidays.Select(h => h.Date.Date).ToList();
-    }
+   
     [RelayCommand]
     private async Task ItemTapped(BusinessTripViewModel businessTrip)
     {
@@ -208,19 +157,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             await Shell.Current.GoToAsync("AbsenceDetailsPage");
         }
     }
-    private DateTime CalculateOrthodoxEaster(int year)
-    {
-        int a = year % 4;
-        int b = year % 7;
-        int c = year % 19;
-        int d = (19 * c + 15) % 30;
-        int e = (2 * a + 4 * b - d + 34) % 7;
-        int month = (int)Math.Floor((d + e + 114) / 31M);
-        int day = ((d + e + 114) % 31) + 1;
-
-        DateTime easter = new DateTime(year, month, day);
-        return easter.AddDays(13);
-    }
+   
 
     internal async Task LoadDataAsync()
     {
@@ -229,8 +166,8 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             IsBusy = true;
             _allBusinessTrips = await _httpService.GetAllBusinessTripsAsync();
             _allAbsences = await _httpService.GetAllAbsencesAsync();
-            _customHolidays = await _httpService.GetAllHolidayDaysAsync()
-                .ContinueWith(t => t.Result.Select(h => h.Date.Date).ToList());
+            _holidayDays = new ObservableCollection<HolidayDay>( await _httpService.GetAllHolidayDaysAsync());
+            _customHolidays = _holidayDays.Select(h => h.Date.Date).ToList();
             GenerateCalendar();
         }
         catch (Exception ex)
@@ -247,17 +184,13 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     {
         _currentDate = _currentDate.AddMonths(direction);
 
-        if (direction != 0 && _currentDate.Year != _officialHolidays.FirstOrDefault().Year)
-        {
-            InitializeOfficialHolidays(_currentDate.Year);
-        }
-
         OnPropertyChanged(nameof(CurrentMonthYear));
         GenerateCalendar();
     }
 
     private void GenerateCalendar()
     {
+
         CalendarDays.Clear();
 
         var firstDayOfMonth = new DateTime(_currentDate.Year, _currentDate.Month, 1);
@@ -279,9 +212,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
 
             var dayAbsences = _allAbsences.Where(a =>
                 date >= a.StartDate.Date && date <= a.StartDate.AddDays(a.DaysCount - 1).Date).ToList();
-
-            var isCustomHoliday = _customHolidays.Contains(date.Date);
-            var isHoliday = isCustomHoliday;
+            var holidayDay = _holidayDays.FirstOrDefault(h => h.Date.Date == date.Date);
 
             var calendarDay = new CalendarDay
             {
@@ -289,8 +220,10 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
                 DayNumber = day.ToString(),
                 IsCurrentMonth = true,
                 IsToday = date.Date == DateTime.Today,
-                IsHoliday = isHoliday,
-                IsCustomHoliday = isCustomHoliday,
+                IsHoliday = holidayDay is not null,
+                HolidayName = holidayDay?.Name ?? string.Empty,
+                IsOfficialHoliday = holidayDay is not null && !holidayDay.IsCustom,
+                IsCustomHoliday = holidayDay is not null && holidayDay.IsCustom,
                 HasBusinessTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Approved),
                 HasPendingTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Pending),
                 HasCompletedTrips = dayTrips.Any(t => t.Status == BusinessTripStatus.Completed),
@@ -327,7 +260,9 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             {
                 Name = HolidayName,
                 Date = SelectedHolidayDate.Date,
+                IsCustom = true
             });
+            _holidayDays = new ObservableCollection<HolidayDay>(await _httpService.GetAllHolidayDaysAsync());
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;
@@ -458,9 +393,7 @@ public class CalendarDay
     public bool HasAnyAbsences => HasApprovedAbsences || HasPendingAbsences || HasRejectedAbsences;
     public bool HasNoAbsences => !HasAnyAbsences;
 
-    public string HolidayTypeText => IsOfficialHoliday ? "Official Holiday" :
-                                   IsCustomHoliday ? "Custom Holiday" :
-                                   string.Empty;
+    public string HolidayName { get; set; }
 
     public Color HolidayColor => IsOfficialHoliday ? Colors.LightPink :
                                IsCustomHoliday ? Colors.LightBlue :
