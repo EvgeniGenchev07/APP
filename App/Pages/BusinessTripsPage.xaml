@@ -3,8 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:App.PageModels"
              xmlns:models="clr-namespace:BusinessLayer;assembly=BusinessLayer"
-             x:Class="App.Pages.BusinessTripsPage"
+             xmlns:converters="clr-namespace:App.Converters" 
+    x:Class="App.Pages.BusinessTripsPage"
              x:DataType="pageModels:BusinessTripsPageModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StatusToTextConverter x:Key="StatusToTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*,Auto">
 
@@ -134,7 +141,7 @@
                                            FontSize="16" 
                                            FontAttributes="Bold"/>
                                     <Label Grid.Row="0" Grid.Column="1"
-                                           Text="{Binding Status}"
+                                           Text="{Binding Status,Converter={StaticResource StatusToTextConverter}}}"
                                            FontSize="12"
                                            TextColor="{Binding Status, Converter={StaticResource StatusToColorConverter}}"
                                            FontAttributes="Bold"

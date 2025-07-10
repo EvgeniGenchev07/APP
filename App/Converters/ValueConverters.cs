@@ -1,3 +1,4 @@
+using BusinessLayer;
 using System.Globalization;
 
 namespace App.Converters
@@ -6,14 +7,14 @@ namespace App.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is byte status)
+            if (value is BusinessTripStatus status)
             {
                 return status switch
                 {
-                    0 => "Чакаща",
-                    1 => "Одобрена",
-                    2 => "Отхвърлена",
-                    3 => "Завършена",
+                    BusinessTripStatus.Pending => "Чакаща",
+                    BusinessTripStatus.Approved => "Одобрена",
+                    BusinessTripStatus.Rejected => "Отхвърлена",
+                    BusinessTripStatus.Completed => "Завършена",
                     _ => "Неизвестен"
                 };
             }
@@ -30,14 +31,14 @@ namespace App.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is byte status)
+            if (value is BusinessTripStatus status)
             {
                 return status switch
                 {
-                    0 => Colors.Orange, // Pending
-                    1 => Colors.Green,  // Approved
-                    2 => Colors.Red,    // Rejected
-                    3 => Colors.Blue,   // Completed
+                    BusinessTripStatus.Pending => Colors.Orange, // Pending
+                    BusinessTripStatus.Approved => Colors.Green,  // Approved
+                    BusinessTripStatus.Rejected => Colors.Red,    // Rejected
+                    BusinessTripStatus.Completed => Colors.Blue,   // Completed
                     _ => Colors.Gray
                 };
             }

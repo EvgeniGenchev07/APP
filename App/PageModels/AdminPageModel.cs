@@ -143,7 +143,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     {
         _officialHolidays.Clear();
 
-        // Fixed date holidays
+
         var fixedHolidays = new List<DateTime>
         {
             new DateTime(year, 1, 1),   // New Year
@@ -158,14 +158,14 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             new DateTime(year, 12, 26)  // Second Day of Christmas
         };
 
-        // Calculate Easter and related holidays
+        
         var easter = CalculateOrthodoxEaster(year);
         var easterHolidays = new List<DateTime>
         {
-            easter.AddDays(-2), // Good Friday
-            easter.AddDays(-1), // Holy Saturday
-            easter,             // Easter Sunday
-            easter.AddDays(1)   // Easter Monday
+            easter.AddDays(-2), 
+            easter.AddDays(-1), 
+            easter,             
+            easter.AddDays(1)   
         };
 
         _officialHolidays.AddRange(fixedHolidays);
@@ -248,7 +248,6 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     {
         _currentDate = _currentDate.AddMonths(direction);
 
-        // Reinitialize holidays if year changed
         if (direction != 0 && _currentDate.Year != _officialHolidays.FirstOrDefault().Year)
         {
             InitializeOfficialHolidays(_currentDate.Year);
