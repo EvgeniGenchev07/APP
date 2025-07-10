@@ -3,7 +3,8 @@ create database EAPDigitalIntegrationDb;
 use EAPDigitalIntegrationDb;
 create table User(
 id varchar(40),
-absenceDays int not null,
+contractDays int not null,
+absenceDays int,
 name varchar(70) not null,
 role tinyint not null,
 email varchar(50) not null unique,
@@ -11,7 +12,7 @@ password varchar(100) not null,
 constraint PK_User primary key(id));
 
 insert into User(
-`id`,`absenceDays`,`name`,`role`,`email`,`password`)values("dawoiudhawudhawuai",20,"Test",1,"example@gmail.com",md5("usercho"));
+`id`, `contractDays`,`absenceDays`,`name`,`role`,`email`,`password`)values("dawoiudhawudhawuai",20,20,"Test",1,"example@gmail.com",md5("usercho"));
 
 create table Absence(
 id int auto_increment,
@@ -53,7 +54,6 @@ userId varchar(40) not null,
 constraint FK_Business_User foreign key(userId) 
 references User(id),
 constraint PK_BusinessTrip primary key(id));
-select * from User;
 
 create table HolidayDay(
     id int auto_increment,
@@ -62,6 +62,4 @@ create table HolidayDay(
     isCustom bool not null,
     constraint PK_HolidayDay primary key(id)
 );
-alter table businesstrip
-add issueId int not null;
-select *  from businesstrip;
+select * from user;
