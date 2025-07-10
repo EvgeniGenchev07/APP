@@ -6,7 +6,7 @@
              x:Class="App.Pages.AdminAllAbsencesPage"
              x:DataType="pageModels:AdminAllAbsencesPageModel">
 
-    <Grid RowDefinitions="Auto,*" Padding="20">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20">
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0"
                     Text="← Назад" 
@@ -25,16 +25,32 @@
                    VerticalOptions="Center"/>
 
         <Button Grid.Column="2" 
-                    Text="Филтрирай" 
-                    Command="{Binding FilterCommand}"
+                    Text="Експортирай" 
+                    Command="{Binding ExportCommand}"
                     BackgroundColor="Transparent"
                     TextColor="White"
                     FontSize="16"
                     HorizontalOptions="End"/>
         </Grid>
+        <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="10">
+            <Label Text="Избери година:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Picker x:Name="YearPicker" VerticalOptions="Center" WidthRequest="120"
+            ItemsSource="{Binding AvailableYears}"
+            SelectedIndexChanged="SelectedIndexChanged"
+            SelectedItem="{Binding SelectedYear}"/>
+            <Label Text="Избери месец:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Picker x:Name="MonthPicker" VerticalOptions="Center" WidthRequest="150"
+            ItemsSource="{Binding AvailableMonths}"
+            SelectedIndexChanged="SelectedIndexChanged"
+            SelectedItem="{Binding SelectedMonth}"/>
+            <Label Text="Избери проект:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Entry Text="{Binding Search}"  VerticalOptions="Center" WidthRequest="200" TextChanged="Entry_TextChanged"/>
 
-    <!-- Content -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <Label Text="Общи разходи:" VerticalOptions="Center" HorizontalOptions="End"/>
+            <Label Text="{Binding .}" TextColor="{StaticResource Primary}" FontSize="Body" HorizontalOptions="End" VerticalOptions="Center"/>
+        </StackLayout>
+        <!-- Content -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*">
             <!-- Stats -->
             <Frame Grid.Row="0" Margin="20,10,20,10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Gray800}}">
                 <Grid ColumnDefinitions="*,*,*,*">
@@ -132,12 +148,17 @@ CommandParameter="{Binding .}"/>
                 </CollectionView>
             </RefreshView>
         </Grid>
-
-        <!-- Loading Indicator -->
         <ActivityIndicator Grid.Row="1" 
-                          IsRunning="{Binding IsBusy}" 
-                          IsVisible="{Binding IsBusy}"
-                          HorizontalOptions="Center"
-                          VerticalOptions="Center"/>
+                   IsRunning="{Binding IsBusy}" 
+                   IsVisible="{Binding IsBusy}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+
+        <!-- Empty state -->
+        <Label Grid.Row="2" Text="Няма намерени служебни пътувания" IsVisible="{Binding HasNoResults}"
+       HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Italic"/>
+        <!-- Loading Indicator -->
+       
+        
     </Grid>
 </ContentPage>

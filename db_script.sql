@@ -62,4 +62,8 @@ create table HolidayDay(
     isCustom bool not null,
     constraint PK_HolidayDay primary key(id)
 );
+alter table BusinessTrip
+add issueId int;
+alter table BusinessTrip
+add additionalExpences decimal;
 select * from user;

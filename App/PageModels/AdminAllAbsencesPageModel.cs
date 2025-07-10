@@ -1,4 +1,4 @@
-using App.Pages;
+п»їusing App.Pages;
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -16,10 +17,24 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
     private readonly HttpService _httpService;
     private bool _isBusy;
     private bool _isRefreshing;
+    [ObservableProperty]
+    private string _search;
+    [ObservableProperty]
+    private ObservableCollection<int> availableYears;
+    [ObservableProperty]
+    private bool _hasNoResults;
+    [ObservableProperty]
+    private int selectedYear;
 
+    [ObservableProperty]
+    private ObservableCollection<string> availableMonths;
+
+    [ObservableProperty]
+    private string selectedMonth;
     public event PropertyChangedEventHandler PropertyChanged;
     [ObservableProperty]
     public ObservableCollection<AbsenceViewModel> absences = new();
+    private List<AbsenceViewModel> _originalAbsences = new();
 
     public bool IsBusy
     {
@@ -48,20 +63,62 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
 
     public ICommand ApproveAbsenceCommand { get; }
     public ICommand RejectAbsenceCommand { get; }
-    public ICommand FilterCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
     public AdminAllAbsencesPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+        AvailableYears = new ObservableCollection<int>(Enumerable.Range(DateTime.Now.Year - 5, 10));
+        SelectedYear = DateTime.Now.Year;
+
+        AvailableMonths = new ObservableCollection<string>(
+            CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.Take(12));
+        AvailableMonths.Add("Р’СЃРёС‡РєРё РјРµСЃРµС†Рё");
+        SelectedMonth = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[DateTime.Now.Month - 1];
+
         ApproveAbsenceCommand = new Command<AbsenceViewModel>(async (absence) => await ApproveAbsenceAsync(absence));
         RejectAbsenceCommand = new Command<AbsenceViewModel>(async (absence) => await RejectAbsenceAsync(absence));
-        FilterCommand = new Command(async () => await FilterAbsencesAsync());
         CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
+    }
+    [RelayCommand]
+    private void FilterAbsence()
+    {
+        try
+        {
+            IsBusy = true;
+            ObservableCollection<AbsenceViewModel> filtered = new ObservableCollection<AbsenceViewModel>(_originalAbsences);
+
+            // Filter by year
+            if (SelectedYear > 0)
+            {
+                filtered = new ObservableCollection<AbsenceViewModel>(
+                    filtered.Where(t => t.StartDate.Year == SelectedYear || t.EndDate.Year == SelectedYear));
+            }
+
+            // Filter by month
+            if (!string.IsNullOrEmpty(SelectedMonth) && selectedMonth != "Р’СЃРёС‡РєРё РјРµСЃРµС†Рё")
+            {
+                var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;
+                filtered = new ObservableCollection<AbsenceViewModel>(
+                    filtered.Where(t => t.StartDate.Month == monthIndex || t.EndDate.Month == monthIndex));
+            }
+
+            if (!string.IsNullOrEmpty(Search))
+            {
+                filtered = new ObservableCollection<AbsenceViewModel>(filtered.Where(t => t.UserName.Contains(Search, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            Absences = filtered;
+            
+        }
+        finally
+        {
+            IsBusy = false;
+            HasNoResults = !Absences.Any();
+        }
     }
 
     internal async Task LoadAbsencesAsync()
@@ -69,9 +126,9 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         try
         {
             IsBusy = true;
-
+            
             var absences = await _httpService.GetAllAbsencesAsync();
-
+            _originalAbsences = absences.Select(a => new AbsenceViewModel(a)).ToList();
             Absences.Clear();
             foreach (var absence in absences)
             {
@@ -85,7 +142,7 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на отсъствия: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("ГѓГ°ГҐГёГЄГ ", $"ГЌГҐГіГ±ГЇГҐГёГ­Г® Г§Г Г°ГҐГ¦Г¤Г Г­ГҐ Г­Г  Г®ГІГ±ГєГ±ГІГўГЁГї: {ex.Message}", "OK");
         }
         finally
         {
@@ -106,10 +163,10 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         if (absence == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърдете одобрение",
-            $"Искате ли да одобрите молбата за командировка?",
-            "Одобри",
-            "Отказ");
+            "ГЏГ®ГІГўГєГ°Г¤ГҐГІГҐ Г®Г¤Г®ГЎГ°ГҐГ­ГЁГҐ",
+            $"Г€Г±ГЄГ ГІГҐ Г«ГЁ Г¤Г  Г®Г¤Г®ГЎГ°ГЁГІГҐ Г¬Г®Г«ГЎГ ГІГ  Г§Г  ГЄГ®Г¬Г Г­Г¤ГЁГ°Г®ГўГЄГ ?",
+            "ГЋГ¤Г®ГЎГ°ГЁ",
+            "ГЋГІГЄГ Г§");
 
         if (confirm)
         {
@@ -129,16 +186,16 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
                     }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(ApprovedAbsences));
-                    await Application.Current.MainPage.DisplayAlert("Успех", "Отсъствието бе одобрено успешно", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Г“Г±ГЇГҐГµ", "ГЋГІГ±ГєГ±ГІГўГЁГҐГІГ® ГЎГҐ Г®Г¤Г®ГЎГ°ГҐГ­Г® ГіГ±ГЇГҐГёГ­Г®", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно одобрение на отсъствие", "OK");
+                    await Application.Current.MainPage.DisplayAlert("ГѓГ°ГҐГёГЄГ ", "ГЌГҐГіГ±ГЇГҐГёГ­Г® Г®Г¤Г®ГЎГ°ГҐГ­ГЁГҐ Г­Г  Г®ГІГ±ГєГ±ГІГўГЁГҐ", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно одобрение на отсъствие: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("ГѓГ°ГҐГёГЄГ ", $"ГЌГҐГіГ±ГЇГҐГёГ­Г® Г®Г¤Г®ГЎГ°ГҐГ­ГЁГҐ Г­Г  Г®ГІГ±ГєГ±ГІГўГЁГҐ: {ex.Message}", "OK");
             }
             finally
             {
@@ -152,10 +209,10 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         if (absence == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърдете отхвърляне",
-            $"Искате ли да отхвърлите молбата за командировка?",
-            "Отхвърли",
-            "Отказ");
+            "ГЏГ®ГІГўГєГ°Г¤ГҐГІГҐ Г®ГІГµГўГєГ°Г«ГїГ­ГҐ",
+            $"Г€Г±ГЄГ ГІГҐ Г«ГЁ Г¤Г  Г®ГІГµГўГєГ°Г«ГЁГІГҐ Г¬Г®Г«ГЎГ ГІГ  Г§Г  ГЄГ®Г¬Г Г­Г¤ГЁГ°Г®ГўГЄГ ?",
+            "ГЋГІГµГўГєГ°Г«ГЁ",
+            "ГЋГІГЄГ Г§");
 
         if (confirm)
         {
@@ -174,16 +231,16 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
                     }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(RejectedAbsences));
-                    await Application.Current.MainPage.DisplayAlert("Успех", "Отсъствието бе отхвърлено успешно", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Г“Г±ГЇГҐГµ", "ГЋГІГ±ГєГ±ГІГўГЁГҐГІГ® ГЎГҐ Г®ГІГµГўГєГ°Г«ГҐГ­Г® ГіГ±ГЇГҐГёГ­Г®", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно отхвърляне на отсъствие", "OK");
+                    await Application.Current.MainPage.DisplayAlert("ГѓГ°ГҐГёГЄГ ", "ГЌГҐГіГ±ГЇГҐГёГ­Г® Г®ГІГµГўГєГ°Г«ГїГ­ГҐ Г­Г  Г®ГІГ±ГєГ±ГІГўГЁГҐ", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно отхвърляне на отсъствие: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("ГѓГ°ГҐГёГЄГ ", $"ГЌГҐГіГ±ГЇГҐГёГ­Г® Г®ГІГµГўГєГ°Г«ГїГ­ГҐ Г­Г  Г®ГІГ±ГєГ±ГІГўГЁГҐ: {ex.Message}", "OK");
             }
             finally
             {
@@ -196,11 +253,10 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
     {
         await Shell.Current.GoToAsync("//AdminPage");
     }
-
-    private async Task FilterAbsencesAsync()
+    [RelayCommand]
+    private async Task Export()
     {
-        // Implement filtering functionality
-        await LoadAbsencesAsync();
+        
     }
 
     private async Task RefreshAsync()

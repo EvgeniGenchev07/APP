@@ -162,7 +162,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
                     worksheet.Cell(currentIndex, 6).Value = businessTrip.Wage * trip.Days;
                     worksheet.Cell(currentIndex, 7).Value = businessTrip.Wage;
                     worksheet.Cell(currentIndex, 8).Value = businessTrip.AccommodationMoney;
-                    worksheet.Cell(currentIndex, 9).Value = businessTrip.OtherExpenses;
+                    worksheet.Cell(currentIndex, 9).Value = businessTrip.AdditionalExpences;
                     worksheet.Cell(currentIndex, 10).Value = businessTrip.Task;
                     worksheet.Cell(currentIndex, 11).FormulaA1 = $"F{currentIndex} + G{currentIndex} + H{currentIndex} + I{currentIndex}";
                     currentIndex++;
@@ -208,10 +208,10 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
             worksheet.Cell(currentIndex, 6).Value = businessTrip.Wage * trip.Days;
             worksheet.Cell(currentIndex, 7).Value = businessTrip.Wage;
             worksheet.Cell(currentIndex, 8).Value = businessTrip.AccommodationMoney;
-            worksheet.Cell(currentIndex, 9).Value = businessTrip.OtherExpenses;
+            worksheet.Cell(currentIndex, 9).Value = businessTrip.AdditionalExpences;
             worksheet.Cell(currentIndex, 10).Value = businessTrip.Task;
             worksheet.Cell(currentIndex, 11).FormulaA1 = $"F{currentIndex} + G{currentIndex} + H{currentIndex} + I{currentIndex}";
-            totalExpenses += businessTrip.Wage * trip.Days + businessTrip.AccommodationMoney + businessTrip.OtherExpenses;
+            totalExpenses += businessTrip.Wage * trip.Days + businessTrip.AccommodationMoney + businessTrip.AdditionalExpences;
             currentIndex++;
         }
         worksheet.Cell(currentIndex, 1).Value = "Общо за месеца";

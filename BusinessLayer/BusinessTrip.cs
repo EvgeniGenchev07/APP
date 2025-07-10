@@ -21,7 +21,6 @@ namespace BusinessLayer
         public CarOwnerShip CarOwnership { get; set; }
         public decimal Wage { get; set; }
         public decimal AccommodationMoney { get; set; }
-        public decimal OtherExpenses { get; set; }
         public string? CarBrand { get; set; }
         public string? CarRegistrationNumber { get; set; }
         public string CarTripDestination { get; set; } = null!;

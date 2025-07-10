@@ -17,4 +17,19 @@ public partial class AdminAllAbsencesPage : ContentPage
             await pageModel.LoadAbsencesAsync();
         }
     }
-} 
+    private void SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (BindingContext is AdminAllAbsencesPageModel viewModel)
+        {
+            viewModel.FilterAbsenceCommand.Execute(null);
+        }
+    }
+
+    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (BindingContext is AdminAllAbsencesPageModel viewModel)
+        {
+            viewModel.FilterAbsenceCommand.Execute(null);
+        }
+    }
+}
