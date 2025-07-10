@@ -62,10 +62,9 @@ public partial class AdminAllAbsencesPageModel :ObservableObject, INotifyPropert
         CancelCommand = new Command(async () => await CancelAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
-        _ = LoadAbsencesAsync();
     }
 
-    private async Task LoadAbsencesAsync()
+    internal async Task LoadAbsencesAsync()
     {
         try
         {

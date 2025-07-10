@@ -24,12 +24,13 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "INSERT INTO HolidayDay (name, date) " +
-                        "VALUES (@name, @date)",
+                        "INSERT INTO HolidayDay (name, date, isCustom) " +
+                        "VALUES (@name, @date, @isCustom)",
                         _eapDbContext.Connection);
 
                     command.Parameters.AddWithValue("@name", holiday.Name);
                     command.Parameters.AddWithValue("@date", holiday.Date);
+                    command.Parameters.AddWithValue("@isCustom", holiday.IsCustom);
 
                     int rowsAffected = command.ExecuteNonQuery();
                     _eapDbContext.Close();
@@ -51,12 +52,13 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "UPDATE HolidayDay SET name = @name, date = @date" +
+                        "UPDATE HolidayDay SET name = @name, date = @date, isCustom = @isCustom" +
                         "WHERE id = @id",
                         _eapDbContext.Connection);
 
                     command.Parameters.AddWithValue("@name", holiday.Name);
                     command.Parameters.AddWithValue("@date", holiday.Date);
+                    command.Parameters.AddWithValue("@isCustom", holiday.IsCustom);
                     command.Parameters.AddWithValue("@id", holiday.Id);
 
                     int rowsAffected = command.ExecuteNonQuery();
@@ -117,6 +119,7 @@ namespace DataLayer
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 Name = reader["name"].ToString(),
+                                IsCustom = Convert.ToBoolean(reader["isCustom"]),
                                 Date = Convert.ToDateTime(reader["date"]),
                             });
                         }
@@ -124,12 +127,17 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
-                holidays.AddRange(InitializeOfficialHolidays(DateTime.Now.Year).Result);
+                int year = DateTime.Now.Year;
+
+                holidays.AddRange(InitializeOfficialHolidays(year-1).Result);
+                holidays.AddRange(InitializeOfficialHolidays(year).Result);
+                holidays.AddRange(InitializeOfficialHolidays(year+1).Result);
             }
             return holidays;
         }

@@ -16,9 +16,10 @@ insert into User(
 create table Absence(
 id int auto_increment,
 type tinyint not null,
-daysCount int not null,
+daysCount tinyint not null,
 created date not null,
 status tinyint not null,
+daysTaken tinyint not null,
 startDate date not null,
 userId varchar(40) not null,
 constraint FK_Absence_User foreign key(userId) 
@@ -58,5 +59,7 @@ create table HolidayDay(
     id int auto_increment,
     name varchar(30) not null,
     date date not null,
+    isCustom bool not null,
     constraint PK_HolidayDay primary key(id)
 );
+select *  from absence;

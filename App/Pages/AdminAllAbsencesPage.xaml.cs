@@ -9,4 +9,12 @@ public partial class AdminAllAbsencesPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is AdminAllAbsencesPageModel pageModel)
+        {
+            await pageModel.LoadAbsencesAsync();
+        }
+    }
 } 

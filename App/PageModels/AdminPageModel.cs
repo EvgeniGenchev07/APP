@@ -136,7 +136,6 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         ShowAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = true);
         HideAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = false);
 
-        _ = LoadDataAsync();
     }
 
     private async Task InitializeOfficialHolidays(int year)

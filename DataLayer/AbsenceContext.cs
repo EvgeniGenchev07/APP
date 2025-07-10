@@ -22,12 +22,13 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "INSERT INTO Absence (type, daysCount, created, status, startDate, userId) " +
-                        "VALUES (@type, @daysCount, @created, @status, @startDate, @userId)",
+                        "INSERT INTO Absence (type, daysCount, daysTaken, created, status, startDate, userId) " +
+                        "VALUES (@type, @daysCount, @daysTaken, @created, @status, @startDate, @userId)",
                         _eapDbContext.Connection);
 
                     command.Parameters.AddWithValue("@type", (int)absence.Type);
                     command.Parameters.AddWithValue("@daysCount", absence.DaysCount);
+                    command.Parameters.AddWithValue("@daysTaken", absence.DaysTaken);
                     command.Parameters.AddWithValue("@created", DateTime.Now.Date);
                     command.Parameters.AddWithValue("@status", (int)absence.Status);
                     command.Parameters.AddWithValue("@startDate", absence.StartDate);
@@ -53,12 +54,12 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "UPDATE Absence SET type = @type, daysCount = @daysCount, " +
+                        "UPDATE Absence SET type = @type, daysCount = @daysCount, daysTaken = @daysTaken, " +
                         "status = @status, startDate = @startDate WHERE id = @id",
                         _eapDbContext.Connection);
-
                     command.Parameters.AddWithValue("@type", (int)absence.Type);
                     command.Parameters.AddWithValue("@daysCount", absence.DaysCount);
+                    command.Parameters.AddWithValue("@daysTaken", absence.DaysTaken);
                     command.Parameters.AddWithValue("@status", (int)absence.Status);
                     command.Parameters.AddWithValue("@startDate", absence.StartDate);
                     command.Parameters.AddWithValue("@id", absence.Id);
@@ -121,8 +122,9 @@ namespace DataLayer
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 Type = (AbsenceType)Convert.ToInt32(reader["type"]),
-                                DaysCount = Convert.ToInt32(reader["daysCount"]),
+                                DaysCount = Convert.ToByte(reader["daysCount"]),
                                 Created = Convert.ToDateTime(reader["created"]),
+                                DaysTaken = Convert.ToByte(reader["daysTaken"]),
                                 Status = (AbsenceStatus)Convert.ToInt32(reader["status"]),
                                 StartDate = Convert.ToDateTime(reader["startDate"]),
                                 UserId = reader["userId"].ToString()
@@ -163,7 +165,8 @@ namespace DataLayer
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 Type = (AbsenceType)Convert.ToInt32(reader["type"]),
-                                DaysCount = Convert.ToInt32(reader["daysCount"]),
+                                DaysCount = Convert.ToByte(reader["daysCount"]),
+                                DaysTaken = Convert.ToByte(reader["daysTaken"]),
                                 Created = Convert.ToDateTime(reader["created"]),
                                 Status = (AbsenceStatus)Convert.ToInt32(reader["status"]),
                                 StartDate = Convert.ToDateTime(reader["startDate"]),
@@ -202,7 +205,8 @@ namespace DataLayer
                             {
                                 Id = Convert.ToInt32(reader["id"]),
                                 Type = (AbsenceType)Convert.ToInt32(reader["type"]),
-                                DaysCount = Convert.ToInt32(reader["daysCount"]),
+                                DaysCount = Convert.ToByte(reader["daysCount"]),
+                                DaysTaken = Convert.ToByte(reader["daysTaken"]),
                                 Created = Convert.ToDateTime(reader["created"]),
                                 Status = (AbsenceStatus)Convert.ToInt32(reader["status"]),
                                 StartDate = Convert.ToDateTime(reader["startDate"]),

@@ -135,8 +135,11 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         ViewAllAbsencesCommand = new Command(async () => await ViewAllAbsencesAsync());
         ViewAllBusinessTripsCommand = new Command(async () => await ViewAllBusinessTripsAsync());
         LogoutCommand = new Command(async () => await LogoutAsync());
-   
-        _ = LoadDataAsync();
+        MessagingCenter.Subscribe<HttpService>(this, "AbsenceCreated", async (sender) =>
+        {
+            AbsenceDays = App.User.AbsenceDays;
+            OnPropertyChanged(nameof(AbsenceDays));
+        });
     }
 
     internal async Task LoadDataAsync()
@@ -154,7 +157,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
                 
                 PendingTripsCount = businessTrips.Count(t => t.Status == BusinessTripStatus.Pending);
                 ApprovedTripsCount = businessTrips.Count(t => t.Status == BusinessTripStatus.Approved);
-                
+
                 RecentBusinessTrips.Clear();
                 foreach (var trip in recentTrips)
                 {

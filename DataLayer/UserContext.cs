@@ -198,7 +198,7 @@ namespace DataLayer
                     var query = @"
                         SELECT 
                             u.*,
-                            a.id AS absence_id, a.type AS absence_type, a.daysCount AS absence_daysCount,
+                            a.id AS absence_id,a.daysTaken as absence_daytaken, a.type AS absence_type, a.daysCount AS absence_daysCount,
                             a.created AS absence_created, a.status AS absence_status, a.startDate AS absence_startDate,
                             bt.id AS trip_id, bt.status AS trip_status, bt.issueDate AS trip_issueDate,
                             bt.projectName, bt.userFullName, bt.task, bt.startDate AS trip_startDate,
@@ -251,8 +251,9 @@ namespace DataLayer
                                     {
                                         Id = absenceId,
                                         Type = Enum.Parse<AbsenceType>(reader["absence_type"].ToString()),
-                                        DaysCount = Convert.ToInt32(reader["absence_daysCount"]),
+                                        DaysCount = Convert.ToByte(reader["absence_daysCount"]),
                                         Created = Convert.ToDateTime(reader["absence_created"]),
+                                        DaysTaken = Convert.ToByte(reader["absence_daytaken"]),
                                         Status = Enum.Parse<AbsenceStatus>(reader["absence_status"].ToString()),
                                         StartDate = Convert.ToDateTime(reader["absence_startDate"]),
                                         UserId = user.Id

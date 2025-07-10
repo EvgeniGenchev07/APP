@@ -40,14 +40,15 @@ namespace Server.Controllers
                 DateTime dateTime = absence.StartDate.AddDays(i);
                 if(dateTime.DayOfWeek == DayOfWeek.Saturday|| dateTime.DayOfWeek == DayOfWeek.Sunday) holidaysCount++;
             }
-            user.AbsenceDays -= absence.DaysCount;
-            user.AbsenceDays += holidaysCount;
+            absence.DaysTaken = (byte)(absence.DaysCount - holidaysCount);
+            user.AbsenceDays -= absence.DaysTaken;
             if (!_userContext.Update(user))
                 {
                     return BadRequest("Failed to update user absence days.");
                 }
             if (_absenceContext.Create(absence))
             {
+                //novo pole za vzetite dni
                 return Ok(JsonSerializer.Serialize(absence));
             }
             else
@@ -163,7 +164,7 @@ namespace Server.Controllers
                 {
                     return NotFound("User not found.");
                 }
-                user.AbsenceDays += absence.DaysCount;
+                user.AbsenceDays += absence.DaysTaken;
                 if (!_userContext.Update(user))
                 {
                     return BadRequest("Failed to update user absence days.");

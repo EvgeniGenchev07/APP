@@ -39,7 +39,6 @@ public partial class AbsencePageModel : ObservableObject
 
     public ObservableCollection<AbsenceTypeOption> AbsenceTypes { get; } = new()
     {
-        new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.Vacation, DisplayName = "Ваканция" },
         new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.SickLeave, DisplayName = "Болнични" },
         new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.PersonalLeave, DisplayName = "Отпуск" },
         new AbsenceTypeOption { Value = BusinessLayer.AbsenceType.Other, DisplayName = "Други" }
@@ -47,7 +46,7 @@ public partial class AbsencePageModel : ObservableObject
 
     public DateTime MinimumDate => DateTime.Today;
 
-    public int DurationDays => (EndDate - StartDate).Days + 1;
+    public byte DurationDays => (byte)((EndDate - StartDate).Days + 1);
 
     public AbsencePageModel(HttpService httpService)
     {

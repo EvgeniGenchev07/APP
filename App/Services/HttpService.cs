@@ -101,7 +101,8 @@ namespace App.Services
                     PropertyNameCaseInsensitive = true
                 });
                 App.User.Absences?.Add(absence);
-                App.User.AbsenceDays -= absence.DaysCount;
+                App.User.AbsenceDays -= absence.DaysTaken;
+                MessagingCenter.Send<HttpService>(this, "AbsenceCreated");
                 return true;
             }
             return false;
