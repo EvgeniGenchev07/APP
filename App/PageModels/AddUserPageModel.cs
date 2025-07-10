@@ -15,6 +15,7 @@ public class AddUserPageModel : INotifyPropertyChanged
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _confirmPassword = string.Empty;
+    private string _absenceDays = string.Empty;
     private string _selectedRole = "Служител";
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -63,6 +64,17 @@ public class AddUserPageModel : INotifyPropertyChanged
         }
     }
 
+    public string AbsenceDays
+    {
+        get => _absenceDays; 
+        set
+        {
+            _absenceDays = value;
+            OnPropertyChanged();
+            ValidateAbsenceDays();
+        }
+    }
+
     public string SelectedRole
     {
         get => _selectedRole;
@@ -91,11 +103,15 @@ public class AddUserPageModel : INotifyPropertyChanged
     public string ConfirmPasswordError { get; private set; } = string.Empty;
     public string RoleError { get; private set; } = string.Empty;
 
+    public string AbsenceDaysError { get; private set; } = string.Empty;
+
     public bool HasNameError => !string.IsNullOrEmpty(NameError);
     public bool HasEmailError => !string.IsNullOrEmpty(EmailError);
     public bool HasPasswordError => !string.IsNullOrEmpty(PasswordError);
     public bool HasConfirmPasswordError => !string.IsNullOrEmpty(ConfirmPasswordError);
     public bool HasRoleError => !string.IsNullOrEmpty(RoleError);
+
+    public bool HasAbsenceDaysError => !string.IsNullOrEmpty(AbsenceDaysError);
 
     public ICommand AddUserCommand { get; }
     public ICommand CancelCommand { get; }
@@ -106,6 +122,7 @@ public class AddUserPageModel : INotifyPropertyChanged
         
         AddUserCommand = new Command(async () => await AddUserAsync());
         CancelCommand = new Command(async () => await CancelAsync());
+        
     }
 
     private async Task AddUserAsync()
@@ -133,6 +150,7 @@ public class AddUserPageModel : INotifyPropertyChanged
                     Name = Name,
                     Email = Email,
                     Password = Password,
+                    AbsenceDays = int.TryParse(AbsenceDays, out int absenceDays) ? absenceDays : 0,
                     Role = role
                 };
 
@@ -169,9 +187,10 @@ public class AddUserPageModel : INotifyPropertyChanged
         ValidateEmail();
         ValidatePassword();
         ValidateConfirmPassword();
+        ValidateAbsenceDays();
         ValidateRole();
 
-        return !HasNameError && !HasEmailError && !HasPasswordError && !HasConfirmPasswordError && !HasRoleError;
+        return !HasNameError && !HasEmailError && !HasPasswordError && !HasConfirmPasswordError && !HasAbsenceDaysError && !HasRoleError;
     }
 
     private void ValidateName()
@@ -244,6 +263,24 @@ public class AddUserPageModel : INotifyPropertyChanged
         }
         OnPropertyChanged(nameof(ConfirmPasswordError));
         OnPropertyChanged(nameof(HasConfirmPasswordError));
+    }
+
+    private void ValidateAbsenceDays()
+    {
+        if (string.IsNullOrWhiteSpace(AbsenceDays))
+        {
+            AbsenceDaysError = "Дните за отсъствие са задължително поле";
+        }
+        else if (!int.TryParse(AbsenceDays, out int days) || days < 0)
+        {
+            AbsenceDaysError = "Моля въведи правилен брой на дни";
+        }
+        else
+        {
+            AbsenceDaysError = string.Empty;
+        }
+        OnPropertyChanged(nameof(AbsenceDaysError));
+        OnPropertyChanged(nameof(HasAbsenceDaysError));
     }
 
     private void ValidateRole()

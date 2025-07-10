@@ -205,7 +205,7 @@ namespace DataLayer
                             bt.projectName, bt.userFullName, bt.task, bt.startDate AS trip_startDate,
                             bt.endDate AS trip_endDate, bt.totalDays, bt.carOwnerShip, bt.wage,
                             bt.accomodationMoney, bt.carBrand, bt.carRegistrationNumber,
-                            bt.carTripDestination, bt.dateOfArrival, bt.carModel,
+                            bt.carTripDestination, bt.dateOfArrival, bt.carModel, bt.additionalExpences,
                             bt.carUsagePerHundredKm, bt.pricePerLiter, bt.departureDate,
                             bt.expensesResponsibility, bt.created AS trip_created
                         FROM 
@@ -287,6 +287,7 @@ namespace DataLayer
                                         CarTripDestination = reader["carTripDestination"].ToString(),
                                         DateOfArrival = Convert.ToDateTime(reader["dateOfArrival"]),
                                         CarModel = reader["carModel"].ToString(),
+                                        AdditionalExpences = Convert.ToDecimal(reader["additionalExpences"]),
                                         CarUsagePerHundredKm = Convert.ToSingle(reader["carUsagePerHundredKm"]),
                                         PricePerLiter = Convert.ToDouble(reader["pricePerLiter"]),
                                         DepartureDate = Convert.ToDateTime(reader["departureDate"]),

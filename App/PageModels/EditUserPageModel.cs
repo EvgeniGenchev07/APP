@@ -16,7 +16,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     private string _email = string.Empty;
     private string _selectedRole = "Служител";
     private string _password = string.Empty;
-    private string _absenceDays = "0";
+    private string _absenceDays = string.Empty;
     private string _userId = string.Empty;
     private bool _isPasswordChanged = false;
     private string _passwordHash = string.Empty;

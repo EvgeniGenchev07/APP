@@ -27,6 +27,8 @@ namespace BusinessLayer
         public string CarTripDestination { get; set; } = null!;
         public DateTime DateOfArrival { get; set; }
         public string CarModel { get; set; } = null!;
+
+        public decimal AdditionalExpences { get; set; }
         public float CarUsagePerHundredKm { get; set; }
         public double PricePerLiter { get; set; }
         public DateTime DepartureDate { get; set; }

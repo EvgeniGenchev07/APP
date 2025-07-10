@@ -25,11 +25,11 @@ namespace DataLayer
                     var command = new MySqlConnector.MySqlCommand(
                         "INSERT INTO BusinessTrip (issueId, status, issueDate, projectName, userFullName, task, " +
                         "startDate, endDate, totalDays, carOwnerShip, wage, accomodationMoney, carBrand, " +
-                        "carRegistrationNumber, carTripDestination, dateOfArrival, carModel, carUsagePerHundredKm, " +
+                        "carRegistrationNumber, carTripDestination, dateOfArrival, carModel, additionalExpences, carUsagePerHundredKm, " +
                         "pricePerLiter, departureDate, expensesResponsibility, created, userId) " +
                         "VALUES (@issueId, @status, @issueDate, @projectName, @userFullName, @task, @startDate, @endDate, " +
                         "@totalDays, @carOwnerShip, @wage, @accomodationMoney, @carBrand, @carRegistrationNumber, " +
-                        "@carTripDestination, @dateOfArrival, @carModel, @carUsagePerHundredKm, @pricePerLiter, " +
+                        "@carTripDestination, @dateOfArrival, @carModel, @additionalExpences, @carUsagePerHundredKm, @pricePerLiter, " +
                         "@departureDate, @expensesResponsibility, @created, @userId)",
                         _eapDbContext.Connection);
 
@@ -50,6 +50,7 @@ namespace DataLayer
                     command.Parameters.AddWithValue("@carTripDestination", businessTrip.CarTripDestination);
                     command.Parameters.AddWithValue("@dateOfArrival", businessTrip.DateOfArrival);
                     command.Parameters.AddWithValue("@carModel", businessTrip.CarModel);
+                    command.Parameters.AddWithValue("@additionalExpences", businessTrip.AdditionalExpences);
                     command.Parameters.AddWithValue("@carUsagePerHundredKm", businessTrip.CarUsagePerHundredKm);
                     command.Parameters.AddWithValue("@pricePerLiter", businessTrip.PricePerLiter);
                     command.Parameters.AddWithValue("@departureDate", businessTrip.DepartureDate);
@@ -112,7 +113,7 @@ namespace DataLayer
                         "userFullName = @userFullName, task = @task, startDate = @startDate, endDate = @endDate, " +
                         "totalDays = @totalDays, carOwnerShip = @carOwnerShip, wage = @wage, accomodationMoney = @accomodationMoney, " +
                         "carBrand = @carBrand, carRegistrationNumber = @carRegistrationNumber, carTripDestination = @carTripDestination, " +
-                        "dateOfArrival = @dateOfArrival, carModel = @carModel, carUsagePerHundredKm = @carUsagePerHundredKm, " +
+                        "dateOfArrival = @dateOfArrival, carModel = @carModel, additionalExpences = @additionalExpences carUsagePerHundredKm = @carUsagePerHundredKm, " +
                         "pricePerLiter = @pricePerLiter, departureDate = @departureDate, expensesResponsibility = @expensesResponsibility " +
                         "WHERE id = @id",
                         _eapDbContext.Connection);
@@ -134,6 +135,7 @@ namespace DataLayer
                     command.Parameters.AddWithValue("@carTripDestination", businessTrip.CarTripDestination);
                     command.Parameters.AddWithValue("@dateOfArrival", businessTrip.DateOfArrival);
                     command.Parameters.AddWithValue("@carModel", businessTrip.CarModel);
+                    command.Parameters.AddWithValue("@additionalExpences", businessTrip.AdditionalExpences);
                     command.Parameters.AddWithValue("@carUsagePerHundredKm", businessTrip.CarUsagePerHundredKm);
                     command.Parameters.AddWithValue("@pricePerLiter", businessTrip.PricePerLiter);
                     command.Parameters.AddWithValue("@departureDate", businessTrip.DepartureDate);
@@ -213,6 +215,7 @@ namespace DataLayer
                                 CarTripDestination = reader["carTripDestination"].ToString(),
                                 DateOfArrival = Convert.ToDateTime(reader["dateOfArrival"]),
                                 CarModel = reader["carModel"].ToString(),
+                                AdditionalExpences = Convert.ToDecimal(reader["additionalExpences"]),
                                 CarUsagePerHundredKm = Convert.ToSingle(reader["carUsagePerHundredKm"]),
                                 PricePerLiter = Convert.ToDouble(reader["pricePerLiter"]),
                                 DepartureDate = Convert.ToDateTime(reader["departureDate"]),
@@ -271,6 +274,7 @@ namespace DataLayer
                                 CarTripDestination = reader["carTripDestination"].ToString(),
                                 DateOfArrival = Convert.ToDateTime(reader["dateOfArrival"]),
                                 CarModel = reader["carModel"].ToString(),
+                                AdditionalExpences = Convert.ToDecimal(reader["additionalExpences"]),
                                 CarUsagePerHundredKm = Convert.ToSingle(reader["carUsagePerHundredKm"]),
                                 PricePerLiter = Convert.ToDouble(reader["pricePerLiter"]),
                                 DepartureDate = Convert.ToDateTime(reader["departureDate"]),
@@ -327,6 +331,7 @@ namespace DataLayer
                                 CarTripDestination = reader["carTripDestination"].ToString(),
                                 DateOfArrival = Convert.ToDateTime(reader["dateOfArrival"]),
                                 CarModel = reader["carModel"].ToString(),
+                                AdditionalExpences = Convert.ToDecimal(reader["additionalExpences"]),
                                 CarUsagePerHundredKm = Convert.ToSingle(reader["carUsagePerHundredKm"]),
                                 PricePerLiter = Convert.ToDouble(reader["pricePerLiter"]),
                                 DepartureDate = Convert.ToDateTime(reader["departureDate"]),

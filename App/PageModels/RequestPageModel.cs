@@ -50,6 +50,9 @@ namespace App.PageModels
         decimal _accommodationAllowanceRate = 0.00m;
 
         [ObservableProperty]
+        decimal _additionalExpenses = 0.00m;
+
+        [ObservableProperty]
         string _vehicleType = "Opel";
 
         [ObservableProperty]
@@ -75,7 +78,7 @@ namespace App.PageModels
         [ObservableProperty]
         ObservableCollection<string> _fuelTypes = new()
         {
-            "D", "A95", "A98", "LPG", "Electric"
+            "Дизел", "Бензин", "Газ", "Ток"
         };
 
         [ObservableProperty]
@@ -130,7 +133,9 @@ namespace App.PageModels
         [RelayCommand]
         private void CalculateTotalExpenses()
         {
-            TotalExpenses = DailyAllowanceRate * DurationDays + AccommodationAllowanceRate * DurationDays;
+            TotalExpenses = DailyAllowanceRate * DurationDays +
+                           AccommodationAllowanceRate * DurationDays +
+                           AdditionalExpenses;
         }
 
         [RelayCommand]
@@ -166,6 +171,7 @@ namespace App.PageModels
                     CarTripDestination = DestinationCity,
                     DateOfArrival = TripStartDate,
                     CarModel = VehicleModel,
+                    AdditionalExpences = AdditionalExpenses,
                     CarUsagePerHundredKm = (float)FuelConsumption,
                     PricePerLiter = 2.50, // Default price
                     DepartureDate = TripEndDate,
@@ -207,6 +213,10 @@ namespace App.PageModels
         partial void OnDurationDaysChanged(int value)
         {
             TripEndDate = TripStartDate.AddDays(value);
+            CalculateTotalExpenses();
+        }
+        partial void OnAdditionalExpensesChanged(decimal value)
+        {
             CalculateTotalExpenses();
         }
 
