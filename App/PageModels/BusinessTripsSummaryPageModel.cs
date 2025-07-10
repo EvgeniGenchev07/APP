@@ -86,7 +86,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
             HasNoResults = false;
 
             var trips = await _httpService.GetAllBusinessTripsAsync();
-            var viewModels = trips.Where(t=>t.Status == BusinessTripStatus.Approved).Select(t => new BusinessTripViewModel(t)).ToList();
+            var viewModels = trips.Where(t => t.Status == BusinessTripStatus.Approved).Select(t => new BusinessTripViewModel(t)).ToList();
             _originalTrips = viewModels;
             Trips = new ObservableCollection<BusinessTripViewModel>(viewModels);
             HasNoResults = !Trips.Any();
