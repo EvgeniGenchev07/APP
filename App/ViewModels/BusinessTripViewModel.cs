@@ -80,7 +80,7 @@ namespace App.ViewModels
             BusinessTripStatus.Completed => Colors.Blue,
             _ => Colors.Gray
         };
-
+        public BusinessTrip BusinessTrip => _trip;
         public static BusinessTrip ToBusinessTrip(BusinessTripViewModel viewModel)
         {
             return new BusinessTrip

@@ -28,24 +28,28 @@ namespace Server.Controllers
             {
                 return BadRequest("Invalid absence data.");
             }
-                User user = _userContext.GetById(absence.UserId);
-                if (user == null)
-                {
-                    return NotFound("User not found.");
-                }
-                var holidays = _holidayDayContext.GetAll();
-            int holidaysCount = holidays.Count(h => h.Date >= absence.StartDate && h.Date < absence.StartDate.AddDays(absence.DaysCount));
-            for(int i = 0; i < absence.DaysCount; i++)
+            User user = _userContext.GetById(absence.UserId);
+            if (user == null)
             {
-                DateTime dateTime = absence.StartDate.AddDays(i);
-                if(dateTime.DayOfWeek == DayOfWeek.Saturday|| dateTime.DayOfWeek == DayOfWeek.Sunday) holidaysCount++;
+                return NotFound("User not found.");
             }
-            absence.DaysTaken = (byte)(absence.DaysCount - holidaysCount);
-            user.AbsenceDays -= absence.DaysTaken;
-            if (!_userContext.Update(user))
+            if (absence.Type == AbsenceType.PersonalLeave)
+            {
+
+                var holidays = _holidayDayContext.GetAll();
+                int holidaysCount = holidays.Count(h => h.Date >= absence.StartDate && h.Date < absence.StartDate.AddDays(absence.DaysCount));
+                for (int i = 0; i < absence.DaysCount; i++)
+                {
+                    DateTime dateTime = absence.StartDate.AddDays(i);
+                    if (dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday) holidaysCount++;
+                }
+                absence.DaysTaken = (byte)(absence.DaysCount - holidaysCount);
+                user.AbsenceDays -= absence.DaysTaken;
+                if (!_userContext.Update(user))
                 {
                     return BadRequest("Failed to update user absence days.");
                 }
+            }
             if (_absenceContext.Create(absence))
             {
                 //novo pole za vzetite dni
@@ -164,10 +168,13 @@ namespace Server.Controllers
                 {
                     return NotFound("User not found.");
                 }
-                user.AbsenceDays += absence.DaysTaken;
-                if (!_userContext.Update(user))
+                if (absence.Type == AbsenceType.PersonalLeave)
                 {
-                    return BadRequest("Failed to update user absence days.");
+                    user.AbsenceDays += absence.DaysTaken;
+                    if (!_userContext.Update(user))
+                    {
+                        return BadRequest("Failed to update user absence days.");
+                    }
                 }
             }
             if (_absenceContext.Update(absence))
@@ -180,4 +187,4 @@ namespace Server.Controllers
             }
         }
     }
-} 
+}
