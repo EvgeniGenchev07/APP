@@ -108,7 +108,7 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
             IsBusy = true;
 
             var absences = await _httpService.GetAllAbsencesAsync();
-            _originalAbsences = absences.Select(a => new AbsenceViewModel(a)).Where(a=>a.Status==AbsenceStatus.Approved).ToList();
+            _originalAbsences = absences.Select(a => new AbsenceViewModel(a)).ToList();
             Absences.Clear();
             foreach (var absence in _originalAbsences)
             {
@@ -237,23 +237,23 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
     [RelayCommand]
     private async Task Export()
     {
-
+        var absencesExport = Absences.Where(a => a.Status == AbsenceStatus.Approved).ToList();
         using var workbook = new XLWorkbook();
         {
             if (SelectedMonth == "Всички месеци")
             {
-                AddSheet(workbook, "Отпуски", absences.Where(a => a.Type == AbsenceType.PersonalLeave).ToList());
-                AddSheet(workbook, "Болнични", absences.Where(a => a.Type == AbsenceType.SickLeave).ToList());
-                AddSheet(workbook, "Други", absences.Where(a => a.Type == AbsenceType.Other).ToList());
-                AddSheet(workbook, "Всички", absences.ToList());
+                AddSheet(workbook, "Отпуски", absencesExport.Where(a => a.Type == AbsenceType.PersonalLeave).ToList());
+                AddSheet(workbook, "Болнични", absencesExport.Where(a => a.Type == AbsenceType.SickLeave).ToList());
+                AddSheet(workbook, "Други", absencesExport.Where(a => a.Type == AbsenceType.Other).ToList());
+                AddSheet(workbook, "Всички", absencesExport.ToList());
             }
             else
             {
                 var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;
-                AddSheet(workbook, "Отпуски", absences.Where(a => a.Type == AbsenceType.PersonalLeave && a.StartDate.Month == monthIndex).ToList());
-                AddSheet(workbook, "Болнични", absences.Where(a => a.Type == AbsenceType.SickLeave && a.StartDate.Month == monthIndex).ToList());
-                AddSheet(workbook, "Други", absences.Where(a => a.Type == AbsenceType.Other && a.StartDate.Month == monthIndex).ToList());
-                AddSheet(workbook, "Всички", absences.Where(a => a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Отпуски", absencesExport.Where(a => a.Type == AbsenceType.PersonalLeave && a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Болнични", absencesExport.Where(a => a.Type == AbsenceType.SickLeave && a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Други", absencesExport.Where(a => a.Type == AbsenceType.Other && a.StartDate.Month == monthIndex).ToList());
+                AddSheet(workbook, "Всички", absencesExport.Where(a => a.StartDate.Month == monthIndex).ToList());
             }
         }
         using var stream = new MemoryStream();

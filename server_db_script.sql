@@ -1,7 +1,4 @@
-drop database EAPDigitalIntegrationDb;
-create database EAPDigitalIntegrationDb;
-use EAPDigitalIntegrationDb;
-
+use eap_admin;
 create table User(
 id varchar(40),
 absenceDays int,
@@ -68,6 +65,7 @@ alter table user
 add contractDays int not null;
 
 insert into User(
-`id`, `contractDays`,`absenceDays`,`name`,`role`,`email`,`password`)values("a49436773d0b4529b010ccb96b4a1f70",20,20,"Admin",1,"admin@eap-save.eu",md5("1a41bfc9"));
+`id`, `contractDays`,`absenceDays`,`name`,`role`,`email`,`password`)
+values("a49436773d0b4529b010ccb96b4a1f70",20,20,"Admin",1,"admin@eap-save.eu",md5("1a41bfc9"));
 
 select * from user;
