@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
 using BusinessLayer;
 
 namespace DataLayer
@@ -40,11 +36,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error creating absence in the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public bool Update(Absence absence)
@@ -70,11 +69,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error updating absence in the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public bool Delete(int absenceId)
@@ -95,11 +97,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error deleting absence from the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public Absence GetById(int absenceId)
@@ -134,14 +139,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving absence from the database.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return null;
+            throw new Exception("Database connection is not established or absence not found.");
         }
 
         public List<Absence> GetByUserId(string userId)
@@ -174,17 +179,19 @@ namespace DataLayer
                             });
                         }
                     }
+                    _eapDbContext.Close();
+                    return absences;
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving absences for user from the database.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return absences;
+            throw new Exception("Database connection is not established.");
         }
         public List<Absence> GetAll()
         {
@@ -215,17 +222,19 @@ namespace DataLayer
                             });
                         }
                     }
+                    _eapDbContext.Close();
+                    return absences;
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving absences from the database.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return absences;
+            throw new Exception("Database connection is not established.");
         }
     }
-} 
+}

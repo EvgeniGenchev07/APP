@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BusinessLayer;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using BusinessLayer;
 
 namespace DataLayer
 {
@@ -33,32 +29,28 @@ namespace DataLayer
 
         public User Authenticate(string email, string password)
         {
-            // Simulate database lookup
-            // In a real application, you would query the database to get the user's hashed password
-            var user = _userContext.GetByEmail(email);
-            if (user == null)
+            try
             {
-                return null; // User not found
-            }
-            if (VerifyPassword(password, user.Password))
-            {
-                return user;
-            }
-            return null;
-        }
 
-        public bool Register(User user)
-        {
-            // Check if user already exists
-            var existingUser = _userContext.GetByEmail(user.Email);
-            if (existingUser != null)
-            {
-                return false; // User already exists
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+                {
+                    return null;
+                }
+                var user = _userContext.GetByEmail(email);
+                if (user == null)
+                {
+                    return null;
+                }
+                if (VerifyPassword(password, user.Password))
+                {
+                    return user;
+                }
+                return null;
             }
-            // Hash the password before storing
-            user.Password = HashPassword(user.Password);
-            // Create the user in the database
-            return _userContext.Create(user);
+            catch (Exception ex)
+            {
+                throw new Exception("Authentication failed", ex);
+            }
         }
     }
 }

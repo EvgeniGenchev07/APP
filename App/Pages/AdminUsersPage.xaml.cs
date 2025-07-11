@@ -17,4 +17,4 @@ public partial class AdminUsersPage : ContentPage
             viewModel.LoadUsersAsync();
         }
     }
-} 
+}

@@ -12,4 +12,4 @@ public partial class EditUserPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
-} 
+}

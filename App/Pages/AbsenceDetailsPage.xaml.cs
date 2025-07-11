@@ -12,4 +12,4 @@ public partial class AbsenceDetailsPage : ContentPage
         InitializeComponent();
         BindingContext = pageModel;
     }
-} 
+}

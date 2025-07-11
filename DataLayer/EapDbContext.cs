@@ -1,10 +1,4 @@
 ﻿using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer
 {
@@ -12,7 +6,7 @@ namespace DataLayer
     {
         private readonly MySqlConnection _connection;
         public MySqlConnection Connection => _connection;
-        public EapDbContext(MySqlConnection connection) 
+        public EapDbContext(MySqlConnection connection)
         {
             _connection = connection;
         }

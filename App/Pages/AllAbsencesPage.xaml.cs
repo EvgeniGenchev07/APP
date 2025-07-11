@@ -19,4 +19,4 @@ public partial class AllAbsencesPage : ContentPage
             ((AllAbsencesPageModel)BindingContext).SelectAbsence(selectedAbsence);
         }
     }
-} 
+}

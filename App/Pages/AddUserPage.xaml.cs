@@ -9,4 +9,4 @@ public partial class AddUserPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
-} 
+}

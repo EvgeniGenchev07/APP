@@ -1,4 +1,3 @@
-using App.Pages;
 using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -30,7 +29,7 @@ namespace App.PageModels
 
         public BusinessTripDetailsPageModel()
         {
-       
+
         }
         public BusinessTripDetailsPageModel(BusinessTripViewModel businessTrip)
         {
@@ -114,7 +113,7 @@ namespace App.PageModels
 
         private async Task CancelAsync()
         {
-            if (App.User.Role==Role.Admin)
+            if (App.User.Role == Role.Admin)
             {
                 await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
             }
@@ -136,15 +135,15 @@ namespace App.PageModels
         {
             if (IsEditing)
             {
-                var result = await Shell.Current.DisplayAlert("Потвърждение", 
+                var result = await Shell.Current.DisplayAlert("Потвърждение",
                     "Искате ли да запазите промените?", "Да", "Не");
-                
+
                 if (result)
                 {
                     CalculateTotalExpenses();
                     IsEditing = false;
-                    
-                    await Shell.Current.DisplayAlert("Успех", 
+
+                    await Shell.Current.DisplayAlert("Успех",
                         "Промените са запазени успешно!", "OK");
                 }
             }
@@ -155,9 +154,9 @@ namespace App.PageModels
         {
             if (IsEditing)
             {
-                var result = await Shell.Current.DisplayAlert("Потвърждение", 
+                var result = await Shell.Current.DisplayAlert("Потвърждение",
                     "Искате ли да отмените промените?", "Да", "Не");
-                
+
                 if (result)
                 {
                     BusinessTrip = new BusinessTripViewModel(CloneBusinessTrip(_originalBusinessTrip));
@@ -172,16 +171,16 @@ namespace App.PageModels
         {
             if (IsEditing)
             {
-                var result = await Shell.Current.DisplayAlert("Предупреждение", 
+                var result = await Shell.Current.DisplayAlert("Предупреждение",
                     "Имате незапазени промени. Искате ли да излезете?", "Да", "Не");
-                
+
                 if (!result)
                 {
                     return;
                 }
             }
-            
+
             await Shell.Current.GoToAsync("..");
         }
     }
-} 
+}

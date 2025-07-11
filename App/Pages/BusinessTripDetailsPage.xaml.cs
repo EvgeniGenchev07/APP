@@ -1,6 +1,5 @@
 using App.PageModels;
 using App.ViewModels;
-using BusinessLayer;
 
 namespace App.Pages
 {
@@ -16,7 +15,7 @@ namespace App.Pages
         protected override void OnNavigatedTo(NavigatedToEventArgs args)
         {
             base.OnNavigatedTo(args);
-            
+
             if (SelectedBusinessTrip != null)
             {
                 BindingContext = new BusinessTripDetailsPageModel(SelectedBusinessTrip);
@@ -30,4 +29,4 @@ namespace App.Pages
 
 
     }
-} 
+}

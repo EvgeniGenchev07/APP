@@ -17,4 +17,4 @@ public partial class AdminAllBusinessTripsPage : ContentPage
             await viewModel.LoadBusinessTripsAsync();
         }
     }
-} 
+}

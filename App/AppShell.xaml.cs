@@ -1,6 +1,4 @@
-﻿using App.Pages;
-
-namespace App
+﻿namespace App
 {
     public partial class AppShell : Shell
     {

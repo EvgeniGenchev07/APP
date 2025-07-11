@@ -1,6 +1,4 @@
 ﻿using BusinessLayer;
-using Microsoft.Maui.Graphics;
-using System;
 
 namespace App.ViewModels
 {
@@ -124,5 +122,5 @@ namespace App.ViewModels
             };
         }
     }
-} 
+}
 

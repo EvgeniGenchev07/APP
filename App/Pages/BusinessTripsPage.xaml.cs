@@ -13,11 +13,11 @@ namespace App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            
+
             if (BindingContext is BusinessTripsPageModel viewModel)
             {
                 viewModel.LoadBusinessTripsCommand.Execute(null);
             }
         }
     }
-} 
+}

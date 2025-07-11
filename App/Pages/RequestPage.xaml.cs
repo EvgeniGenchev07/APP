@@ -5,8 +5,8 @@ namespace App.Pages;
 
 public partial class RequestPage : ContentPage
 {
-	public RequestPage(RequestPageModel model)
-	{
+    public RequestPage(RequestPageModel model)
+    {
         BindingContext = model;
         InitializeComponent();
     }

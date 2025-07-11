@@ -5,7 +5,7 @@ namespace App.Pages;
 
 public partial class RegisterPage : ContentPage
 {
-    public RegisterPage (RegisterPageModel model)
+    public RegisterPage(RegisterPageModel model)
     {
         BindingContext = model;
         InitializeComponent();

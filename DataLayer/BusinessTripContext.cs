@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data;
 using BusinessLayer;
 
 namespace DataLayer
@@ -95,11 +91,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error creating business trip in the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public bool Update(BusinessTrip businessTrip)
@@ -148,11 +147,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error updating business trip in the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public bool Delete(int businessTripId)
@@ -173,11 +175,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error deleting business trip from the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public BusinessTrip GetById(int businessTripId)
@@ -228,14 +233,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving business trip from the database.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return null;
+            throw new Exception("Database connection is not established.");
         }
 
         public List<BusinessTrip> GetByUserId(string userId)
@@ -284,17 +289,19 @@ namespace DataLayer
                             });
                         }
                     }
+                    _eapDbContext.Close();
+                    return businessTrips;
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving business trips by user ID from the database.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return businessTrips;
+            throw new Exception("Database connection is not established.");
         }
 
         public List<BusinessTrip> GetAll()
@@ -341,17 +348,19 @@ namespace DataLayer
                             });
                         }
                     }
+                    _eapDbContext.Close();
+                    return businessTrips;
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving all business trips from the database.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return businessTrips;
+            throw new Exception("Database connection is not established.");
         }
     }
 }

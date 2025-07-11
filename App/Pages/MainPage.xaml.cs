@@ -22,7 +22,7 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
         if (BindingContext is MainPageModel pageModel)
         {
-             await pageModel.LoadDataAsync();
+            await pageModel.LoadDataAsync();
             CalendarDay calendarDay = pageModel.CalendarDays.FirstOrDefault(d => d.IsToday);
             if (calendarDay != null)
             {
@@ -30,4 +30,4 @@ public partial class MainPage : ContentPage
             }
         }
     }
-} 
+}

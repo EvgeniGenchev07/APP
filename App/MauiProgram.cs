@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
+﻿using App.PageModels;
 using App.Pages;
-using App.PageModels;
 using App.Services;
+using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 
 namespace App
 {
@@ -21,21 +21,21 @@ namespace App
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
-            builder.Services.AddTransientWithShellRoute<RequestPage,RequestPageModel>("request");
-            builder.Services.AddTransientWithShellRoute<RegisterPage,RegisterPageModel>("register");
-            builder.Services.AddTransientWithShellRoute<MainPage,MainPageModel>("MainPage");
-            builder.Services.AddTransientWithShellRoute<AdminPage,AdminPageModel>("AdminPage");
-            builder.Services.AddTransientWithShellRoute<AdminUsersPage,AdminUsersPageModel>("AdminUsersPage");
-            builder.Services.AddTransientWithShellRoute<AddUserPage,AddUserPageModel>("AddUserPage");
-            builder.Services.AddTransientWithShellRoute<EditUserPage,EditUserPageModel>("EditUserPage");
-            builder.Services.AddTransientWithShellRoute<AdminAllAbsencesPage,AdminAllAbsencesPageModel>("AdminAllAbsencesPage");
-            builder.Services.AddTransientWithShellRoute<AdminAllBusinessTripsPage,AdminAllBusinessTripsPageModel>("AdminAllBusinessTripsPage");
-            builder.Services.AddTransientWithShellRoute<AbsencePage,AbsencePageModel>("AbsencePage");
-            builder.Services.AddTransientWithShellRoute<AllAbsencesPage,AllAbsencesPageModel>("AllAbsencesPage");
-            builder.Services.AddTransientWithShellRoute<AbsenceDetailsPage,AbsenceDetailsPageModel>("AbsenceDetailsPage");
-            builder.Services.AddTransientWithShellRoute<BusinessTripsPage,BusinessTripsPageModel>("businesstrips");
+            builder.Services.AddTransientWithShellRoute<RequestPage, RequestPageModel>("request");
+            builder.Services.AddTransientWithShellRoute<RegisterPage, RegisterPageModel>("register");
+            builder.Services.AddTransientWithShellRoute<MainPage, MainPageModel>("MainPage");
+            builder.Services.AddTransientWithShellRoute<AdminPage, AdminPageModel>("AdminPage");
+            builder.Services.AddTransientWithShellRoute<AdminUsersPage, AdminUsersPageModel>("AdminUsersPage");
+            builder.Services.AddTransientWithShellRoute<AddUserPage, AddUserPageModel>("AddUserPage");
+            builder.Services.AddTransientWithShellRoute<EditUserPage, EditUserPageModel>("EditUserPage");
+            builder.Services.AddTransientWithShellRoute<AdminAllAbsencesPage, AdminAllAbsencesPageModel>("AdminAllAbsencesPage");
+            builder.Services.AddTransientWithShellRoute<AdminAllBusinessTripsPage, AdminAllBusinessTripsPageModel>("AdminAllBusinessTripsPage");
+            builder.Services.AddTransientWithShellRoute<AbsencePage, AbsencePageModel>("AbsencePage");
+            builder.Services.AddTransientWithShellRoute<AllAbsencesPage, AllAbsencesPageModel>("AllAbsencesPage");
+            builder.Services.AddTransientWithShellRoute<AbsenceDetailsPage, AbsenceDetailsPageModel>("AbsenceDetailsPage");
+            builder.Services.AddTransientWithShellRoute<BusinessTripsPage, BusinessTripsPageModel>("businesstrips");
             builder.Services.AddTransientWithShellRoute<BusinessTripsSummaryPage, BusinessTripsSummaryPageModel>("BusinessTripsSummaryPage");
             builder.Services.AddTransient<BusinessTripDetailsPage>();
             builder.Services.AddScoped(_ =>

@@ -6,4 +6,4 @@ namespace BusinessLayer
         Personal = 1,
         Rental = 2
     }
-} 
+}
