@@ -61,20 +61,23 @@ namespace DataLayer
                         {
                             try
                             {
+                                var transactionCommand = new MySqlConnector.MySqlCommand(@"
+                                SET @currentYearMonth := NULL;
+                                SET @rank := 0;
 
-                                var transactionCommand = new MySqlConnector.MySqlCommand(
-                                @"WITH RankedIssues AS (
-                                SELECT
-                                    id,
-                                    DENSE_RANK() OVER (
-                                        PARTITION BY YEAR(issueDate), MONTH(issueDate)
-                                        ORDER BY issueDate
-                                    ) AS newIssueId
-                                FROM BusinessTrip
-                            )
-                            UPDATE BusinessTrip bt
-                            JOIN RankedIssues r ON bt.id = r.id
-                            SET bt.issueId = r.newIssueId;",
+                                UPDATE BusinessTrip bt
+                                JOIN (
+                                    SELECT 
+                                        id,
+                                        @rank := IF(@currentYearMonth = DATE_FORMAT(issueDate, '%Y-%m'),
+                                                    @rank + 1,
+                                                    1) AS newIssueId,
+                                        @currentYearMonth := DATE_FORMAT(issueDate, '%Y-%m') AS ym
+                                    FROM BusinessTrip
+                                    ORDER BY issueDate
+                                ) AS ranked ON bt.id = ranked.id
+                                SET bt.issueId = ranked.newIssueId
+                                WHERE bt.id = ranked.id;",
                                 _eapDbContext.Connection, transaction);
                                 transactionCommand.ExecuteNonQuery();
                                 transaction.Commit();
@@ -112,7 +115,7 @@ namespace DataLayer
                         "userFullName = @userFullName, task = @task, startDate = @startDate, endDate = @endDate, " +
                         "totalDays = @totalDays, carOwnerShip = @carOwnerShip, wage = @wage, accomodationMoney = @accomodationMoney, " +
                         "carBrand = @carBrand, carRegistrationNumber = @carRegistrationNumber, carTripDestination = @carTripDestination, " +
-                        "dateOfArrival = @dateOfArrival, carModel = @carModel, additionalExpences = @additionalExpences carUsagePerHundredKm = @carUsagePerHundredKm, " +
+                        "dateOfArrival = @dateOfArrival, carModel = @carModel, additionalExpences = @additionalExpences, carUsagePerHundredKm = @carUsagePerHundredKm, " +
                         "pricePerLiter = @pricePerLiter, departureDate = @departureDate, expensesResponsibility = @expensesResponsibility " +
                         "WHERE id = @id",
                         _eapDbContext.Connection);

@@ -35,7 +35,7 @@
 
                 <!-- Status (Right) -->
                 <Label Grid.Row="0" Grid.Column="2"
-                   Text="{Binding BusinessTrip.StatusText}"
+                   Text="{Binding BusinessTrip.Status}"
                    FontSize="14"
                    TextColor="White"
                    FontAttributes="Bold"
@@ -75,7 +75,7 @@
                         HorizontalOptions="FillAndExpand">
                         <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                             <Label Text="📍" FontSize="24" HorizontalOptions="Center"/>
-                            <Label Text="{Binding BusinessTrip.Destination}" 
+                            <Label Text="{Binding BusinessTrip.CarTripDestination}" 
                                 FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
                             <Label Text="Дестинация" FontSize="12" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
@@ -93,7 +93,7 @@
                         HorizontalOptions="FillAndExpand">
                         <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
                             <Label Text="⏱️" FontSize="24" HorizontalOptions="Center"/>
-                            <Label Text="{Binding BusinessTrip.Days, StringFormat='{0} дни'}" 
+                            <Label Text="{Binding BusinessTrip.TotalDays, StringFormat='{0} дни'}" 
                                 FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
                             <Label Text="Продължителност" FontSize="12" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
@@ -211,7 +211,7 @@
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Дневни издръжки:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
-                                   Text="{Binding BusinessTrip.Wage}" 
+                                   Text="{Binding Wage}" 
                                    IsEnabled="{Binding IsEditing}"
                                    Keyboard="Numeric"
                                    TextColor="{Binding IsEditing}"
@@ -221,7 +221,7 @@
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Квартирни издръжки:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
-                                   Text="{Binding BusinessTrip.AccommodationMoney}" 
+                                   Text="{Binding AccommodationMoney}" 
                                    IsEnabled="{Binding IsEditing}"
                                    Keyboard="Numeric"
                                    TextColor="{Binding IsEditing}"
@@ -231,7 +231,7 @@
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Други разходи:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
-                                Text="{Binding BusinessTrip.AdditionalExpences}" 
+                                Text="{Binding AdditionalExpences}" 
                                 IsEnabled="{Binding IsEditing}"
                                 Keyboard="Numeric"
                                 TextColor="{Binding IsEditing}"
@@ -311,14 +311,7 @@
 
                 <!-- Action Buttons -->
                 <VerticalStackLayout Spacing="10" Margin="0,20,0,0">
-                    <Button Text="Запази промените" 
-                            Command="{Binding SaveCommand}"
-                            IsVisible="{Binding IsEditing}"
-                            HorizontalOptions="Fill"
-                            BackgroundColor="{AppThemeBinding Light=#28A745, Dark=#2ECC71}"
-                            TextColor="White"
-                            FontSize="16"
-                            HeightRequest="50"/>
+                    
 
                     <Button Text="Отказ" 
                             Command="{Binding CancelEditCommand}"
@@ -328,7 +321,14 @@
                             TextColor="White"
                             FontSize="16"
                             HeightRequest="50"/>
-
+                    <Button Text="Изтриване" 
+                        Command="{Binding DeleteCommand}"
+                        IsVisible="{Binding IsEditing}"
+                        HorizontalOptions="Fill"
+                        BackgroundColor="{AppThemeBinding Light=#DC3545, Dark=#2ECC71}"
+                        TextColor="White"
+                        FontSize="16"
+                        HeightRequest="50"/>        
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

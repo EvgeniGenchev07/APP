@@ -1,78 +1,73 @@
+using App.Pages;
+using App.Services;
 using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace App.PageModels
 {
     public partial class BusinessTripDetailsPageModel : ObservableObject
     {
+        private readonly HttpService _httpService;
         [ObservableProperty]
-        private BusinessTripViewModel _businessTrip;
+        private BusinessTrip _businessTrip;
 
-        [ObservableProperty]
-        private decimal _totalExpenses;
 
         [ObservableProperty]
         private bool _canEdit;
 
-        [ObservableProperty]
-        private string _editButtonText = "Редактирай";
 
         [ObservableProperty]
         private bool _isEditing;
 
         private BusinessTrip _originalBusinessTrip;
-
-        public ICommand CancelCommand { get; }
-
-        public BusinessTripDetailsPageModel()
+        [ObservableProperty]
+        private decimal _additionalExpences;
+        [ObservableProperty]
+        private decimal _wage;
+        [ObservableProperty]
+        private decimal _accommodationMoney;
+        private bool isReturning;
+        public string EditButtonText => IsEditing ? "Запази" : "Редактирай";
+        public decimal TotalExpenses => Wage * BusinessTrip.TotalDays + AccommodationMoney * BusinessTrip.TotalDays + AdditionalExpences;
+        public BusinessTripDetailsPageModel(){}
+        public BusinessTripDetailsPageModel(HttpService service)
         {
-
+            BusinessTrip = BusinessTripDetailsPage.SelectedBusinessTrip.BusinessTrip;
+            _httpService = service;
+            _originalBusinessTrip = CloneBusinessTrip(BusinessTrip);
+            
         }
-        public BusinessTripDetailsPageModel(BusinessTripViewModel businessTrip)
+        internal async void LoadData()
         {
-            BusinessTrip = businessTrip;
-            _originalBusinessTrip = new BusinessTrip()
-            {
-                AccommodationMoney = businessTrip.AccommodationMoney,
-                CarBrand = businessTrip.CarBrand,
-                CarModel = businessTrip.CarModel,
-            };
-            CancelCommand = new Command(async () => await CancelAsync());
+            BusinessTrip = BusinessTripDetailsPage.SelectedBusinessTrip.BusinessTrip;
+            _originalBusinessTrip = CloneBusinessTrip(BusinessTrip);
+            AdditionalExpences = BusinessTrip.AdditionalExpences;
+            Wage = BusinessTrip.Wage;
+            AccommodationMoney = BusinessTrip.AccommodationMoney;
+            IsEditing = false;
+            isReturning = false;
             CalculateTotalExpenses();
             UpdateCanEdit();
+            OnPropertyChanged(nameof(EditButtonText));
         }
-
-        public BusinessTripDetailsPageModel(BusinessTrip businessTrip)
+        partial void OnBusinessTripChanged(BusinessTrip value)=>CalculateTotalExpenses();
+        partial void OnAdditionalExpencesChanged(decimal value)=> CalculateTotalExpenses();
+        partial void OnWageChanged(decimal value) => CalculateTotalExpenses();
+        partial void OnAccommodationMoneyChanged(decimal value) => CalculateTotalExpenses();
+        async partial void OnIsEditingChanged(bool value)
         {
-            BusinessTrip = new BusinessTripViewModel(businessTrip);
-            _originalBusinessTrip = CloneBusinessTrip(businessTrip);
-            CancelCommand = new Command(async () => await CancelAsync());
-            CalculateTotalExpenses();
-            UpdateCanEdit();
+            if(!value&&!isReturning) await Save();
         }
-
-        partial void OnBusinessTripChanged(BusinessTripViewModel value)
-        {
-            CalculateTotalExpenses();
-            UpdateCanEdit();
-        }
-
-        partial void OnIsEditingChanged(bool value)
-        {
-            if (!value)
-            {
-                CalculateTotalExpenses();
-            }
-        }
-
+        
         private void CalculateTotalExpenses()
         {
             if (BusinessTrip != null)
             {
-                TotalExpenses = BusinessTrip.Wage * BusinessTrip.Days + BusinessTrip.AccommodationMoney * BusinessTrip.Days + BusinessTrip.AdditionalExpences;
+                OnPropertyChanged(nameof(TotalExpenses));
             }
         }
 
@@ -110,16 +105,20 @@ namespace App.PageModels
                 Created = original.Created
             };
         }
-
-        private async Task CancelAsync()
+        [RelayCommand]
+        private async Task Cancel()
         {
-            if (App.User.Role == Role.Admin)
+            if(IsEditing)  await CancelEdit();
+            if (!IsEditing)
             {
-                await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
-            }
-            else
-            {
-                await Shell.Current.GoToAsync("//businesstrips");
+                if (App.User.Role == Role.Admin)
+                {
+                    await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
+                }
+                else
+                {
+                    await Shell.Current.GoToAsync("//businesstrips");
+                }
             }
         }
 
@@ -127,26 +126,29 @@ namespace App.PageModels
         private void ToggleEdit()
         {
             IsEditing = !IsEditing;
-            EditButtonText = IsEditing ? "Запази" : "Редактирай";
+            OnPropertyChanged(nameof(EditButtonText));
         }
-
         [RelayCommand]
+        private async Task Delete()
+        {
+
+        }
         private async Task Save()
         {
-            if (IsEditing)
-            {
                 var result = await Shell.Current.DisplayAlert("Потвърждение",
                     "Искате ли да запазите промените?", "Да", "Не");
 
                 if (result)
                 {
                     CalculateTotalExpenses();
-                    IsEditing = false;
-
+                    BusinessTrip.AccommodationMoney = AccommodationMoney;
+                    BusinessTrip.AdditionalExpences = AdditionalExpences;
+                    BusinessTrip.Wage = Wage;
+                    await _httpService.CreateBusinessTripAsync(BusinessTrip);
+                    if(IsEditing) ToggleEdit();
                     await Shell.Current.DisplayAlert("Успех",
                         "Промените са запазени успешно!", "OK");
                 }
-            }
         }
 
         [RelayCommand]
@@ -159,28 +161,14 @@ namespace App.PageModels
 
                 if (result)
                 {
-                    BusinessTrip = new BusinessTripViewModel(CloneBusinessTrip(_originalBusinessTrip));
+                    BusinessTrip = CloneBusinessTrip(_originalBusinessTrip);
+                    isReturning = true;
                     IsEditing = false;
                 }
             }
         }
 
 
-        [RelayCommand]
-        private async Task GoBack()
-        {
-            if (IsEditing)
-            {
-                var result = await Shell.Current.DisplayAlert("Предупреждение",
-                    "Имате незапазени промени. Искате ли да излезете?", "Да", "Не");
-
-                if (!result)
-                {
-                    return;
-                }
-            }
-
-            await Shell.Current.GoToAsync("..");
-        }
+        
     }
 }

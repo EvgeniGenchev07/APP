@@ -7,26 +7,18 @@ namespace App.Pages
     {
         public static BusinessTripViewModel SelectedBusinessTrip { get; set; }
 
-        public BusinessTripDetailsPage()
+        public BusinessTripDetailsPage(BusinessTripDetailsPageModel businessTripDetailsPageModel)
         {
+            BindingContext = businessTripDetailsPageModel;
             InitializeComponent();
         }
-
-        protected override void OnNavigatedTo(NavigatedToEventArgs args)
+        protected override void OnAppearing()
         {
-            base.OnNavigatedTo(args);
-
-            if (SelectedBusinessTrip != null)
+            base.OnAppearing();
+            if (BindingContext is BusinessTripDetailsPageModel viewModel)
             {
-                BindingContext = new BusinessTripDetailsPageModel(SelectedBusinessTrip);
-            }
-            else
-            {
-                DisplayAlert("Грешка", "Командировката не е намерена", "OK");
-                Shell.Current.GoToAsync("..");
+                viewModel.LoadData();
             }
         }
-
-
     }
 }

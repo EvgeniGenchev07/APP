@@ -6,8 +6,8 @@ public partial class BusinessTripsSummaryPage : ContentPage
 {
     public BusinessTripsSummaryPage(BusinessTripsSummaryPageModel pageModel)
     {
-        BindingContext = pageModel;
         InitializeComponent();
+        BindingContext = pageModel;
     }
     protected override async void OnAppearing()
     {
