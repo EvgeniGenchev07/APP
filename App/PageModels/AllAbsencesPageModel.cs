@@ -172,6 +172,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
                     AllAbsences.Add(absence);
                 }
                 UpdateStatistics();
+                FilterAbsence();
             }
         }
         catch (Exception ex)
@@ -191,6 +192,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
         ApprovedAbsences = AllAbsences.Count(a => a.Status == AbsenceStatus.Approved);
         RejectedAbsences = AllAbsences.Count(a => a.Status == AbsenceStatus.Rejected);
         OnPropertyChanged(nameof(HasNoResults));
+        OnPropertyChanged(nameof(AllAbsences));
     }
 
     private void FilterAbsence()
