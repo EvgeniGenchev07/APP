@@ -47,7 +47,7 @@
                         <Label Grid.Row="0" Grid.Column="2" Text="Чакащи отсъствия" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="3" Text="Одобрени отсъствия" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <Label Grid.Row="0" Grid.Column="4" Text="Чакащи командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Grid.Row="0" Grid.Column="5" Text="Завършени командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Grid.Row="0" Grid.Column="5" Text="Одобрени командировки" FontAttributes="Bold" HorizontalOptions="Center"/>
                         <!-- Values Row -->
                         <Label Grid.Row="1" Grid.Column="0" Text="{Binding ContractDays}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                         <Label Grid.Row="1" Grid.Column="1" Text="{Binding AbsenceDays}" FontSize="24" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
@@ -158,11 +158,9 @@
                                                TextColor="{Binding TextColor}"
                                                Margin="0,5,0,0"/>
 
-                                                <!-- Indicators - Центрирани линийки -->
                                                 <Grid Grid.Row="1" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" 
                                               HorizontalOptions="Center" VerticalOptions="Center"
                                               Margin="0,0,0,5">
-                                                    <!-- Business Trip Indicators -->
                                                     <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2" HorizontalOptions="Center">
                                                         <Frame IsVisible="{Binding HasBusinessTrips}"
                                                        BackgroundColor="{StaticResource Primary}"
@@ -176,8 +174,8 @@
                                                        HeightRequest="4"
                                                        WidthRequest="20"
                                                        HasShadow="False"/>
-                                                        <Frame IsVisible="{Binding HasCompletedTrips}"
-                                                       BackgroundColor="{StaticResource Success}"
+                                                        <Frame IsVisible="{Binding HasRejectedTrips}"
+                                                       BackgroundColor="{StaticResource Error}"
                                                        CornerRadius="2"
                                                        HeightRequest="4"
                                                        WidthRequest="20"
@@ -273,13 +271,13 @@
                                 <Label Grid.Row="0" Grid.Column="3" Text="Изчакваща" VerticalOptions="Center"/>
 
                                 <BoxView Grid.Row="1" Grid.Column="0" 
-                                 Color="{StaticResource Success}" 
+                                 Color="{StaticResource Error}" 
                                  WidthRequest="20" 
                                  HeightRequest="4" 
                                  CornerRadius="2"
                                  Margin="0,0,5,0"
                                  VerticalOptions="Center"/>
-                                <Label Grid.Row="1" Grid.Column="1" Text="Завършена" VerticalOptions="Center"/>
+                                <Label Grid.Row="1" Grid.Column="1" Text="Отхвърлена" VerticalOptions="Center"/>
                             </Grid>
 
                             <!-- Absence Indicators -->
@@ -358,10 +356,6 @@
                                         StrokeShape="Rectangle"
                                         Margin="0,5"
                                         Padding="10">
-                                            <Border.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminPageModel}}, Path=ItemTappedCommand}" 
-                                                                      CommandParameter="{Binding .}"/>
-                                            </Border.GestureRecognizers>
                                             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
                                                 <Label Grid.Row="0" Grid.Column="0" 
                                                    Text="{Binding UserFullName}" 
@@ -403,10 +397,6 @@
                                         StrokeShape="Rectangle"
                                         Margin="0,5"
                                         Padding="10">
-                                            <Border.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type pageModels:AdminPageModel}}, Path=SelectAbsenceCommand}" 
-                                                                      CommandParameter="{Binding .}"/>
-                                            </Border.GestureRecognizers>
                                             <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
                                                 <Label Grid.Row="0" Grid.Column="0" 
                                                    Text="{Binding UserName}" 

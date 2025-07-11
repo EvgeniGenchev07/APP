@@ -190,8 +190,8 @@
                                                            HeightRequest="4"
                                                            WidthRequest="20"
                                                            HasShadow="False"/>
-                                                    <Frame IsVisible="{Binding HasCompletedTrips}"
-                                                           BackgroundColor="{StaticResource Success}"
+                                                    <Frame IsVisible="{Binding HasRejectedTrips}"
+                                                           BackgroundColor="{StaticResource Error}"
                                                            CornerRadius="2"
                                                            HeightRequest="4"
                                                            WidthRequest="20"
@@ -287,13 +287,13 @@
                             <Label Grid.Row="0" Grid.Column="3" Text="Изчакваща" VerticalOptions="Center"/>
 
                             <BoxView Grid.Row="1" Grid.Column="0" 
-                                     Color="{StaticResource Success}" 
+                                     Color="{StaticResource Error}" 
                                      WidthRequest="20" 
                                      HeightRequest="4" 
                                      CornerRadius="2"
                                      Margin="0,0,5,0"
                                      VerticalOptions="Center"/>
-                            <Label Grid.Row="1" Grid.Column="1" Text="Завършена" VerticalOptions="Center"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="Отхвърлена" VerticalOptions="Center"/>
                         </Grid>
 
                         <!-- Absence Indicators -->
