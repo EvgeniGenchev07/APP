@@ -42,6 +42,23 @@ namespace App.Services
             }
             return new List<BusinessTrip>();
         }
+
+        public async Task<bool> DeleteBusinessTripAsync(int id)
+        {
+        
+                var response = await _httpClient.DeleteAsync($"BusinessTrip/cancel/{id}");
+            User user = App.User;
+            if (user.BusinessTrips != null)
+            {
+                var tripToRemove = user.BusinessTrips.FirstOrDefault(t => t.Id == id);
+                if (tripToRemove != null)
+                {
+                    user.BusinessTrips.Remove(tripToRemove);
+                }
+            }
+            return response.IsSuccessStatusCode;
+           
+        }
         public async Task<List<HolidayDay>> GetAllHolidayDaysAsync()
         {
             var response = await _httpClient.GetAsync("HolidayDay/all");

@@ -162,8 +162,8 @@
                             <Entry Grid.Column="1" 
                                 Text="{Binding BusinessTrip.IssueDate}" 
                                 IsEnabled="False"
-                                TextColor="{Binding IsEditing}"
-                                FontSize="14"/>
+                                   TextColor="{Binding IsEditing}"
+                                   FontSize="14"/>
                         </Grid>
 
                         <!-- Project Name -->

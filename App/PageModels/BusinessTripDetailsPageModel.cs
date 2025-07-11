@@ -12,6 +12,8 @@ namespace App.PageModels
     public partial class BusinessTripDetailsPageModel : ObservableObject
     {
         private readonly HttpService _httpService;
+        private readonly HttpClient _httpClient = new HttpClient();
+
         [ObservableProperty]
         private BusinessTrip _businessTrip;
 
@@ -106,6 +108,7 @@ namespace App.PageModels
                 Created = original.Created
             };
         }
+        
         [RelayCommand]
         private async Task Cancel()
         {
@@ -132,7 +135,55 @@ namespace App.PageModels
         [RelayCommand]
         private async Task Delete()
         {
+            if (BusinessTrip == null) return;
 
+            var confirm = await Shell.Current.DisplayAlert(
+                "Потвърждение",
+                "Сигурни ли сте, че искате да изтриете тази командировка? Това действие не може да бъде отменено.",
+                "Да, изтрий",
+                "Отказ");
+
+            if (confirm)
+            {
+                try
+                {
+                    var success = await _httpService.DeleteBusinessTripAsync(BusinessTrip.Id);
+
+                    if (success)
+                    {
+                        await Shell.Current.DisplayAlert(
+                            "Успех",
+                            "Командировката беше изтрита успешно!",
+                            "OK");
+
+                        isReturning = true;
+                        ToggleEdit();
+
+                        if (App.User.Role == Role.Admin)
+                        {
+                            await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
+                        }
+                        else
+                        {
+                            await Shell.Current.GoToAsync("//businesstrips");
+                        }
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert(
+                            "Грешка",
+                            "Неуспешно изтриване на командировката.",
+                            "OK");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await Shell.Current.DisplayAlert(
+                        "Грешка",
+                        $"Възникна грешка при изтриване: {ex.Message}",
+                        "OK");
+                }
+            }
         }
         private async Task Save()
         {
