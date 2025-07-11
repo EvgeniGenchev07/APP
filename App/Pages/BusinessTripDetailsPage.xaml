@@ -3,8 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pageModels="clr-namespace:App.PageModels"
              xmlns:models="clr-namespace:BusinessLayer;assembly=BusinessLayer"
+             xmlns:converters="clr-namespace:App.Converters"
              x:Class="App.Pages.BusinessTripDetailsPage"
              x:DataType="pageModels:BusinessTripDetailsPageModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StatusToTextConverter x:Key="StatusToTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*">
         <!-- Header with frame content -->
@@ -35,7 +42,7 @@
 
                 <!-- Status (Right) -->
                 <Label Grid.Row="0" Grid.Column="2"
-                   Text="{Binding BusinessTrip.Status}"
+                   Text="{Binding BusinessTrip.Status, Converter={StaticResource StatusToTextConverter}}"
                    FontSize="14"
                    TextColor="White"
                    FontAttributes="Bold"
@@ -142,10 +149,10 @@
                         <Label Text="📋 Детайли за командировка" FontSize="18" FontAttributes="Bold"/>
 
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
-                            <Label Text="ЗАПОВЕД№:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
+                            <Label Text="ЗАПОВЕД №:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
                                 Text="{Binding BusinessTrip.IssueId}" 
-                                IsEnabled="{Binding IsEditing}"
+                                IsEnabled="False"
                                 TextColor="{Binding IsEditing}"
                                 FontSize="14"/>
                         </Grid>
@@ -153,8 +160,8 @@
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
                             <Label Text="Дата на създаване:" FontSize="14" FontAttributes="Bold" VerticalOptions="Center"/>
                             <Entry Grid.Column="1" 
-                                Text="{Binding BusinessTrip.CreatedDate}" 
-                                IsEnabled="{Binding IsEditing}"
+                                Text="{Binding BusinessTrip.IssueDate}" 
+                                IsEnabled="False"
                                 TextColor="{Binding IsEditing}"
                                 FontSize="14"/>
                         </Grid>
