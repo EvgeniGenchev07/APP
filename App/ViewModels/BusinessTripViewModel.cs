@@ -24,6 +24,8 @@ namespace App.ViewModels
         public string UserName => _trip.UserFullName ?? "Неизвестен потребител";
         public string UserFullName => _trip.UserFullName;
 
+        public int IssueId => _trip.IssueId;
+
         public string ProjectName => _trip.ProjectName;
         public string CarTripDestination => _trip.CarTripDestination;
         public string Destination => _trip.CarTripDestination;

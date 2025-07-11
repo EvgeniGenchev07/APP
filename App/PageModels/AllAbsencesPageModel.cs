@@ -143,11 +143,9 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
         BackCommand = new Command(async () => await BackAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
-        // Initialize years (last 5 years and next 5 years)
         AvailableYears = new ObservableCollection<int>(Enumerable.Range(DateTime.Now.Year - 5, 10));
         SelectedYear = DateTime.Now.Year;
 
-        // Initialize months
         AvailableMonths = new ObservableCollection<string>(
             CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.Take(12));
         AvailableMonths.Add("Всички месеци");
@@ -173,8 +171,6 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
                 {
                     AllAbsences.Add(absence);
                 }
-
-                // Calculate statistics
                 UpdateStatistics();
             }
         }
@@ -204,14 +200,11 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
             IsBusy = true;
             ObservableCollection<AbsenceViewModel> filtered = new ObservableCollection<AbsenceViewModel>(_originalAbsences);
 
-            // Filter by year
             if (SelectedYear > 0)
             {
                 filtered = new ObservableCollection<AbsenceViewModel>(
                     filtered.Where(t => t.StartDate.Year == SelectedYear || t.EndDate.Year == SelectedYear));
             }
-
-            // Filter by month
             if (!string.IsNullOrEmpty(SelectedMonth) && SelectedMonth != "Всички месеци")
             {
                 var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;

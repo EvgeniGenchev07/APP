@@ -81,6 +81,7 @@ namespace App.PageModels
             return new BusinessTrip
             {
                 Id = original.Id,
+                IssueId = original.IssueId,
                 Status = original.Status,
                 IssueDate = original.IssueDate,
                 ProjectName = original.ProjectName,

@@ -37,15 +37,12 @@
                    AutomationProperties.Name="Организация" />
 
                 <!-- Document Info -->
-                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="8">
-                    <Label Text="ЗАПОВЕД №:" FontSize="14" VerticalOptions="Center"/>
-                    <Entry Grid.Column="1" Text="{Binding DocumentNumber}" WidthRequest="60" FontSize="14"/>
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                    <Label  Grid.Column="0" Text="Дата:" FontSize="14" VerticalOptions="Center"/>
+                    <DatePicker x:Name="DataLabel" Grid.Column="1" Date="{Binding DocumentDate}" Format="dd-MM-yyyy" WidthRequest="150" FontSize="12"/>
 
-                    <Label  Grid.Column="2" Text="Дата:" FontSize="14" VerticalOptions="Center"/>
-                    <DatePicker x:Name="DataLabel" Grid.Column="3" Date="{Binding DocumentDate}" Format="dd-MM-yyyy" WidthRequest="150" FontSize="12"/>
-
-                    <Label Grid.Column="4" Text="Проект:" FontSize="14" VerticalOptions="Center"/>
-                    <Entry Grid.Column="5" Text="{Binding Project}" WidthRequest="150" FontSize="14"/>
+                    <Label Grid.Column="2" Text="Проект:" FontSize="14" VerticalOptions="Center"/>
+                    <Entry Grid.Column="3" Text="{Binding Project}" WidthRequest="150" FontSize="14"/>
                 </Grid>
 
                 <!-- Employee Info -->
