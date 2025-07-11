@@ -1,6 +1,5 @@
 ﻿using App.Pages;
 using App.Services;
-using App.ViewModels;
 using BusinessLayer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -118,7 +117,7 @@ public class EditUserPageModel : INotifyPropertyChanged
     public EditUserPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+
         UpdateUserCommand = new Command(async () => await UpdateUserAsync());
         CancelCommand = new Command(async () => await CancelAsync());
 
@@ -153,7 +152,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             IsBusy = true;
 
             var role = SelectedRole == "Служител" ? Role.Employee : Role.Admin;
-            
+
             if (!int.TryParse(AbsenceDays, out int absenceDays))
             {
                 absenceDays = 0;
@@ -161,16 +160,16 @@ public class EditUserPageModel : INotifyPropertyChanged
             if (_isPasswordChanged)
             {
 
-            using(var md5 = System.Security.Cryptography.MD5.Create())
-            {
-                // Hash the password if it's provided
-                if (!string.IsNullOrWhiteSpace(Password))
+                using (var md5 = System.Security.Cryptography.MD5.Create())
                 {
-                    var passwordBytes = System.Text.Encoding.UTF8.GetBytes(Password);
-                    var hashedBytes = md5.ComputeHash(passwordBytes);
-                    _passwordHash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLowerInvariant();
+                    // Hash the password if it's provided
+                    if (!string.IsNullOrWhiteSpace(Password))
+                    {
+                        var passwordBytes = System.Text.Encoding.UTF8.GetBytes(Password);
+                        var hashedBytes = md5.ComputeHash(passwordBytes);
+                        _passwordHash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLowerInvariant();
+                    }
                 }
-            }
             }
             var user = new User
             {
@@ -326,4 +325,4 @@ public class EditUserPageModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-} 
+}

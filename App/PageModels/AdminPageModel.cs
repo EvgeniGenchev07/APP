@@ -4,12 +4,9 @@ using App.ViewModels;
 using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Storage;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace App.PageModels;
@@ -138,7 +135,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
 
     }
 
-   
+
     [RelayCommand]
     private async Task ItemTapped(BusinessTripViewModel businessTrip)
     {
@@ -157,7 +154,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             await Shell.Current.GoToAsync("AbsenceDetailsPage");
         }
     }
-   
+
 
     internal async Task LoadDataAsync()
     {
@@ -166,7 +163,7 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
             IsBusy = true;
             _allBusinessTrips = await _httpService.GetAllBusinessTripsAsync();
             _allAbsences = await _httpService.GetAllAbsencesAsync();
-            _holidayDays = new ObservableCollection<HolidayDay>( await _httpService.GetAllHolidayDaysAsync());
+            _holidayDays = new ObservableCollection<HolidayDay>(await _httpService.GetAllHolidayDaysAsync());
             _customHolidays = _holidayDays.Select(h => h.Date.Date).ToList();
             GenerateCalendar();
         }
@@ -305,9 +302,9 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     {
         if (day == null || day.IsEmpty || !day.IsCurrentMonth)
             return;
-        if(SelectedDay is not null)
+        if (SelectedDay is not null)
         {
-            SelectedDay.IsSelected = false; 
+            SelectedDay.IsSelected = false;
             int index = CalendarDays.IndexOf(SelectedDay);
             if (index >= 0)
             {
@@ -403,7 +400,7 @@ public class CalendarDay
     {
         get
         {
-            if (IsSelected) return Color.FromArgb("#4169E1"); 
+            if (IsSelected) return Color.FromArgb("#4169E1");
             if (IsHoliday) return IsOfficialHoliday ? Colors.LightPink : Colors.LightBlue;
             return Colors.Transparent;
         }
@@ -413,7 +410,7 @@ public class CalendarDay
     {
         get
         {
-            if (IsSelected) return Colors.Black; 
+            if (IsSelected) return Colors.Black;
             if (!IsCurrentMonth) return Colors.Gray;
             if (IsHoliday) return Colors.DarkRed;
             return Colors.Black;

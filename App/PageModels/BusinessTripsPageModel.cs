@@ -73,7 +73,7 @@ namespace App.PageModels
             }
 
             IsLoading = true;
-            
+
             try
             {
                 AllBusinessTrips.Clear();
@@ -196,4 +196,4 @@ namespace App.PageModels
         public int? Value { get; set; }
         public string DisplayName { get; set; } = string.Empty;
     }
-} 
+}

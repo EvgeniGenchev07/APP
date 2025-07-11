@@ -1,5 +1,4 @@
 ﻿using BusinessLayer;
-using Microsoft.Maui.Graphics;
 
 namespace App.ViewModels;
 
@@ -35,4 +34,4 @@ public class UserViewModel
         Role.Employee => Colors.Blue,
         _ => Colors.Gray
     };
-} 
+}

@@ -5,12 +5,8 @@ using ClosedXML.Excel;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Storage;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Runtime.CompilerServices;
 namespace App.PageModels;
 
 public partial class BusinessTripsSummaryPageModel : ObservableObject
@@ -104,11 +100,11 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
     {
         await Shell.Current.GoToAsync("//AdminAllBusinessTripsPage");
     }
-   
 
 
-[RelayCommand]
-    private async Task Export() 
+
+    [RelayCommand]
+    private async Task Export()
     {
         using var workbook = new XLWorkbook();
         if (SelectedMonth == "Всички месеци")
@@ -118,7 +114,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
                 List<decimal> monthsExpences = new List<decimal>();
                 foreach (var month in AvailableMonths)
                 {
-                   monthsExpences.Add( AddSheet(workbook, month));
+                    monthsExpences.Add(AddSheet(workbook, month));
                 }
                 var worksheet = workbook.Worksheets.Add($"Обобщение {SelectedYear}");
                 worksheet.Cell(1, 1).Value = "Месец";
@@ -176,9 +172,9 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         stream.Position = 0;
-        var result = await FileSaver.Default.SaveAsync($"BusinessTrips-{Guid.NewGuid().ToString().Substring(0,5)}.xlsx", stream);
+        var result = await FileSaver.Default.SaveAsync($"BusinessTrips-{Guid.NewGuid().ToString().Substring(0, 5)}.xlsx", stream);
     }
-    private decimal AddSheet(XLWorkbook workbook,string month)
+    private decimal AddSheet(XLWorkbook workbook, string month)
     {
         var worksheet = workbook.Worksheets.Add(month);
         worksheet.Cell(1, 1).Value = "Номер";
@@ -194,7 +190,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
         worksheet.Cell(1, 11).Value = "Общо";
         int currentIndex = 2;
         var filteredTrips = Trips.Where(t => (t.StartDate.Year == SelectedYear && t.StartDate.ToString("MMMM", CultureInfo.CurrentCulture) == month) || month == "Всички месеци").ToList();
-                decimal totalExpenses = 0;
+        decimal totalExpenses = 0;
         foreach (var trip in filteredTrips)
         {
             var businessTrip = trip.BusinessTrip;
@@ -222,7 +218,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
         try
         {
             var projects = await _httpService.GetAllBusinessTripsAsync();
-            AvailableProjects = new ObservableCollection<string>(projects.Select(bt=>bt.ProjectName).Distinct().ToList());
+            AvailableProjects = new ObservableCollection<string>(projects.Select(bt => bt.ProjectName).Distinct().ToList());
             AvailableProjects.Insert(0, "Всички проекти");
             SelectedProject = "Всички проекти";
         }
@@ -249,7 +245,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
             }
 
             // Filter by month
-            if (!string.IsNullOrEmpty(SelectedMonth) && selectedMonth!="Всички месеци")
+            if (!string.IsNullOrEmpty(SelectedMonth) && selectedMonth != "Всички месеци")
             {
                 var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;
                 filtered = new ObservableCollection<BusinessTripViewModel>(

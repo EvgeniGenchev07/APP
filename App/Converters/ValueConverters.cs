@@ -56,13 +56,13 @@ namespace App.Converters
             if (value is int intValue)
             {
                 bool result = intValue > 0;
-                
+
                 // Check if we need to invert the result
                 if (parameter is string param && param.Equals("Invert", StringComparison.OrdinalIgnoreCase))
                 {
                     result = !result;
                 }
-                
+
                 return result;
             }
             return false;
@@ -138,4 +138,4 @@ namespace App.Converters
             throw new NotImplementedException();
         }
     }
-} 
+}

@@ -1,13 +1,10 @@
-﻿using App.Services;
+﻿using App.Pages;
+using App.Services;
 using App.ViewModels;
-using BusinessLayer;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Microsoft.Maui.Graphics;
-using App.Pages;
-using System.Linq;
 
 namespace App.PageModels;
 
@@ -17,7 +14,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     private bool _isBusy;
     private bool _isRefreshing;
     private string _searchText = string.Empty;
-    private List<UserViewModel> _allUsers = new(); 
+    private List<UserViewModel> _allUsers = new();
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -94,10 +91,10 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             var users = await _httpService.GetAllUsersAsync();
             _allUsers = users.Select(u => new UserViewModel(u)).ToList();
 
-                foreach (var user in _allUsers)
-                {
-                    Users.Add(user);
-                }
+            foreach (var user in _allUsers)
+            {
+                Users.Add(user);
+            }
         }
         catch (Exception ex)
         {

@@ -9,8 +9,6 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace App.PageModels;
 
@@ -93,7 +91,6 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
             OnPropertyChanged(nameof(PendingAbsences));
             OnPropertyChanged(nameof(ApprovedAbsences));
             OnPropertyChanged(nameof(RejectedAbsences));
-
         }
         finally
         {
@@ -259,10 +256,10 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
         stream.Position = 0;
-        var result = await FileSaver.Default.SaveAsync($"Absences-{Guid.NewGuid().ToString().Substring(0,5)}.xlsx", stream);
+        var result = await FileSaver.Default.SaveAsync($"Absences-{Guid.NewGuid().ToString().Substring(0, 5)}.xlsx", stream);
     }
 
-    private void AddSheet(XLWorkbook workbook,string type, List<AbsenceViewModel> absences)
+    private void AddSheet(XLWorkbook workbook, string type, List<AbsenceViewModel> absences)
     {
         var worksheet = workbook.Worksheets.Add($"{SelectedYear} {type}");
         worksheet.Cell(1, 1).Value = "Месец";
@@ -275,7 +272,7 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
             worksheet.Cell(1, horizontalIndex).Value = name;
             for (int i = 0; i < 12; i++)
             {
-                worksheet.Cell(i+verticalIndex, horizontalIndex).Value = 0;
+                worksheet.Cell(i + verticalIndex, horizontalIndex).Value = 0;
             }
             horizontalIndex++;
         }

@@ -1,14 +1,12 @@
+using App.Pages;
 using App.Services;
 using App.ViewModels;
-using BusinessLayer;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Microsoft.Maui.Graphics;
-using App.Pages;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace App.PageModels;
 
@@ -93,7 +91,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
     public AllAbsencesPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+
         BackCommand = new Command(async () => await BackAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
 
@@ -159,4 +157,4 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-} 
+}

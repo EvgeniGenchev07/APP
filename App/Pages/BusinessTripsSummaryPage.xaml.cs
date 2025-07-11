@@ -4,8 +4,8 @@ namespace App.Pages;
 
 public partial class BusinessTripsSummaryPage : ContentPage
 {
-	public BusinessTripsSummaryPage(BusinessTripsSummaryPageModel pageModel)
-	{
+    public BusinessTripsSummaryPage(BusinessTripsSummaryPageModel pageModel)
+    {
         BindingContext = pageModel;
         InitializeComponent();
     }

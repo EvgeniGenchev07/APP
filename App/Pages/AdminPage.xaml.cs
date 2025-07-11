@@ -23,7 +23,7 @@ public partial class AdminPage : ContentPage
         if (BindingContext is AdminPageModel pageModel)
         {
             await pageModel.LoadDataAsync();
-            CalendarDay calendarDay = pageModel.CalendarDays.FirstOrDefault(d=>d.IsToday);
+            CalendarDay calendarDay = pageModel.CalendarDays.FirstOrDefault(d => d.IsToday);
             if (calendarDay != null)
             {
                 pageModel.SelectDay(calendarDay);

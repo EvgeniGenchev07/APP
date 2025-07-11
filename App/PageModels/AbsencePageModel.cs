@@ -93,7 +93,7 @@ public partial class AbsencePageModel : ObservableObject
             };
 
             var success = await _httpService.CreateAbsenceAsync(absence);
-            
+
             if (success)
             {
                 await Shell.Current.DisplayAlert("Успех", "Молбата за отсъствие е изпратена успешно", "OK");
@@ -171,4 +171,4 @@ public class AbsenceTypeOption
 {
     public BusinessLayer.AbsenceType Value { get; set; }
     public string DisplayName { get; set; } = string.Empty;
-} 
+}

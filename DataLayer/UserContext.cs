@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-using System.Data;
-using BusinessLayer;
+﻿using BusinessLayer;
 
 namespace DataLayer
 {
@@ -16,7 +9,8 @@ namespace DataLayer
         {
             _eapDbContext = eapDbContext ?? throw new ArgumentNullException(nameof(eapDbContext));
         }
-        public List<User> ReadAll() {
+        public List<User> ReadAll()
+        {
             var users = new List<User>();
 
             if (_eapDbContext.IsConnect())
@@ -45,16 +39,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error reading users: {ex.Message}");
+                    throw new Exception("Error reading users from the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return new List<User>();
                 }
             }
-            else
-            {
-                Console.WriteLine("Failed to connect to the database.");
-                return new List<User>();
-            }
+            throw new Exception("Database connection is not established.");
         }
         public bool Create(User user)
         {
@@ -62,12 +54,10 @@ namespace DataLayer
             {
                 try
                 {
-              
                     if (string.IsNullOrEmpty(user.Id))
                     {
                         user.Id = Guid.NewGuid().ToString();
                     }
-
 
                     var command = new MySqlConnector.MySqlCommand(
                         "INSERT INTO User (Id, Name, Email, Password, Role, ContractDays, AbsenceDays) " +
@@ -88,12 +78,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    
+                    throw new Exception("Error creating user in the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public bool Update(User user)
@@ -121,12 +113,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error updating user in the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public bool Delete(string userId)
@@ -147,11 +141,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
+                    throw new Exception("Error deleting user from the database.", ex);
+                }
+                finally
+                {
                     _eapDbContext.Close();
-                    return false;
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
 
         public User GetById(string userId)
@@ -184,14 +181,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    throw new Exception("Error retrieving user by ID.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return null;
+            throw new Exception("Database connection is not established.");
         }
 
         public User GetByEmail(string email)
@@ -310,41 +307,14 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-                    return null;
+                    throw new Exception("Error retrieving user by email.", ex);
                 }
                 finally
                 {
                     _eapDbContext.Close();
                 }
             }
-            return null;
+            throw new Exception("Database connection is not established.");
         }
-
-        
-        private string GetPasswordHash(string userId)
-        {
-            if (_eapDbContext.IsConnect())
-            {
-                try
-                {
-                    var command = new MySqlConnector.MySqlCommand(
-                        "SELECT Password FROM User WHERE Id = @id",
-                        _eapDbContext.Connection);
-
-                    command.Parameters.AddWithValue("@id", userId);
-
-                    var result = command.ExecuteScalar();
-                    _eapDbContext.Close();
-                    return result?.ToString();
-                }
-                catch (Exception ex)
-                {
-                    _eapDbContext.Close();
-                    return null;
-                }
-            }
-            return null;
-        }
-
     }
 }

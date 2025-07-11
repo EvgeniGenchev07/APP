@@ -9,7 +9,7 @@ namespace App.PageModels
     public partial class RequestPageModel : ObservableObject
     {
         private readonly HttpService _httpService;
-        
+
         [ObservableProperty]
         string _organization = "ЕНЕРГИЙНА АГЕНЦИЯ-ПЛОВДИВ";
 
@@ -181,11 +181,11 @@ namespace App.PageModels
                 };
 
                 var success = await _httpService.CreateBusinessTripAsync(businessTrip);
-                
+
                 if (success)
                 {
                     await Shell.Current.DisplayAlert("Успех", "Командировката е запазена успешно", "OK");
-                   
+
                     await Shell.Current.GoToAsync("//MainPage");
                 }
                 else

@@ -42,7 +42,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     }
 
     public int TotalTrips => BusinessTrips.Count;
-    public int PendingTrips => BusinessTrips.Count(t => t.Status ==  BusinessTripStatus.Pending);
+    public int PendingTrips => BusinessTrips.Count(t => t.Status == BusinessTripStatus.Pending);
     public int ApprovedTrips => BusinessTrips.Count(t => t.Status == BusinessTripStatus.Approved);
     public int RejectedTrips => BusinessTrips.Count(t => t.Status == BusinessTripStatus.Rejected);
 
@@ -55,7 +55,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     public AdminAllBusinessTripsPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+
         ApproveTripCommand = new Command<BusinessTripViewModel>(async (trip) => await ApproveTripAsync(trip));
         RejectTripCommand = new Command<BusinessTripViewModel>(async (trip) => await RejectTripAsync(trip));
         SummaryCommand = new Command(async () => await SummaryAsync());
@@ -106,9 +106,9 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         if (trip == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърдете одобрение", 
-            $"Искате ли да одобрите молбата за командировка?", 
-            "Одобри", 
+            "Потвърдете одобрение",
+            $"Искате ли да одобрите молбата за командировка?",
+            "Одобри",
             "Отказ");
 
         if (confirm)
@@ -116,7 +116,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
             try
             {
                 IsBusy = true;
-                
+
                 // Call API to approve business trip
                 var success = await _httpService.ApproveBusinessTripAsync(trip.Id);
                 if (success)
@@ -152,9 +152,9 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         if (trip == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Потвърдете отхвърляне", 
-            $"Искате ли да отхвърлите молбата за командировка?", 
-            "Отхвърли", 
+            "Потвърдете отхвърляне",
+            $"Искате ли да отхвърлите молбата за командировка?",
+            "Отхвърли",
             "Отказ");
 
         if (confirm)
@@ -162,7 +162,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
             try
             {
                 IsBusy = true;
-                
+
                 var success = await _httpService.RejectBusinessTripAsync(trip.Id);
                 if (success)
                 {
@@ -213,4 +213,4 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-} 
+}

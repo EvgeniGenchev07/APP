@@ -1,10 +1,6 @@
 ﻿using BusinessLayer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 namespace App.Services
 {
     public class HttpService
@@ -16,16 +12,16 @@ namespace App.Services
         }
         public async Task<User> PostUserLogin(string email, string password)
         {
-            var json = JsonSerializer.Serialize(new {email,password });
+            var json = JsonSerializer.Serialize(new { email, password });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("User/login",content);
+            var response = await _httpClient.PostAsync("User/login", content);
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
                 User user = JsonSerializer.Deserialize<User>(responseContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
-                }); 
+                });
                 return response.RequestMessage != null && response.RequestMessage.Content != null
                     ? user
                     : null;
@@ -93,10 +89,10 @@ namespace App.Services
             var json = JsonSerializer.Serialize(absence);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("Absence/create", content);
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                absence =  JsonSerializer.Deserialize<Absence>(responseContent, new JsonSerializerOptions
+                absence = JsonSerializer.Deserialize<Absence>(responseContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
@@ -141,7 +137,7 @@ namespace App.Services
             }
             return null;
         }
-        
+
 
         public async Task<bool> CancelAbsenceAsync(int absenceId)
         {
@@ -203,7 +199,7 @@ namespace App.Services
 
         public async Task<bool> ApproveAbsenceAsync(int absenceId)
         {
-            var json = JsonSerializer.Serialize(new {id= absenceId, status = BusinessTripStatus.Approved });
+            var json = JsonSerializer.Serialize(new { id = absenceId, status = BusinessTripStatus.Approved });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"Absence/requestupdate", content);
             return response.IsSuccessStatusCode;
@@ -211,7 +207,7 @@ namespace App.Services
 
         public async Task<bool> RejectAbsenceAsync(int absenceId)
         {
-            var json = JsonSerializer.Serialize(new {id= absenceId, status = BusinessTripStatus.Rejected });
+            var json = JsonSerializer.Serialize(new { id = absenceId, status = BusinessTripStatus.Rejected });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"Absence/requestupdate", content);
             return response.IsSuccessStatusCode;
@@ -220,7 +216,7 @@ namespace App.Services
 
         public async Task<bool> ApproveBusinessTripAsync(int tripId)
         {
-            var json = JsonSerializer.Serialize(new {id= tripId, status = BusinessTripStatus.Approved });
+            var json = JsonSerializer.Serialize(new { id = tripId, status = BusinessTripStatus.Approved });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"BusinessTrip/requestupdate", content);
             return response.IsSuccessStatusCode;
@@ -228,11 +224,11 @@ namespace App.Services
 
         public async Task<bool> RejectBusinessTripAsync(int tripId)
         {
-            var json = JsonSerializer.Serialize(new {id=tripId,status = BusinessTripStatus.Rejected});
+            var json = JsonSerializer.Serialize(new { id = tripId, status = BusinessTripStatus.Rejected });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"BusinessTrip/requestupdate", content);
             return response.IsSuccessStatusCode;
         }
-       
+
     }
 }

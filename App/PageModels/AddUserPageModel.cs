@@ -94,7 +94,7 @@ public class AddUserPageModel : INotifyPropertyChanged
         {
             _absenceDays = value;
             OnPropertyChanged();
-            ValidateAbsenceDays();                    ;
+            ValidateAbsenceDays(); ;
         }
     }
 
@@ -131,10 +131,10 @@ public class AddUserPageModel : INotifyPropertyChanged
     public AddUserPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+
         AddUserCommand = new Command(async () => await AddUserAsync());
         CancelCommand = new Command(async () => await CancelAsync());
-        
+
     }
 
     private async Task AddUserAsync()
@@ -157,15 +157,15 @@ public class AddUserPageModel : INotifyPropertyChanged
                 var hashedPassword = md5.ComputeHash(passwordBytes);
                 Password = BitConverter.ToString(hashedPassword).Replace("-", "").ToLowerInvariant();
             }
-                var user = new User
-                {
-                    Name = Name,
-                    Email = Email,
-                    Password = Password,
-                    Role = role,
-                    ContractDays = int.TryParse(ContractDays, out int contractDays) ? contractDays : 0,
-                    AbsenceDays = int.Parse(ContractDays)
-                };
+            var user = new User
+            {
+                Name = Name,
+                Email = Email,
+                Password = Password,
+                Role = role,
+                ContractDays = int.TryParse(ContractDays, out int contractDays) ? contractDays : 0,
+                AbsenceDays = int.Parse(ContractDays)
+            };
 
             // Call API to create user
             var success = await _httpService.CreateUserAsync(user);
@@ -334,4 +334,4 @@ public class AddUserPageModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-} 
+}

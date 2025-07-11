@@ -1,5 +1,4 @@
 ﻿using BusinessLayer;
-using Microsoft.Maui.Graphics;
 
 namespace App.ViewModels;
 
@@ -13,7 +12,7 @@ public class AbsenceViewModel
     }
 
     public int Id => _absence.Id;
-    public AbsenceStatus Status {get => _absence.Status;set => _absence.Status = value; }
+    public AbsenceStatus Status { get => _absence.Status; set => _absence.Status = value; }
     public DateTime StartDate => _absence.StartDate;
     public DateTime EndDate => _absence.StartDate.AddDays(_absence.DaysCount - 1);
     public byte Days => _absence.DaysCount;
@@ -29,7 +28,7 @@ public class AbsenceViewModel
         AbsenceType.Other => "Други",
         _ => "Неизвестен"
     };
-        
+
     public string StatusText => _absence.Status switch
     {
         AbsenceStatus.Pending => "В очакване",
@@ -55,10 +54,10 @@ public class AbsenceViewModel
     };
 
     public string DateRange => $"{_absence.StartDate:MM/dd/yyyy} - {EndDate:MM/dd/yyyy} ({_absence.DaysCount} дни)";
-    
+
     public string DurationText => $"{_absence.DaysCount} {(_absence.DaysCount == 1 ? "ден" : "дни")}";
-    
+
     public string CreatedText => $"Заявено на {_absence.Created:MM/dd/yyyy}";
 
     public bool CanChangeStatus => Status == AbsenceStatus.Pending;
-} 
+}

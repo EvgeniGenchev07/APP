@@ -1,11 +1,10 @@
+using App.Pages;
 using App.Services;
 using App.ViewModels;
 using BusinessLayer;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Microsoft.Maui.Graphics;
-using App.Pages;
 
 namespace App.PageModels;
 
@@ -42,7 +41,7 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
     public string TypeText => Absence?.TypeText ?? string.Empty;
     public string StatusText => Absence?.StatusText ?? string.Empty;
     public Color StatusColor => Absence?.StatusColor ?? Colors.Gray;
-    
+
     public string StatusIcon => Absence?.Status switch
     {
         BusinessLayer.AbsenceStatus.Pending => "\u23F3", // Pending
@@ -85,7 +84,7 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
     public AbsenceDetailsPageModel(HttpService httpService)
     {
         _httpService = httpService;
-        
+
         BackCommand = new Command(async () => await BackAsync());
         EditCommand = new Command(async () => await EditAsync());
         CancelCommand = new Command(async () => await CancelAsync());
@@ -120,7 +119,7 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
         try
         {
             IsBusy = true;
-            
+
             // Navigate to edit page (could be the same as AbsencePage with pre-filled data)
             await Shell.Current.DisplayAlert("Редактиране", "Фукнционалността за редактиране ще бъде въведена в бъдеще", "OK");
         }
@@ -140,8 +139,8 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
 
         var confirmed = await Shell.Current.DisplayAlert(
             "Откажете молбата",
-            "Искате ли да откажете тази молба? Това действие не може да бъде отменено.", 
-            "Откажете молбата", 
+            "Искате ли да откажете тази молба? Това действие не може да бъде отменено.",
+            "Откажете молбата",
             "Запазете молбата");
 
         if (!confirmed) return;
@@ -152,7 +151,7 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
 
             // Call API to cancel the absence request
             var success = await _httpService.CancelAbsenceAsync(Absence.Id);
-            
+
             if (success)
             {
                 await Shell.Current.DisplayAlert("Успех", "Молбата за отсъствие бе отказана", "OK");
@@ -177,4 +176,4 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-} 
+}

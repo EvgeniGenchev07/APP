@@ -1,10 +1,4 @@
 ﻿using BusinessLayer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataLayer
 {
@@ -39,66 +33,11 @@ namespace DataLayer
                 catch (Exception ex)
                 {
                     _eapDbContext.Close();
-                    return false;
+                    throw new Exception("Error creating holiday in the database.", ex);
                 }
             }
-            return false;
+            throw new Exception("Database connection is not established.");
         }
-
-        public bool Update(HolidayDay holiday)
-        {
-            if (_eapDbContext.IsConnect())
-            {
-                try
-                {
-                    var command = new MySqlConnector.MySqlCommand(
-                        "UPDATE HolidayDay SET name = @name, date = @date, isCustom = @isCustom" +
-                        "WHERE id = @id",
-                        _eapDbContext.Connection);
-
-                    command.Parameters.AddWithValue("@name", holiday.Name);
-                    command.Parameters.AddWithValue("@date", holiday.Date);
-                    command.Parameters.AddWithValue("@isCustom", holiday.IsCustom);
-                    command.Parameters.AddWithValue("@id", holiday.Id);
-
-                    int rowsAffected = command.ExecuteNonQuery();
-                    _eapDbContext.Close();
-                    return rowsAffected > 0;
-                }
-                catch (Exception ex)
-                {
-                    _eapDbContext.Close();
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        public bool Delete(int holidayDayId)
-        {
-            if (_eapDbContext.IsConnect())
-            {
-                try
-                {
-                    var command = new MySqlConnector.MySqlCommand(
-                        "DELETE FROM HolidayDay WHERE id = @id",
-                        _eapDbContext.Connection);
-
-                    command.Parameters.AddWithValue("@id", holidayDayId);
-
-                    int rowsAffected = command.ExecuteNonQuery();
-                    _eapDbContext.Close();
-                    return rowsAffected > 0;
-                }
-                catch (Exception ex)
-                {
-                    _eapDbContext.Close();
-                    return false;
-                }
-            }
-            return false;
-        }
-
 
         public List<HolidayDay> GetAll()
         {
@@ -127,7 +66,7 @@ namespace DataLayer
                 }
                 catch (Exception ex)
                 {
-
+                    throw new Exception("Error retrieving holidays from the database.", ex);
                 }
                 finally
                 {
@@ -135,11 +74,12 @@ namespace DataLayer
                 }
                 int year = DateTime.Now.Year;
 
-                holidays.AddRange(InitializeOfficialHolidays(year-1).Result);
+                holidays.AddRange(InitializeOfficialHolidays(year - 1).Result);
                 holidays.AddRange(InitializeOfficialHolidays(year).Result);
-                holidays.AddRange(InitializeOfficialHolidays(year+1).Result);
+                holidays.AddRange(InitializeOfficialHolidays(year + 1).Result);
+                return holidays;
             }
-            return holidays;
+            throw new Exception("Database connection is not established.");
         }
         private DateTime CalculateOrthodoxEaster(int year)
         {
@@ -193,9 +133,9 @@ namespace DataLayer
                         monday = monday.AddDays(1);
                     }
 
-                    if (!holidays.Select(h=>h.Date).Contains(monday))
+                    if (!holidays.Select(h => h.Date).Contains(monday))
                     {
-                        holidays.Add(new HolidayDay() {Date=monday,Name=$"Почивен поради {holiday.Name}" });
+                        holidays.Add(new HolidayDay() { Date = monday, Name = $"Почивен поради {holiday.Name}" });
                     }
                 }
             }
