@@ -1,10 +1,12 @@
-using App.Pages;
+Ôªøusing App.Pages;
 using App.Services;
 using App.ViewModels;
+using BusinessLayer;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -19,11 +21,55 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
     private int _pendingAbsences;
     private int _approvedAbsences;
     private int _rejectedAbsences;
+    private string _search;
+    private int _selectedYear;
+    private string _selectedMonth;
 
     public event PropertyChangedEventHandler PropertyChanged;
-    [ObservableProperty]
 
+    [ObservableProperty]
     public ObservableCollection<AbsenceViewModel> allAbsences = new();
+
+    [ObservableProperty]
+    public ObservableCollection<int> availableYears = new();
+
+    [ObservableProperty]
+    public ObservableCollection<string> availableMonths = new();
+
+    private List<AbsenceViewModel> _originalAbsences = new();
+
+    public string Search
+    {
+        get => _search;
+        set
+        {
+            _search = value;
+            OnPropertyChanged();
+            FilterAbsence();
+        }
+    }
+
+    public int SelectedYear
+    {
+        get => _selectedYear;
+        set
+        {
+            _selectedYear = value;
+            OnPropertyChanged();
+            FilterAbsence();
+        }
+    }
+
+    public string SelectedMonth
+    {
+        get => _selectedMonth;
+        set
+        {
+            _selectedMonth = value;
+            OnPropertyChanged();
+            FilterAbsence();
+        }
+    }
 
     public int TotalAbsences
     {
@@ -85,6 +131,8 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
         }
     }
 
+    public bool HasNoResults => !(AllAbsences.Any());
+
     public ICommand BackCommand { get; }
     public ICommand RefreshCommand { get; }
 
@@ -94,6 +142,16 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
 
         BackCommand = new Command(async () => await BackAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
+
+        // Initialize years (last 5 years and next 5 years)
+        AvailableYears = new ObservableCollection<int>(Enumerable.Range(DateTime.Now.Year - 5, 10));
+        SelectedYear = DateTime.Now.Year;
+
+        // Initialize months
+        AvailableMonths = new ObservableCollection<string>(
+            CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.Take(12));
+        AvailableMonths.Add("–í—Å–∏—á–∫–∏ –º–µ—Å–µ—Ü–∏");
+        SelectedMonth = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames[DateTime.Now.Month - 1];
 
         _ = LoadDataAsync();
     }
@@ -109,22 +167,72 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
                 var absences = await _httpService.GetUserAbsencesAsync(App.User.Id);
                 var sortedAbsences = absences.OrderByDescending(a => a.Created).ToList();
 
+                _originalAbsences = sortedAbsences.Select(a => new AbsenceViewModel(a)).ToList();
                 AllAbsences.Clear();
-                foreach (var absence in sortedAbsences)
+                foreach (var absence in _originalAbsences)
                 {
-                    AllAbsences.Add(new AbsenceViewModel(absence));
+                    AllAbsences.Add(absence);
                 }
 
                 // Calculate statistics
-                TotalAbsences = absences.Count;
-                PendingAbsences = absences.Count(a => a.Status == BusinessLayer.AbsenceStatus.Pending);
-                ApprovedAbsences = absences.Count(a => a.Status == BusinessLayer.AbsenceStatus.Approved);
-                RejectedAbsences = absences.Count(a => a.Status == BusinessLayer.AbsenceStatus.Rejected);
+                UpdateStatistics();
             }
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("√Â¯Í‡", $"ÕÂÛÒÔÂ¯ÌÓ Á‡ÂÊ‰‡ÌÂ Ì‡ ÓÚÒ˙ÒÚ‚ËˇÚ‡: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("–ì—Ä–µ—à–∫–∞", $"–ù–µ—É—Å–ø–µ—à–Ω–æ –∑–∞—Ä–µ–∂–¥–∞–Ω–µ –Ω–∞ –æ—Ç—Å—ä—Å—Ç–≤–∏—è—Ç–∞: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void UpdateStatistics()
+    {
+        TotalAbsences = AllAbsences.Count;
+        PendingAbsences = AllAbsences.Count(a => a.Status == AbsenceStatus.Pending);
+        ApprovedAbsences = AllAbsences.Count(a => a.Status == AbsenceStatus.Approved);
+        RejectedAbsences = AllAbsences.Count(a => a.Status == AbsenceStatus.Rejected);
+        OnPropertyChanged(nameof(HasNoResults));
+    }
+
+    private void FilterAbsence()
+    {
+        try
+        {
+            IsBusy = true;
+            ObservableCollection<AbsenceViewModel> filtered = new ObservableCollection<AbsenceViewModel>(_originalAbsences);
+
+            // Filter by year
+            if (SelectedYear > 0)
+            {
+                filtered = new ObservableCollection<AbsenceViewModel>(
+                    filtered.Where(t => t.StartDate.Year == SelectedYear || t.EndDate.Year == SelectedYear));
+            }
+
+            // Filter by month
+            if (!string.IsNullOrEmpty(SelectedMonth) && SelectedMonth != "–í—Å–∏—á–∫–∏ –º–µ—Å–µ—Ü–∏")
+            {
+                var monthIndex = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, SelectedMonth) + 1;
+                filtered = new ObservableCollection<AbsenceViewModel>(
+                    filtered.Where(t => t.StartDate.Month == monthIndex || t.EndDate.Month == monthIndex));
+            }
+
+            if (!string.IsNullOrEmpty(Search))
+            {
+                filtered = new ObservableCollection<AbsenceViewModel>(
+                    filtered.Where(t => t.TypeText.Contains(Search, StringComparison.OrdinalIgnoreCase) ||
+                                      t.StatusText.Contains(Search, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            AllAbsences.Clear();
+            foreach (var item in filtered)
+            {
+                AllAbsences.Add(item);
+            }
+
+            UpdateStatistics();
         }
         finally
         {
@@ -143,6 +251,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
     {
         await Shell.Current.GoToAsync("//MainPage");
     }
+
     [RelayCommand]
     public async void SelectAbsence(AbsenceViewModel absence)
     {

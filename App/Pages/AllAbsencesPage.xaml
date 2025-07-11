@@ -6,7 +6,8 @@
              x:Class="App.Pages.AllAbsencesPage"
              x:DataType="pageModels:AllAbsencesPageModel">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!-- Added an extra row for the filter controls -->
         <!-- Header with Back Button -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10" BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}">
             <Button Grid.Column="0" 
@@ -26,7 +27,39 @@
                    VerticalOptions="Center"/>
         </Grid>
 
-        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+        <!-- Filter Controls -->
+        <StackLayout Grid.Row="1" 
+                     Orientation="Horizontal" 
+                     Spacing="10"
+                     Padding="20,10"
+                     VerticalOptions="Center">
+            <Label Text="Избери година:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Picker x:Name="YearPicker" 
+                    VerticalOptions="Center" 
+                    WidthRequest="120"
+                    ItemsSource="{Binding AvailableYears}"
+                    SelectedItem="{Binding SelectedYear}"/>
+            <Label Text="Избери месец:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Picker x:Name="MonthPicker" 
+                    VerticalOptions="Center" 
+                    WidthRequest="150"
+                    ItemsSource="{Binding AvailableMonths}"
+                    SelectedItem="{Binding SelectedMonth}"/>
+            <Label Text="Търси по име:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Entry Text="{Binding Search}"  
+                   VerticalOptions="Center" 
+                   WidthRequest="200"/>
+
+            <Label Text="Общо отпуски:" VerticalOptions="Center" HorizontalOptions="End"/>
+            <Label Text="{Binding TotalAbsences}" 
+                   TextColor="{StaticResource Primary}" 
+                   FontSize="Body" 
+                   HorizontalOptions="End" 
+                   VerticalOptions="Center"/>
+        </StackLayout>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*">
             <!-- Summary Stats -->
             <Border Grid.Row="0" 
                     Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
@@ -51,15 +84,8 @@
             <RefreshView Grid.Row="1" 
                          IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding AllAbsences}"
+                <CollectionView ItemsSource="{Binding AllAbsences}" 
                                VerticalScrollBarVisibility="Never">
-                    <CollectionView.Header>
-                        <Label Text="История на отсъствията" 
-                               FontSize="18" 
-                               FontAttributes="Bold" 
-                               Margin="20,10,20,10"
-                               HorizontalOptions="Center"/>
-                    </CollectionView.Header>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:AbsenceViewModel">
                             <Border Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray700}}"
@@ -122,8 +148,8 @@ CommandParameter="{Binding .}"/>
             </RefreshView>
         </Grid>
 
-        <!-- Loading Indicator -->
-        <ActivityIndicator Grid.Row="1" 
+        <!-- Loading Indicator - spans all rows -->
+        <ActivityIndicator Grid.RowSpan="3" 
                           IsRunning="{Binding IsBusy}" 
                           IsVisible="{Binding IsBusy}"
                           HorizontalOptions="Center"
