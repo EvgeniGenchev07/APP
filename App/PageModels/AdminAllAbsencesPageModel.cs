@@ -119,7 +119,7 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Application.Current.MainPage.DisplayAlert("Ãðåøêà", $"Íåóñïåøíî çàðåæäàíå íà îòñúñòâèÿ: {ex.Message}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно зареждане на данните: {ex.Message}", "OK");
         }
         finally
         {
@@ -141,10 +141,10 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
         if (absence == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Ïîòâúðäåòå îäîáðåíèå",
-            $"Èñêàòå ëè äà îäîáðèòå ìîëáàòà çà êîìàíäèðîâêà?",
-            "Îäîáðè",
-            "Îòêàç");
+            "Одобри отсъствие",
+            $"Искате ли да одобрите това отсъствие?",
+            "Одобри",
+            "Откажи");
 
         if (confirm)
         {
@@ -164,16 +164,16 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
                     }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(ApprovedAbsences));
-                    await Application.Current.MainPage.DisplayAlert("Óñïåõ", "Îòñúñòâèåòî áå îäîáðåíî óñïåøíî", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Отсъствието бе одобрено успешно", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Ãðåøêà", "Íåóñïåøíî îäîáðåíèå íà îòñúñòâèå", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно одобрение на отсъствие", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Ãðåøêà", $"Íåóñïåøíî îäîáðåíèå íà îòñúñòâèå: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно одобрение на отсъствие: {ex.Message}", "OK");
             }
             finally
             {
@@ -187,10 +187,10 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
         if (absence == null) return;
 
         var confirm = await Application.Current.MainPage.DisplayAlert(
-            "Ïîòâúðäåòå îòõâúðëÿíå",
-            $"Èñêàòå ëè äà îòõâúðëèòå ìîëáàòà çà êîìàíäèðîâêà?",
-            "Îòõâúðëè",
-            "Îòêàç");
+            "Потвърдете отхвърляне",
+            $"Искате ли да отхвърлите молбата за командировка?",
+            "Отхвърли",
+            "Отказ");
 
         if (confirm)
         {
@@ -209,16 +209,16 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
                     }
                     OnPropertyChanged(nameof(PendingAbsences));
                     OnPropertyChanged(nameof(RejectedAbsences));
-                    await Application.Current.MainPage.DisplayAlert("Óñïåõ", "Îòñúñòâèåòî áå îòõâúðëåíî óñïåøíî", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Отсъствието бе отхвърлено успешно", "OK");
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Ãðåøêà", "Íåóñïåøíî îòõâúðëÿíå íà îòñúñòâèå", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно отхвърляне на отсъствие", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Ãðåøêà", $"Íåóñïåøíî îòõâúðëÿíå íà îòñúñòâèå: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Грешка", $"Неуспешно отхвърляне на отсъствие: {ex.Message}", "OK");
             }
             finally
             {
