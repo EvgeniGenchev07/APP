@@ -32,7 +32,7 @@ namespace Server.Controllers
                 if (_businessTripContext.Create(businessTrip))
                 {
                     _logger.LogInformation($"Business trip request created successfully for user {businessTrip.UserId}.");
-                    return Ok(JsonSerializer.Serialize(businessTrip));
+                    return Ok(JsonSerializer.Serialize(_businessTripContext.GetByUserId(businessTrip.UserId)));
                 }
                 else
                 {

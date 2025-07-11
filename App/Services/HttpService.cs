@@ -129,11 +129,11 @@ namespace App.Services
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                businessTrip = JsonSerializer.Deserialize<BusinessTrip>(responseContent, new JsonSerializerOptions
+                List<BusinessTrip> businessTrips = JsonSerializer.Deserialize<List<BusinessTrip>>(responseContent, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
-                App.User.BusinessTrips?.Add(businessTrip);
+                App.User.BusinessTrips = businessTrips;
                 return true;
             }
             return false;
