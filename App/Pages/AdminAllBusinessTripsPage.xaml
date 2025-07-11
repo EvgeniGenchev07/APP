@@ -57,11 +57,95 @@
                 </Grid>
             </Frame>
 
-            <!-- Business Trips List -->
+            <!-- Filters Section -->
+            <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+                <VerticalStackLayout Padding="15" Spacing="10">
+
+                    <!-- Search Bar -->
+                    <Frame BorderColor="LightGray" CornerRadius="8" Padding="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Entry Grid.Column="0"
+                       Text="{Binding SearchText}" 
+                       Placeholder="Търсене по проект, задача, дестинация..."
+                       FontSize="14"/>
+                            <Button Grid.Column="1" 
+                        Text="🔍" 
+                        Command="{Binding RefreshCommand}"
+                        WidthRequest="50"
+                        BackgroundColor="Transparent"
+                        TextColor="{AppThemeBinding Light=#007AFF, Dark=#0A84FF}"/>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Date Range Filters -->
+                    <Frame BorderColor="LightGray" CornerRadius="8" Padding="10">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Филтър по дата" FontSize="14" FontAttributes="Bold"/>
+                            <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="10">
+                                <Label Text="От:" FontSize="14" VerticalOptions="Center"/>
+                                <DatePicker Grid.Column="1" 
+                               Date="{Binding StartDateFilter}" 
+                               Format="dd/MM/yyyy"
+                               FontSize="14"/>
+                                <Label Grid.Column="2" Text="До:" FontSize="14" VerticalOptions="Center"/>
+                                <DatePicker Grid.Column="3" 
+                               Date="{Binding EndDateFilter}" 
+                               Format="dd/MM/yyyy"
+                               FontSize="14"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Project and Destination Filters -->
+                    <Frame BorderColor="LightGray" CornerRadius="8" Padding="10">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Филтри" FontSize="14" FontAttributes="Bold"/>
+                            <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="10">
+                                <Label Text="Проект:" FontSize="14" VerticalOptions="Center"/>
+                                <Entry Grid.Column="1" 
+                           Text="{Binding ProjectFilter}" 
+                           Placeholder="Име на проект"
+                           FontSize="14"/>
+                                <Label Grid.Column="2" Text="Дестинация:" FontSize="14" VerticalOptions="Center"/>
+                                <Entry Grid.Column="3" 
+                           Text="{Binding DestinationFilter}" 
+                           Placeholder="Град"
+                           FontSize="14"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Status Filter -->
+                    <Frame BorderColor="LightGray" CornerRadius="8" Padding="10">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Статус" FontSize="14" FontAttributes="Bold"/>
+                            <Picker ItemsSource="{Binding StatusOptions}"
+                        SelectedItem="{Binding SelectedStatusOption}"
+                        ItemDisplayBinding="{Binding DisplayName}"
+                        FontSize="14"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Clear Filters Button -->
+                    <Button Text="Изчисти филтрите" 
+                Command="{Binding ClearFiltersCommand}"
+                HorizontalOptions="Fill"
+                BackgroundColor="{AppThemeBinding Light=#FF6B6B, Dark=#FF5252}"
+                TextColor="White"
+                FontSize="14"
+                HeightRequest="40"/>
+
+                    <!-- Results Count -->
+                    <Label Text="{Binding FilteredBusinessTrips.Count, StringFormat='Намерени командировки: {0}'}" 
+               FontSize="14" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"/>
+
+                    <!-- Business Trips List -->
             <RefreshView Grid.Row="1" 
                         IsRefreshing="{Binding IsRefreshing}" 
                         Command="{Binding RefreshCommand}">
-                <CollectionView ItemsSource="{Binding BusinessTrips}"
+                <CollectionView ItemsSource="{Binding FilteredBusinessTrips}"
                          VerticalScrollBarVisibility="Never"
                                Margin="20,0,20,20">
                     <CollectionView.ItemTemplate>
@@ -138,6 +222,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
+            </VerticalStackLayout>
+            </ScrollView>
         </Grid>
 
         <!-- Loading Indicator -->

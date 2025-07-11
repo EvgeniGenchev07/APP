@@ -17,6 +17,50 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     private bool _isBusy;
     private bool _isRefreshing;
 
+    [ObservableProperty]
+    private ObservableCollection<BusinessTripViewModel> _filteredBusinessTrips = new();
+
+    [ObservableProperty]
+    private string _searchText = string.Empty;
+
+    [ObservableProperty]
+    private DateTime? _startDateFilter;
+
+    [ObservableProperty]
+    private DateTime? _endDateFilter;
+
+    [ObservableProperty]
+    private string _projectFilter = string.Empty;
+
+    [ObservableProperty]
+    private string _destinationFilter = string.Empty;
+
+    [ObservableProperty]
+    private byte? _statusFilter;
+
+    [ObservableProperty]
+    private bool _isLoading = false;
+
+    [ObservableProperty]
+    private string _userName = string.Empty;
+
+    [ObservableProperty]
+    private bool _hasResults = true;
+
+    // Status options for filter
+    [ObservableProperty]
+    private ObservableCollection<StatusOption> _statusOptions = new()
+        {
+            new StatusOption { Value = null, DisplayName = "Всички" },
+            new StatusOption { Value = 0, DisplayName = "Чакаща" },
+            new StatusOption { Value = 1, DisplayName = "Одобрена" },
+            new StatusOption { Value = 2, DisplayName = "Отхвърлена" },
+            new StatusOption { Value = 3, DisplayName = "Завършена" }
+        };
+
+    [ObservableProperty]
+    private StatusOption _selectedStatusOption;
+
     public event PropertyChangedEventHandler PropertyChanged;
     [ObservableProperty]
     public ObservableCollection<BusinessTripViewModel> businessTrips = new();
@@ -208,6 +252,81 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         await LoadBusinessTripsAsync();
         IsRefreshing = false;
     }
+
+    private void ApplyFilters()
+    {
+        if (BusinessTrips == null) return;
+
+        var filtered = BusinessTrips.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            filtered = filtered.Where(trip =>
+                (trip.ProjectName?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (trip.Task?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (trip.CarTripDestination?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (trip.CarBrand?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (trip.CarModel?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false)
+            );
+        }
+
+        if (StartDateFilter.HasValue)
+        {
+            filtered = filtered.Where(trip => trip.StartDate >= StartDateFilter.Value);
+        }
+
+        if (EndDateFilter.HasValue)
+        {
+            filtered = filtered.Where(trip => trip.EndDate <= EndDateFilter.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(ProjectFilter))
+        {
+            filtered = filtered.Where(trip =>
+                trip.ProjectName?.Contains(ProjectFilter, StringComparison.OrdinalIgnoreCase) ?? false
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(DestinationFilter))
+        {
+            filtered = filtered.Where(trip =>
+                trip.CarTripDestination?.Contains(DestinationFilter, StringComparison.OrdinalIgnoreCase) ?? false
+            );
+        }
+
+        if (SelectedStatusOption?.Value.HasValue == true)
+        {
+            var statusValue = (BusinessTripStatus)SelectedStatusOption.Value.Value;
+            filtered = filtered.Where(trip => trip.Status == statusValue);
+        }
+
+        FilteredBusinessTrips.Clear();
+        foreach (var trip in filtered.OrderByDescending(t => t.StartDate))
+        {
+            FilteredBusinessTrips.Add(trip);
+        }
+        HasResults = FilteredBusinessTrips.Count > 0;
+    }
+
+    [RelayCommand]
+    private void ClearFilters()
+    {
+        SearchText = string.Empty;
+        StartDateFilter = null;
+        EndDateFilter = null;
+        ProjectFilter = string.Empty;
+        DestinationFilter = string.Empty;
+        SelectedStatusOption = StatusOptions[0];
+        ApplyFilters();
+    }
+
+    partial void OnSearchTextChanged(string value) => ApplyFilters();
+    partial void OnStartDateFilterChanged(DateTime? value) => ApplyFilters();
+    partial void OnEndDateFilterChanged(DateTime? value) => ApplyFilters();
+    partial void OnProjectFilterChanged(string value) => ApplyFilters();
+    partial void OnDestinationFilterChanged(string value) => ApplyFilters();
+    partial void OnSelectedStatusOptionChanged(StatusOption value) => ApplyFilters();
+
 
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
