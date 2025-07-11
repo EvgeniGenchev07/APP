@@ -111,7 +111,7 @@ namespace DataLayer
                 try
                 {
                     var command = new MySqlConnector.MySqlCommand(
-                        "UPDATE BusinessTrip SET issueId=@issueId, status = @status, issueDate = @issueDate, projectName = @projectName, " +
+                        "UPDATE BusinessTrip SET status = @status, projectName = @projectName, " +
                         "userFullName = @userFullName, task = @task, startDate = @startDate, endDate = @endDate, " +
                         "totalDays = @totalDays, carOwnerShip = @carOwnerShip, wage = @wage, accomodationMoney = @accomodationMoney, " +
                         "carBrand = @carBrand, carRegistrationNumber = @carRegistrationNumber, carTripDestination = @carTripDestination, " +
@@ -120,9 +120,7 @@ namespace DataLayer
                         "WHERE id = @id",
                         _eapDbContext.Connection);
 
-                    command.Parameters.AddWithValue("@issueId", businessTrip.IssueId);
                     command.Parameters.AddWithValue("@status", (int)businessTrip.Status);
-                    command.Parameters.AddWithValue("@issueDate", businessTrip.IssueDate);
                     command.Parameters.AddWithValue("@projectName", businessTrip.ProjectName);
                     command.Parameters.AddWithValue("@userFullName", businessTrip.UserFullName);
                     command.Parameters.AddWithValue("@task", businessTrip.Task ?? "");
@@ -219,6 +217,7 @@ namespace DataLayer
                                 Wage = Convert.ToDecimal(reader["wage"]),
                                 AccommodationMoney = Convert.ToDecimal(reader["accomodationMoney"]),
                                 CarBrand = reader["carBrand"].ToString(),
+                                IssueId = Convert.ToInt32(reader["issueId"]),
                                 CarRegistrationNumber = reader["carRegistrationNumber"].ToString(),
                                 CarTripDestination = reader["carTripDestination"].ToString(),
                                 DateOfArrival = Convert.ToDateTime(reader["dateOfArrival"]),
@@ -276,6 +275,7 @@ namespace DataLayer
                                 TotalDays = Convert.ToByte(reader["totalDays"]),
                                 CarOwnership = (CarOwnerShip)Convert.ToInt32(reader["carOwnerShip"]),
                                 Wage = Convert.ToDecimal(reader["wage"]),
+                                IssueId = Convert.ToInt32(reader["issueId"]),
                                 AccommodationMoney = Convert.ToDecimal(reader["accomodationMoney"]),
                                 CarBrand = reader["carBrand"].ToString(),
                                 CarRegistrationNumber = reader["carRegistrationNumber"].ToString(),
@@ -336,6 +336,7 @@ namespace DataLayer
                                 CarOwnership = (CarOwnerShip)Convert.ToInt32(reader["carOwnerShip"]),
                                 Wage = Convert.ToDecimal(reader["wage"]),
                                 AccommodationMoney = Convert.ToDecimal(reader["accomodationMoney"]),
+                                IssueId = Convert.ToInt32(reader["issueId"]),
                                 CarBrand = reader["carBrand"].ToString(),
                                 CarRegistrationNumber = reader["carRegistrationNumber"].ToString(),
                                 CarTripDestination = reader["carTripDestination"].ToString(),
