@@ -10,7 +10,7 @@ namespace DataLayer
 
         public AuthenticationContext(UserContext userContext)
         {
-            _userContext = userContext ?? throw new ArgumentNullException(nameof(userContext));
+            _userContext = userContext;
         }
         private string HashPassword(string password)
         {

@@ -43,7 +43,7 @@ namespace App
                 return new HttpService(
                     new HttpClient
                     {
-                        BaseAddress = new Uri("http://localhost:5105/")
+                        BaseAddress = new Uri("http://192.168.0.60:5000/")
                     });
             });
             return builder.Build();
