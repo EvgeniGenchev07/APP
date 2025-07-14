@@ -34,7 +34,7 @@ namespace App
                         string path = Path.Combine(appDirectory, folderName);
                         if (version.ToString() != AppInfo.Current.VersionString)
                         {
-                            InstallAppUpdate(response["downloadUrl"].ToString(), path);
+                            InstallAppUpdate(response["downloadUrl"].ToString(),version.ToString(), path);
                         }
                         else
                         {
@@ -48,7 +48,7 @@ namespace App
             });
 
         }
-        private async void InstallAppUpdate(string fileUrl, string path)
+        private async void InstallAppUpdate(string fileUrl,string version, string path)
         {
             if (!Directory.Exists(path))
             {
@@ -59,7 +59,7 @@ namespace App
             File.WriteAllBytes(path, fileBytes);
             var startInfo = new ProcessStartInfo
             {
-                FileName = "newVersion.msix",
+                FileName = $"app_{version}.msix",
                 Arguments = $"/i \"{path}\"",
                 UseShellExecute = true,
                 Verb = "runas"
