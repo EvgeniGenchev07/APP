@@ -45,7 +45,7 @@
                     WidthRequest="150"
                     ItemsSource="{Binding AvailableMonths}"
                     SelectedItem="{Binding SelectedMonth}"/>
-            <Label Text="Търси по име:" VerticalOptions="Center" HorizontalOptions="Start"/>
+            <Label Text="Търси по тип:" VerticalOptions="Center" HorizontalOptions="Start"/>
             <Entry Text="{Binding Search}"  
                    VerticalOptions="Center" 
                    WidthRequest="200"/>
