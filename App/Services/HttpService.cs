@@ -10,6 +10,17 @@ namespace App.Services
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
+        public async Task<Dictionary<string,object>> GetAppVersionAsync()
+        {
+            var response = await _httpClient.GetAsync("App/getappversion");
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var versionInfo = JsonSerializer.Deserialize<Dictionary<string,object>>(responseContent);
+                return versionInfo;
+            }
+            return null;
+        }
         public async Task<User> PostUserLogin(string email, string password)
         {
             var json = JsonSerializer.Serialize(new { email, password });
