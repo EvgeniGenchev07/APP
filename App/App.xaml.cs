@@ -1,6 +1,5 @@
 ﻿using App.Services;
 using BusinessLayer;
-using DocumentFormat.OpenXml.Bibliography;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -9,77 +8,120 @@ namespace App
     public partial class App : Application
     {
         internal static User User { get; set; }
-        string folderName = "tempapp";
-        string appDirectory = FileSystem.AppDataDirectory;
 
-
+        private readonly string folderName = "tempapp";
+        private readonly string appDirectory = FileSystem.AppDataDirectory;
+        private readonly HttpService _httpService;
 
         public App(HttpService httpService)
         {
             InitializeComponent();
             MainPage = new AppShell();
             Current.UserAppTheme = AppTheme.Light;
+
             var culture = CultureInfo.CreateSpecificCulture("bg-BG");
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
-            httpService.GetAppVersionAsync().ContinueWith(task =>
+
+            _httpService = httpService;
+
+            Application.Current.Dispatcher.Dispatch(async () =>
             {
-                if (task.IsCompletedSuccessfully)
-                {
-                    var response = task.Result;
-                    if (response != null && response.TryGetValue("version", out var versionObj) && versionObj is double version)
-                    {
-                        string path = Path.Combine(appDirectory, folderName);
-                        if (version.ToString() != AppInfo.Current.VersionString)
-                        {
-                            InstallAppUpdate(response["downloadUrl"].ToString(),version.ToString(), path);
-                        }
-                        else
-                        {
-                            if (Directory.Exists(path))
-                            {
-                                Directory.Delete(path);
-                            }
-                        }
-                    }
-                }
+                await CheckForAppUpdateAsync();
             });
-
         }
-        private async void InstallAppUpdate(string fileUrl,string version, string path)
-        {
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            using HttpClient client = new HttpClient();
-            byte[] fileBytes = await client.GetByteArrayAsync(fileUrl);
-            File.WriteAllBytes(path, fileBytes);
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = $"app_{version}.msix",
-                Arguments = $"/i \"{path}\"",
-                UseShellExecute = true,
-                Verb = "runas"
-            };
 
+        private async Task CheckForAppUpdateAsync()
+        {
             try
             {
+                var response = await _httpService.GetAppVersionAsync();
+                if (response != null)
+                {
+                    string version = response["version"].ToString();
+                    string path = Path.Combine(appDirectory, folderName);
+
+                    if (version != AppInfo.Current.VersionString)
+                    {
+                        await InstallAppUpdateAsync(response["downloadUrl"].ToString(), version, path);
+                    }
+                    else if (Directory.Exists(path))
+                    {
+                        Directory.Delete(path, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error checking for update: {ex.Message}");
+            }
+        }
+
+        private async Task InstallAppUpdateAsync(string fileUrl, string version, string path)
+        {
+            try
+            {
+                bool confirm = await Shell.Current.DisplayAlert(
+                    "Потвърждение",
+                    "Сигурни ли сте, че искате да инсталирате нова версия на приложението?",
+                    "Да, инсталирай",
+                    "Отказ");
+
+                if (!confirm)
+                    return;
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                using HttpClient client = new HttpClient();
+                byte[] fileBytes = await client.GetByteArrayAsync(fileUrl);
+
+                string filePath = Path.Combine(path, $"app_{version}.msix");
+                File.WriteAllBytes(filePath, fileBytes);
+
+                /* var startInfo = new ProcessStartInfo
+                  {
+                      FileName = "explorer.exe",
+                      Arguments = $"\"{filePath}\"",
+                      UseShellExecute = true,
+                      Verb = "runas"
+                  };*/
+                string msixFullPath = filePath.Replace('\\', '/'); // make URI-friendly path
+
+                string uri = $"ms-appinstaller:?source=file:///{msixFullPath}";
+
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = uri,
+                    UseShellExecute = true,
+                    Verb = "runas"
+                };
+
                 Process.Start(startInfo);
                 Application.Current.Quit();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error starting process: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to install the update. Please try again later.", "OK");
+                Debug.WriteLine($"Error during update: {ex.Message}");
+                await Shell.Current.DisplayAlert("Грешка", "Инсталирането на новата версия не бе успешно. Моля, опитайте отново по-късно.", "OK");
             }
             finally
             {
-                if (File.Exists(path))
+                if (Directory.Exists(path))
                 {
-                    File.Delete(path);
+                    try
+                    {
+                        Directory.Delete(path, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Failed to clean up temp files: {ex.Message}");
+                    }
                 }
             }
         }

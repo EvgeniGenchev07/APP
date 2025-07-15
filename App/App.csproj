@@ -48,14 +48,13 @@
 
 	<PropertyGroup>
 	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.22000.0</TargetFrameworks>
-	  <PackageCertificateThumbprint>4AB93BE87138DFDCF4CFD84AEFE09E3F065F4622</PackageCertificateThumbprint>
+	  <PackageCertificateThumbprint>89B9C02B21C2714C2DD0DB3D8AEAA6A14A19BEA8</PackageCertificateThumbprint>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiAppIcon Include="Resources\AppIcon\logosvg.png" />
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splashscreen.png" Color="#000000" BaseSize="128,128" />
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
@@ -108,6 +107,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="App_TemporaryKey.pfx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="Resources\AppIcon\BadgeLogo.scale-100.png">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
