@@ -43,7 +43,7 @@ namespace App
                     string version = response["version"].ToString();
                     string path = Path.Combine(appDirectory, folderName);
 
-                    if (version != AppInfo.Current.VersionString)
+                    if (version != $"{AppInfo.Current.Version.Major}.{AppInfo.Current.Version.MajorRevision}")
                     {
                         await InstallAppUpdateAsync(response["downloadUrl"].ToString(), version, path);
                     }

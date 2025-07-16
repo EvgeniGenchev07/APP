@@ -48,7 +48,7 @@
 
 	<PropertyGroup>
 	  <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.22000.0</TargetFrameworks>
-	  <PackageCertificateThumbprint>89B9C02B21C2714C2DD0DB3D8AEAA6A14A19BEA8</PackageCertificateThumbprint>
+	  <PackageCertificateThumbprint>714E791631F1C30911DD13115E8D935AA86C21C7</PackageCertificateThumbprint>
 	</PropertyGroup>
 
 	<ItemGroup>
