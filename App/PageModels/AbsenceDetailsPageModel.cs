@@ -10,7 +10,7 @@ namespace App.PageModels;
 
 public class AbsenceDetailsPageModel : INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private AbsenceViewModel _absence;
 
@@ -81,9 +81,9 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
     public ICommand EditCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public AbsenceDetailsPageModel(HttpService httpService)
+    public AbsenceDetailsPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         BackCommand = new Command(async () => await BackAsync());
         EditCommand = new Command(async () => await EditAsync());
@@ -150,7 +150,7 @@ public class AbsenceDetailsPageModel : INotifyPropertyChanged
             IsBusy = true;
 
             // Call API to cancel the absence request
-            var success = await _httpService.CancelAbsenceAsync(Absence.Id);
+            var success = await _dbService.CancelAbsenceAsync(Absence.Id);
 
             if (success)
             {

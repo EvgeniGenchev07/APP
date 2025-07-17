@@ -11,10 +11,10 @@ namespace App.PageModels;
 
 public partial class BusinessTripsSummaryPageModel : ObservableObject
 {
-    private readonly HttpService _httpService;
-    public BusinessTripsSummaryPageModel(HttpService httpService)
+    private readonly DatabaseService _dbService;
+    public BusinessTripsSummaryPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         // Initialize filters
         AvailableYears = new ObservableCollection<int>(Enumerable.Range(DateTime.Now.Year - 5, 10));
@@ -78,7 +78,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
             IsLoading = true;
             HasNoResults = false;
 
-            var trips = await _httpService.GetAllBusinessTripsAsync();
+            var trips = await _dbService.GetAllBusinessTripsAsync();
             var viewModels = trips.Where(t => t.Status == BusinessTripStatus.Approved).Select(t => new BusinessTripViewModel(t)).ToList();
             _originalTrips = viewModels;
             Trips = new ObservableCollection<BusinessTripViewModel>(viewModels);
@@ -217,7 +217,7 @@ public partial class BusinessTripsSummaryPageModel : ObservableObject
     {
         try
         {
-            var projects = await _httpService.GetAllBusinessTripsAsync();
+            var projects = await _dbService.GetAllBusinessTripsAsync();
             AvailableProjects = new ObservableCollection<string>(projects.Select(bt => bt.ProjectName).Distinct().ToList());
             AvailableProjects.Insert(0, "Всички проекти");
             SelectedProject = "Всички проекти";

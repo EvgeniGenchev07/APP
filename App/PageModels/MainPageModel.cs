@@ -13,7 +13,7 @@ namespace App.PageModels;
 
 public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private string _userName;
     private int _contractDays;
@@ -225,9 +225,9 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
     private List<Absence> _allAbsences = new();
 
 
-    public MainPageModel(HttpService httpService)
+    public MainPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
         _currentDate = DateTime.Now;
 
         //Calendar initialization
@@ -247,7 +247,7 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         ViewAllAbsencesCommand = new Command(async () => await ViewAllAbsencesAsync());
         ViewAllBusinessTripsCommand = new Command(async () => await ViewAllBusinessTripsAsync());
         LogoutCommand = new Command(async () => await LogoutAsync());
-        MessagingCenter.Subscribe<HttpService>(this, "AbsenceCreated", async (sender) =>
+        MessagingCenter.Subscribe<DatabaseService>(this, "AbsenceCreated", async (sender) =>
         {
             AbsenceDays = App.User.AbsenceDays;
             OnPropertyChanged(nameof(AbsenceDays));
@@ -292,9 +292,9 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
                 NoAbsences = !recentAbsences.Any();
                 //Calendar
                 IsBusy = true;
-                _allBusinessTrips = await _httpService.GetAllBusinessTripsAsync();
-                _allAbsences = await _httpService.GetAllAbsencesAsync();
-                _holidayDays = new ObservableCollection<HolidayDay>(await _httpService.GetAllHolidayDaysAsync());
+                _allBusinessTrips = await _dbService.GetAllBusinessTripsAsync();
+                _allAbsences = await _dbService.GetAllAbsencesAsync();
+                _holidayDays = new ObservableCollection<HolidayDay>(await _dbService.GetAllHolidayDaysAsync());
                 _customHolidays = _holidayDays.Select(h => h.Date.Date).ToList();
                 GenerateCalendar();
             }
@@ -458,13 +458,13 @@ public partial class MainPageModel : ObservableObject, INotifyPropertyChanged
         {
             IsBusy = true;
             _customHolidays.Add(SelectedHolidayDate.Date);
-            await _httpService.CreateHolidayDayAsync(new HolidayDay()
+            await _dbService.CreateHolidayDayAsync(new HolidayDay()
             {
                 Name = HolidayName,
                 Date = SelectedHolidayDate.Date,
                 IsCustom = true
             });
-            _holidayDays = new ObservableCollection<HolidayDay>(await _httpService.GetAllHolidayDaysAsync());
+            _holidayDays = new ObservableCollection<HolidayDay>(await _dbService.GetAllHolidayDaysAsync());
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;

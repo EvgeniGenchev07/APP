@@ -11,7 +11,7 @@ namespace App.PageModels
 {
     public partial class BusinessTripDetailsPageModel : ObservableObject
     {
-        private readonly HttpService _httpService;
+        private readonly DatabaseService _dbService;
         private readonly HttpClient _httpClient = new HttpClient();
 
         [ObservableProperty]
@@ -36,10 +36,10 @@ namespace App.PageModels
         public string EditButtonText => IsEditing ? "Запази" : "Редактирай";
         public decimal TotalExpenses => Wage * BusinessTrip.TotalDays + AccommodationMoney * BusinessTrip.TotalDays + AdditionalExpences;
         public BusinessTripDetailsPageModel(){}
-        public BusinessTripDetailsPageModel(HttpService service)
+        public BusinessTripDetailsPageModel(DatabaseService service)
         {
             BusinessTrip = BusinessTripDetailsPage.SelectedBusinessTrip.BusinessTrip;
-            _httpService = service;
+            _dbService = service;
             _originalBusinessTrip = CloneBusinessTrip(BusinessTrip);
             
         }
@@ -147,7 +147,7 @@ namespace App.PageModels
             {
                 try
                 {
-                    var success = await _httpService.DeleteBusinessTripAsync(BusinessTrip.Id);
+                    var success = await _dbService.DeleteBusinessTripAsync(BusinessTrip.Id);
 
                     if (success)
                     {
@@ -196,7 +196,7 @@ namespace App.PageModels
                     BusinessTrip.AccommodationMoney = AccommodationMoney;
                     BusinessTrip.AdditionalExpences = AdditionalExpences;
                     BusinessTrip.Wage = Wage;
-                    await _httpService.CreateBusinessTripAsync(BusinessTrip);
+                    await _dbService.CreateBusinessTripAsync(BusinessTrip);
                     if(IsEditing) ToggleEdit();
                     await Shell.Current.DisplayAlert("Успех",
                         "Промените са запазени успешно!", "OK");

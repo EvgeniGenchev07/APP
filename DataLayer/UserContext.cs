@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using MySqlConnector;
 
 namespace DataLayer
 {
@@ -48,6 +49,35 @@ namespace DataLayer
             }
             throw new Exception("Database connection is not established.");
         }
+
+        public async Task UpdateAbsenceBalancesAsync()
+        {
+            if (_eapDbContext.IsConnect())
+            {
+                using (var transaction = _eapDbContext.Connection.BeginTransaction())
+                {
+                    try
+                    {
+                        var transactionCommand = new MySqlCommand(@"
+                                UPDATE user
+                                SET AbsenceDays = LEAST(AbsenceDays + ContractDays, 40);",
+                                _eapDbContext.Connection, transaction);
+                        transactionCommand.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        await transaction.RollbackAsync();
+                        throw new Exception("Error updating leave balances in the database.", ex);
+                    }
+                    finally
+                    {
+                        _eapDbContext.Close();
+                    }
+                }
+            }
+        }
+
         public bool Create(User user)
         {
             if (_eapDbContext.IsConnect())

@@ -10,7 +10,7 @@ namespace App.PageModels;
 
 public class AdminUsersPageModel : INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private bool _isRefreshing;
     private string _searchText = string.Empty;
@@ -67,9 +67,9 @@ public class AdminUsersPageModel : INotifyPropertyChanged
     public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
-    public AdminUsersPageModel(HttpService httpService)
+    public AdminUsersPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         AddUserCommand = new Command(async () => await AddUserAsync());
         EditUserCommand = new Command<UserViewModel>(async (user) => await EditUserAsync(user));
@@ -88,7 +88,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             Users.Clear();
             _allUsers.Clear();
 
-            var users = await _httpService.GetAllUsersAsync();
+            var users = await _dbService.GetAllUsersAsync();
             _allUsers = users.Select(u => new UserViewModel(u)).ToList();
 
             foreach (var user in _allUsers)
@@ -166,7 +166,7 @@ public class AdminUsersPageModel : INotifyPropertyChanged
             try
             {
                 IsBusy = true;
-                var success = await _httpService.DeleteUserAsync(user.Id);
+                var success = await _dbService.DeleteUserAsync(user.Id);
 
                 if (success)
                 {

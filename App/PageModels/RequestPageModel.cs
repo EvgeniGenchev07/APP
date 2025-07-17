@@ -8,7 +8,7 @@ namespace App.PageModels
 {
     public partial class RequestPageModel : ObservableObject
     {
-        private readonly HttpService _httpService;
+        private readonly DatabaseService _dbService;
 
         [ObservableProperty]
         string _organization = "ЕНЕРГИЙНА АГЕНЦИЯ-ПЛОВДИВ";
@@ -87,9 +87,9 @@ namespace App.PageModels
         [ObservableProperty]
         private bool _isBusy;
 
-        public RequestPageModel(HttpService httpService)
+        public RequestPageModel(DatabaseService dbService)
         {
-            _httpService = httpService;
+            _dbService = dbService;
             LoadUserData();
         }
 
@@ -180,7 +180,7 @@ namespace App.PageModels
                     UserId = App.User?.Id ?? string.Empty
                 };
 
-                var success = await _httpService.CreateBusinessTripAsync(businessTrip);
+                var success = await _dbService.CreateBusinessTripAsync(businessTrip);
 
                 if (success)
                 {

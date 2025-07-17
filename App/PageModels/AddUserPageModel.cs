@@ -9,7 +9,7 @@ namespace App.PageModels;
 
 public class AddUserPageModel : INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private string _name = string.Empty;
     private string _email = string.Empty;
@@ -128,9 +128,9 @@ public class AddUserPageModel : INotifyPropertyChanged
     public ICommand AddUserCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public AddUserPageModel(HttpService httpService)
+    public AddUserPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         AddUserCommand = new Command(async () => await AddUserAsync());
         CancelCommand = new Command(async () => await CancelAsync());
@@ -168,7 +168,7 @@ public class AddUserPageModel : INotifyPropertyChanged
             };
 
             // Call API to create user
-            var success = await _httpService.CreateUserAsync(user);
+            var success = await _dbService.CreateUserAsync(user);
             if (success)
             {
                 await Application.Current.MainPage.DisplayAlert("Успех", "Потребителят бе създаден успешно", "OK");

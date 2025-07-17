@@ -14,7 +14,7 @@ public class RegisterPageModel : INotifyPropertyChanged
     private bool _isBusy;
     private bool _isEnabled;
     private bool _isPasswordHidden = true;
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -86,13 +86,13 @@ public class RegisterPageModel : INotifyPropertyChanged
     public ICommand RegisterCommand { get; }
     public ICommand TogglePasswordCommand { get; }
 
-    public RegisterPageModel(HttpService httpService)
+    public RegisterPageModel(DatabaseService dbService)
     {
         RegisterCommand = new Command(async () => await RegisterAsync(), CanRegister);
         TogglePasswordCommand = new Command(() => IsPasswordHidden = !IsPasswordHidden);
 
         PropertyChanged += (_, __) => ((Command)RegisterCommand).ChangeCanExecute();
-        _httpService = httpService;
+        _dbService = dbService;
     }
 
     private bool CanRegister()
@@ -122,7 +122,7 @@ public class RegisterPageModel : INotifyPropertyChanged
                 return;
             }
 
-            User user = await _httpService.PostUserLogin(Email, Password);
+            User user = await _dbService.UserLogin(Email, Password);
             if (user == null)
             {
                 ErrorMessage = "Неуспешна регистрация. Моля опитайте отново.";

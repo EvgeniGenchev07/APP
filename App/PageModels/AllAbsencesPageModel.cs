@@ -14,7 +14,7 @@ namespace App.PageModels;
 
 public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private bool _isRefreshing;
     private int _totalAbsences;
@@ -136,9 +136,9 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
     public ICommand BackCommand { get; }
     public ICommand RefreshCommand { get; }
 
-    public AllAbsencesPageModel(HttpService httpService)
+    public AllAbsencesPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         BackCommand = new Command(async () => await BackAsync());
         RefreshCommand = new Command(async () => await RefreshAsync());
@@ -162,7 +162,7 @@ public partial class AllAbsencesPageModel : ObservableObject, INotifyPropertyCha
 
             if (App.User != null)
             {
-                var absences = await _httpService.GetUserAbsencesAsync(App.User.Id);
+                var absences = await _dbService.GetUserAbsencesAsync(App.User.Id);
                 var sortedAbsences = absences.OrderByDescending(a => a.Created).ToList();
 
                 _originalAbsences = sortedAbsences.Select(a => new AbsenceViewModel(a)).ToList();

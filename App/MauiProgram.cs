@@ -2,7 +2,10 @@
 using App.Pages;
 using App.Services;
 using CommunityToolkit.Maui;
+using DataLayer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MySqlConnector;
 
 namespace App
 {
@@ -38,13 +41,17 @@ namespace App
             builder.Services.AddTransientWithShellRoute<BusinessTripsPage, BusinessTripsPageModel>("businesstrips");
             builder.Services.AddTransientWithShellRoute<BusinessTripsSummaryPage, BusinessTripsSummaryPageModel>("BusinessTripsSummaryPage");
             builder.Services.AddTransientWithShellRoute<BusinessTripDetailsPage, BusinessTripDetailsPageModel>("businesstripdetails");
-            builder.Services.AddScoped(_ =>
+            builder.Services.AddScoped<DatabaseService>();
+            builder.Services.AddScoped<BusinessTripContext>();
+            builder.Services.AddScoped<AbsenceContext>();
+            builder.Services.AddScoped<UserContext>();
+            builder.Services.AddScoped<HolidayDayContext>();
+            builder.Services.AddScoped<AuthenticationContext>();
+            const string connectionString = "Server=78.130.149.254;Port=8089;database=eap_admin;UID=eap_admin;password=M88RvBv5BpzJ7Vha;Allow User Variables=True";
+            builder.Services.AddScoped(_=>
             {
-                return new HttpService(
-                    new HttpClient
-                    {
-                        BaseAddress = new Uri("http://78.130.149.254:60000/")
-                    });
+                var connection = new MySqlConnection(connectionString);
+                return new EapDbContext(connection);
             });
             return builder.Build();
         }

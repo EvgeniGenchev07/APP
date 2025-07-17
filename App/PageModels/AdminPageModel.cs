@@ -13,7 +13,7 @@ namespace App.PageModels;
 
 public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private DateTime _currentDate;
     private bool _isBusy;
     private bool _isDaySelected;
@@ -117,9 +117,9 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
     private List<BusinessTrip> _allBusinessTrips = new();
     private List<Absence> _allAbsences = new();
 
-    public AdminPageModel(HttpService httpService)
+    public AdminPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
         _currentDate = DateTime.Now;
 
         PreviousMonthCommand = new Command(async () => await NavigateMonth(-1));
@@ -134,7 +134,21 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         HideAddHolidayDialogCommand = new Command(() => IsHolidayDialogVisible = false);
 
     }
-
+    [RelayCommand]
+    private async Task StartNewAccountingYear()
+    {
+        bool response = await Application.Current.MainPage.DisplayAlert("Потвърждение", $"Сигурни ли сте, че искате да отбележите нова счетоводна година?", "Да", "Отказ");
+        if (response)
+        {
+            bool result = await _dbService.UpdateUserAbsenceBalance();
+            if (result)
+            {
+                await Application.Current.MainPage.DisplayAlert("Успех", "Счетоводната година е успешно отбелязана!", "OK");
+                await LoadDataAsync();
+            }
+            else await Application.Current.MainPage.DisplayAlert("Грешка", "Неуспешно отбелязване на новата счетоводна година!", "OK");
+        }
+    }
 
     [RelayCommand]
     private async Task ItemTapped(BusinessTripViewModel businessTrip)
@@ -161,9 +175,9 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         try
         {
             IsBusy = true;
-            _allBusinessTrips = await _httpService.GetAllBusinessTripsAsync();
-            _allAbsences = await _httpService.GetAllAbsencesAsync();
-            _holidayDays = new ObservableCollection<HolidayDay>(await _httpService.GetAllHolidayDaysAsync());
+            _allBusinessTrips = await _dbService.GetAllBusinessTripsAsync();
+            _allAbsences = await _dbService.GetAllAbsencesAsync();
+            _holidayDays = new ObservableCollection<HolidayDay>(await _dbService.GetAllHolidayDaysAsync());
             _customHolidays = _holidayDays.Select(h => h.Date.Date).ToList();
             GenerateCalendar();
         }
@@ -253,13 +267,13 @@ public partial class AdminPageModel : ObservableObject, INotifyPropertyChanged
         {
             IsBusy = true;
             _customHolidays.Add(SelectedHolidayDate.Date);
-            await _httpService.CreateHolidayDayAsync(new HolidayDay()
+            await _dbService.CreateHolidayDayAsync(new HolidayDay()
             {
                 Name = HolidayName,
                 Date = SelectedHolidayDate.Date,
                 IsCustom = true
             });
-            _holidayDays = new ObservableCollection<HolidayDay>(await _httpService.GetAllHolidayDaysAsync());
+            _holidayDays = new ObservableCollection<HolidayDay>(await _dbService.GetAllHolidayDaysAsync());
             GenerateCalendar();
             IsHolidayDialogVisible = false;
             HolidayName = string.Empty;

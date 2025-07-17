@@ -9,7 +9,7 @@ namespace App.PageModels;
 
 public class EditUserPageModel : INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private string _name = string.Empty;
     private string _email = string.Empty;
@@ -114,9 +114,9 @@ public class EditUserPageModel : INotifyPropertyChanged
     public ICommand UpdateUserCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public EditUserPageModel(HttpService httpService)
+    public EditUserPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         UpdateUserCommand = new Command(async () => await UpdateUserAsync());
         CancelCommand = new Command(async () => await CancelAsync());
@@ -183,7 +183,7 @@ public class EditUserPageModel : INotifyPropertyChanged
             };
 
             // Call API to update user
-            var success = await _httpService.UpdateUserAsync(user);
+            var success = await _dbService.UpdateUserAsync(user);
             if (success)
             {
                 await Application.Current.MainPage.DisplayAlert("Успех", "Потребителят бе обновен успешно", "OK");

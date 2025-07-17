@@ -14,7 +14,7 @@ namespace App.PageModels;
 
 public partial class AdminAllAbsencesPageModel : ObservableObject
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     [ObservableProperty]
     private bool _isBusy;
     [ObservableProperty]
@@ -42,9 +42,9 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
     public int RejectedAbsences => Absences.Count(a => a.Status == AbsenceStatus.Rejected);
     public bool HasNoResults => !(Absences.Any());
 
-    public AdminAllAbsencesPageModel(HttpService httpService)
+    public AdminAllAbsencesPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
         AvailableYears = new ObservableCollection<int>(Enumerable.Range(DateTime.Now.Year - 5, 10));
         SelectedYear = DateTime.Now.Year;
 
@@ -104,7 +104,7 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
         {
             IsBusy = true;
 
-            var absences = await _httpService.GetAllAbsencesAsync();
+            var absences = await _dbService.GetAllAbsencesAsync();
             _originalAbsences = absences.Select(a => new AbsenceViewModel(a)).ToList();
             Absences.Clear();
             foreach (var absence in _originalAbsences)
@@ -153,7 +153,7 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
                 IsBusy = true;
 
                 // Call API to approve absence
-                var success = await _httpService.ApproveAbsenceAsync(absence.Id);
+                var success = await _dbService.ApproveAbsenceAsync(absence.Id);
                 if (success)
                 {
                     absence.Status = AbsenceStatus.Approved;
@@ -198,7 +198,7 @@ public partial class AdminAllAbsencesPageModel : ObservableObject
             {
                 IsBusy = true;
 
-                var success = await _httpService.RejectAbsenceAsync(absence.Id);
+                var success = await _dbService.RejectAbsenceAsync(absence.Id);
                 if (success)
                 {
                     absence.Status = AbsenceStatus.Rejected;

@@ -55,7 +55,7 @@ public class AbsenceViewModel
 
     public string DateRange => $"{_absence.StartDate:MM/dd/yyyy} - {EndDate:MM/dd/yyyy} ({_absence.DaysCount} дни)";
 
-    public string DurationText => $"{_absence.DaysCount} {(_absence.DaysCount == 1 ? "ден" : "дни")}";
+    public string DurationText => $"{_absence.DaysTaken} {(_absence.DaysTaken == 1 ? "ден" : "дни")}";
 
     public string CreatedText => $"Заявено на {_absence.Created:MM/dd/yyyy}";
 

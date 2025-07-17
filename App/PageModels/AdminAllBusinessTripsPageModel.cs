@@ -13,7 +13,7 @@ namespace App.PageModels;
 
 public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyPropertyChanged
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
     private bool _isBusy;
     private bool _isRefreshing;
 
@@ -96,9 +96,9 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
     public ICommand CancelCommand { get; }
     public ICommand RefreshCommand { get; }
 
-    public AdminAllBusinessTripsPageModel(HttpService httpService)
+    public AdminAllBusinessTripsPageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
 
         ApproveTripCommand = new Command<BusinessTripViewModel>(async (trip) => await ApproveTripAsync(trip));
         RejectTripCommand = new Command<BusinessTripViewModel>(async (trip) => await RejectTripAsync(trip));
@@ -114,7 +114,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
         {
             IsBusy = true;
 
-            var trips = await _httpService.GetAllBusinessTripsAsync();
+            var trips = await _dbService.GetAllBusinessTripsAsync();
 
             BusinessTrips.Clear();
             foreach (var trip in trips)
@@ -162,7 +162,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
                 IsBusy = true;
 
                 // Call API to approve business trip
-                var success = await _httpService.ApproveBusinessTripAsync(trip.Id);
+                var success = await _dbService.ApproveBusinessTripAsync(trip.Id);
                 if (success)
                 {
                     trip.Status = BusinessTripStatus.Approved;
@@ -207,7 +207,7 @@ public partial class AdminAllBusinessTripsPageModel : ObservableObject, INotifyP
             {
                 IsBusy = true;
 
-                var success = await _httpService.RejectBusinessTripAsync(trip.Id);
+                var success = await _dbService.RejectBusinessTripAsync(trip.Id);
                 if (success)
                 {
                     trip.Status = BusinessTripStatus.Rejected;

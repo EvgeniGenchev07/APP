@@ -10,7 +10,7 @@ namespace App.PageModels;
 
 public partial class AbsencePageModel : ObservableObject
 {
-    private readonly HttpService _httpService;
+    private readonly DatabaseService _dbService;
 
     [ObservableProperty]
     private string _employeeName;
@@ -47,14 +47,16 @@ public partial class AbsencePageModel : ObservableObject
     };
 
     public DateTime MinimumDate => DateTime.Today;
+    private byte duration;
+    public byte DurationDays => duration;
 
-    public byte DurationDays => (byte)((EndDate - StartDate).Days + 1);
-
-    public AbsencePageModel(HttpService httpService)
+    public AbsencePageModel(DatabaseService dbService)
     {
-        _httpService = httpService;
+        _dbService = dbService;
         LoadUserData();
         ValidateForm();
+        duration = (byte)((EndDate - StartDate).Days + 1);
+        OnPropertyChanged(nameof(DurationDays));
     }
 
     private void LoadUserData()
@@ -87,14 +89,15 @@ public partial class AbsencePageModel : ObservableObject
             var absence = new Absence
             {
                 Type = SelectedAbsenceType.Value,
-                DaysCount = DurationDays,
+                DaysCount = (byte)((EndDate - StartDate).Days + 1),
+                DaysTaken = DurationDays,
                 StartDate = StartDate,
                 Status = BusinessLayer.AbsenceStatus.Pending,
                 Created = DateTime.Now,
                 UserId = App.User?.Id ?? string.Empty
             };
 
-            var success = await _httpService.CreateAbsenceAsync(absence);
+            var success = await _dbService.CreateAbsenceAsync(absence);
 
             if (success)
             {
@@ -119,7 +122,8 @@ public partial class AbsencePageModel : ObservableObject
     private bool ValidateForm()
     {
         var errors = new List<string>();
-
+        duration = (byte)((EndDate - StartDate).Days + 1);
+        if (SelectedAbsenceType?.Value == AbsenceType.PersonalLeave) duration -= (byte)_dbService.CalculateHolidays(StartDate, duration);
         if (SelectedAbsenceType == null)
         {
             errors.Add("Моля избери причина за отсъствието");
@@ -135,7 +139,7 @@ public partial class AbsencePageModel : ObservableObject
             errors.Add("Крайната дата не може да бъде преди началната");
         }
 
-        if (DurationDays > AvailableDays)
+        if (DurationDays > AvailableDays && SelectedAbsenceType?.Value == AbsenceType.PersonalLeave)
         {
             errors.Add($"Имаш още само {AvailableDays} свободни дни");
         }
@@ -143,7 +147,7 @@ public partial class AbsencePageModel : ObservableObject
         HasValidationErrors = errors.Any();
         ValidationMessage = string.Join("\n", errors);
         IsFormValid = !HasValidationErrors;
-
+        OnPropertyChanged(nameof(DurationDays));
         return IsFormValid;
     }
 
@@ -154,13 +158,11 @@ public partial class AbsencePageModel : ObservableObject
             EndDate = value;
         }
         ValidateForm();
-        OnPropertyChanged(nameof(DurationDays));
     }
 
     partial void OnEndDateChanged(DateTime value)
     {
         ValidateForm();
-        OnPropertyChanged(nameof(DurationDays));
     }
 
     partial void OnSelectedAbsenceTypeChanged(AbsenceTypeOption value)
